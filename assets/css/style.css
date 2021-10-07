@@ -664,17 +664,31 @@ section {
 }
 
 .portfolio .portfolio-wrap .portfolio-info h4 {
-  font-size: 20px;
-  color: #c7c7c7;
-  font-weight: 600;
+  font-size: 2rem;
+  color: #000000;
+  font-weight: bold;
 }
 
-.portfolio .portfolio-wrap .portfolio-info p {
-  color: #c7c7c7;
-  font-size: 14px;
+.portfolio .portfolio-wrap .portfolio-info a {
+  color: #272727;
+  font-size: 1rem;
   text-transform: uppercase;
   padding: 0;
   margin: 0;
+  transition: 0.3s;
+}
+
+.portfolio .portfolio-wrap .portfolio-info p:hover {
+  color: #daa114;
+  background-color: rgba(0,0,0, 0.6);
+  font-size: 1.2rem;
+  text-decoration: underline;
+}
+
+.portfolio .portfolio-wrap .portfolio-info a:hover{
+  color: #daa114;
+  font-size: 1.2rem;
+  text-shadow: 2px 2px 5px #000;
 }
 
 .portfolio .portfolio-wrap .portfolio-links {
@@ -683,7 +697,7 @@ section {
 }
 
 .portfolio .portfolio-wrap .portfolio-links a {
-  color: #c7c7c7;
+  color: #4d4d4d;
   margin: 0 2px;
   font-size: 28px;
   display: inline-block;
@@ -691,7 +705,8 @@ section {
 }
 
 .portfolio .portfolio-wrap .portfolio-links a:hover {
-  color: #148af9;
+  color: #dba521;
+  font-size: 50px;
 }
 
 .portfolio .portfolio-wrap:hover::before {
