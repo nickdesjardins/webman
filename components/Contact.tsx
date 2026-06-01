@@ -1,10 +1,13 @@
 "use client";
 
 import { useState } from "react";
+import { useLanguage } from "@/lib/i18n";
 
 type Status = "idle" | "loading" | "sent" | "error";
 
 export default function Contact() {
+  const { t } = useLanguage();
+  const c = t.contact;
   const [status, setStatus] = useState<Status>("idle");
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -23,13 +26,13 @@ export default function Contact() {
         body: JSON.stringify(data),
       });
       const json = await res.json();
-      if (!res.ok) throw new Error(json.error || "Something went wrong.");
+      if (!res.ok) throw new Error(json.error || c.error);
       setStatus("sent");
       form.reset();
     } catch (err) {
       setStatus("error");
       setErrorMessage(
-        err instanceof Error ? err.message : "Something went wrong."
+        err instanceof Error ? err.message : c.error
       );
     }
   };
@@ -38,7 +41,7 @@ export default function Contact() {
     <section id="contact" className="contact">
       <div className="container" data-aos="fade-up">
         <div className="section-title">
-          <h2>Contact</h2>
+          <h2>{c.title}</h2>
         </div>
 
         <div className="row mt-1">
@@ -46,19 +49,19 @@ export default function Contact() {
             <div className="info">
               <div className="address">
                 <i className="bi bi-geo-alt" />
-                <h4>Location:</h4>
+                <h4>{c.location}</h4>
                 <p>Les Coteaux, Quebec, J7X 0A4</p>
               </div>
 
               <div className="email">
                 <i className="bi bi-envelope" />
-                <h4>Email:</h4>
+                <h4>{c.email}</h4>
                 <p>nick.desjardins@live.com</p>
               </div>
 
               <div className="phone">
                 <i className="bi bi-phone" />
-                <h4>Call:</h4>
+                <h4>{c.call}</h4>
                 <p>+1 514-318-8025</p>
               </div>
             </div>
@@ -77,7 +80,7 @@ export default function Contact() {
                     name="name"
                     className="form-control"
                     id="name"
-                    placeholder="Your Name"
+                    placeholder={c.namePlaceholder}
                     required
                   />
                 </div>
@@ -87,7 +90,7 @@ export default function Contact() {
                     className="form-control"
                     name="email"
                     id="email"
-                    placeholder="Your Email"
+                    placeholder={c.emailPlaceholder}
                     required
                   />
                 </div>
@@ -98,7 +101,7 @@ export default function Contact() {
                   className="form-control"
                   name="subject"
                   id="subject"
-                  placeholder="Subject"
+                  placeholder={c.subjectPlaceholder}
                   required
                 />
               </div>
@@ -107,24 +110,22 @@ export default function Contact() {
                   className="form-control"
                   name="message"
                   rows={5}
-                  placeholder="Message"
+                  placeholder={c.messagePlaceholder}
                   required
                 />
               </div>
               <div className="my-3">
-                {status === "loading" && <div className="loading">Loading</div>}
+                {status === "loading" && <div className="loading">{c.loading}</div>}
                 {status === "error" && (
                   <div className="error-message">{errorMessage}</div>
                 )}
                 {status === "sent" && (
-                  <div className="sent-message">
-                    Your message has been sent. Thank you!
-                  </div>
+                  <div className="sent-message">{c.sent}</div>
                 )}
               </div>
               <div className="text-center">
                 <button type="submit" disabled={status === "loading"}>
-                  Send Message
+                  {c.send}
                 </button>
               </div>
             </form>

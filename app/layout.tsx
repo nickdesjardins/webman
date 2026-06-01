@@ -15,6 +15,7 @@ import AosInit from "@/components/AosInit";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import BackToTop from "@/components/BackToTop";
+import { LanguageProvider } from "@/lib/i18n";
 
 const openSans = Open_Sans({
   subsets: ["latin"],
@@ -64,11 +65,13 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${openSans.variable} ${raleway.variable} ${poppins.variable}`}>
-        <AosInit />
-        <Header />
-        {children}
-        <Footer />
-        <BackToTop />
+        <LanguageProvider>
+          <AosInit />
+          <Header />
+          {children}
+          <Footer />
+          <BackToTop />
+        </LanguageProvider>
       </body>
     </html>
   );

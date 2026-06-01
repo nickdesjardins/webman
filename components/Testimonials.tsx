@@ -2,6 +2,7 @@
 
 /* eslint-disable @next/next/no-img-element */
 import { Swiper, SwiperSlide } from "swiper/react";
+import { useLanguage } from "@/lib/i18n";
 import { Autoplay, Pagination } from "swiper/modules";
 
 interface Testimonial {
@@ -97,11 +98,13 @@ const TESTIMONIALS: Testimonial[] = [
 ];
 
 export default function Testimonials() {
+  const { t } = useLanguage();
+
   return (
     <section id="testimonials" className="testimonials section-bg">
       <div className="container" data-aos="fade-up">
         <div className="section-title">
-          <h2>Testimonials</h2>
+          <h2>{t.testimonials.title}</h2>
         </div>
 
         <Swiper

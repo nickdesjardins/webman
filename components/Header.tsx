@@ -1,19 +1,21 @@
 "use client";
 
 import { useEffect, useState } from "react";
-
-const NAV_LINKS = [
-  { hash: "hero", label: "Home", icon: "bx-home" },
-  { hash: "about", label: "About", icon: "bx-user" },
-  { hash: "resume", label: "Resume", icon: "bx-file-blank" },
-  { hash: "portfolio", label: "Portfolio", icon: "bx-book-content" },
-  { hash: "services", label: "Tools", icon: "bx-server" },
-  { hash: "contact", label: "Contact", icon: "bx-envelope" },
-];
+import { useLanguage } from "@/lib/i18n";
 
 export default function Header() {
+  const { t, lang, setLang } = useLanguage();
   const [mobileNavActive, setMobileNavActive] = useState(false);
   const [activeSection, setActiveSection] = useState("hero");
+
+  const NAV_LINKS = [
+    { hash: "hero", label: t.nav.home, icon: "bx-home" },
+    { hash: "about", label: t.nav.about, icon: "bx-user" },
+    { hash: "resume", label: t.nav.resume, icon: "bx-file-blank" },
+    { hash: "portfolio", label: t.nav.portfolio, icon: "bx-book-content" },
+    { hash: "services", label: t.nav.tools, icon: "bx-server" },
+    { hash: "contact", label: t.nav.contact, icon: "bx-envelope" },
+  ];
 
   // Toggle the body class the template's CSS uses to slide the mobile nav in.
   useEffect(() => {
@@ -39,7 +41,8 @@ export default function Header() {
     onScroll();
     document.addEventListener("scroll", onScroll);
     return () => document.removeEventListener("scroll", onScroll);
-  }, []);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lang]);
 
   const handleNavClick = (
     e: React.MouseEvent<HTMLAnchorElement>,
@@ -77,6 +80,15 @@ export default function Header() {
                 </a>
               </li>
             ))}
+            <li>
+              <button
+                className="nav-link lang-toggle"
+                onClick={() => setLang(lang === "en" ? "fr" : "en")}
+                aria-label={`Switch to ${t.nav.switchTo}`}
+              >
+                <i className="bx bx-globe" /> <span>{t.nav.switchTo}</span>
+              </button>
+            </li>
           </ul>
         </nav>
       </header>

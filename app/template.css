@@ -1354,3 +1354,52 @@ button.back-to-top {
   padding: 0;
   cursor: pointer;
 }
+
+/* Language toggle button — matches nav-menu a style */
+button.lang-toggle {
+  display: flex;
+  align-items: center;
+  color: #c7c7c7;
+  padding: 10px 18px;
+  margin-bottom: 8px;
+  font-size: 15px;
+  border-radius: 50px;
+  background: #f2f3f5;
+  height: 56px;
+  width: 100%;
+  overflow: hidden;
+  transition: 0.3s;
+  border: 0;
+  cursor: pointer;
+  text-align: left;
+}
+
+button.lang-toggle i {
+  font-size: 20px;
+}
+
+button.lang-toggle span {
+  padding: 0 5px 0 7px;
+  color: #c7c7c7;
+}
+
+@media (min-width: 992px) {
+  button.lang-toggle {
+    width: 56px;
+  }
+  button.lang-toggle span {
+    display: none;
+    color: #fff;
+  }
+}
+
+button.lang-toggle:hover {
+  color: #fff;
+  background: #dba521;
+  width: 100%;
+}
+
+button.lang-toggle:hover span {
+  display: block;
+  color: #fff;
+}

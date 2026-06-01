@@ -1,16 +1,20 @@
+"use client";
+
 /* eslint-disable @next/next/no-img-element */
 import { tools } from "@/data/tools";
+import { useLanguage } from "@/lib/i18n";
 
 export default function Tools() {
+  const { t } = useLanguage();
+
   return (
     <section id="services" className="services">
       <div className="container" data-aos="fade-up">
         <div className="section-title">
-          <h2>Tools: My Kung Fu</h2>
+          <h2>{t.tools.title}</h2>
           <p>
-            Here&apos;s a list of some Operating System, Softwares, Environments,
-            Languages and tools I&apos;ve used. <br />
-            In a completely un-ordered list.
+            {t.tools.description1} <br />
+            {t.tools.description2}
           </p>
         </div>
 

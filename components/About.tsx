@@ -1,15 +1,20 @@
+"use client";
+
 /* eslint-disable @next/next/no-img-element */
+import { useLanguage } from "@/lib/i18n";
+
 export default function About() {
+  const { t } = useLanguage();
+  const a = t.about;
+
   return (
     <section id="about" className="about">
       <div className="container" data-aos="fade-up">
         <div className="section-title">
-          <h2>About</h2>
+          <h2>{a.title}</h2>
           <p>
-            Technology is my passion. Programming is my language. Success is my
-            legacy.
-            <br />I built my first website in 2004 and never stopped sharpening
-            my skills.
+            {a.tagline}
+            <br />{a.builtFirst}
           </p>
         </div>
 
@@ -18,13 +23,13 @@ export default function About() {
             <img src="/assets/img/ah-ha.png" className="img-fluid" alt="" />
           </div>
           <div className="col-lg-8 pt-4 pt-lg-0 content">
-            <h3>Digital Marketer &amp; Fullstack Developer.</h3>
+            <h3>{a.subtitle}</h3>
             <p className="fst-italic">
-              This is me. I made this website for fun and laughter. <br />
-              Who said recruting a developer should be a boring task? <br />
-              If you wanted to see only the corporate side of me, here&apos;s my{" "}
+              {a.intro} <br />
+              {a.recruitLine} <br />
+              {a.resumePrompt}{" "}
               <a href="#resume" className="scrollto">
-                resume
+                {a.resumeLink}
               </a>
               . <br />
             </p>
@@ -32,15 +37,15 @@ export default function About() {
               <div className="col-lg-6">
                 <ul>
                   <li>
-                    <i className="bi bi-chevron-right" /> <strong>Website:</strong>{" "}
+                    <i className="bi bi-chevron-right" /> <strong>{a.labels.website}:</strong>{" "}
                     <span>www.webman.dev</span>
                   </li>
                   <li>
-                    <i className="bi bi-chevron-right" /> <strong>Phone:</strong>{" "}
+                    <i className="bi bi-chevron-right" /> <strong>{a.labels.phone}:</strong>{" "}
                     <span>+1 514-318-8025</span>
                   </li>
                   <li>
-                    <i className="bi bi-chevron-right" /> <strong>City:</strong>{" "}
+                    <i className="bi bi-chevron-right" /> <strong>{a.labels.city}:</strong>{" "}
                     <span>Montreal, CA</span>
                   </li>
                 </ul>
@@ -49,27 +54,24 @@ export default function About() {
                 <ul>
                   <li>
                     <i className="bi bi-chevron-right" />{" "}
-                    <strong>Highest Education:</strong> <span>University</span>
+                    <strong>{a.labels.education}:</strong> <span>{a.values.education}</span>
                   </li>
                   <li>
-                    <i className="bi bi-chevron-right" /> <strong>Email:</strong>{" "}
+                    <i className="bi bi-chevron-right" /> <strong>{a.labels.email}:</strong>{" "}
                     <span>nick.desjardins@live.com</span>
                   </li>
                   <li>
                     <i className="bi bi-chevron-right" />{" "}
-                    <strong>Freelance:</strong> <span>Available</span>
+                    <strong>{a.labels.freelance}:</strong> <span>{a.values.freelance}</span>
                   </li>
                 </ul>
               </div>
             </div>
             <p>
-              I&apos;ve been working at New Roots Herbal inc. since November
-              2018, managing every aspect of our web presence. <br />
-              From websites to digital ads, social media to internal networking.
-              What I do not know, I learn. <br />
+              {a.bio1} <br />
+              {a.bio2} <br />
               <br />
-              “Don&apos;t tell me the sky&apos;s the limit when there are
-              footprints on the moon.” ― Paul Brandt
+              &quot;{a.quote}&quot; ― {a.quoteAuthor}
             </p>
           </div>
         </div>

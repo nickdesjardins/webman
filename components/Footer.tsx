@@ -1,3 +1,7 @@
+"use client";
+
+import { useLanguage } from "@/lib/i18n";
+
 const SOCIALS = [
   { href: "https://github.com/nickdesjardins", cls: "twitter", icon: "bxl-github" },
   { href: "https://www.facebook.com/desjardins.nick/", cls: "facebook", icon: "bxl-facebook" },
@@ -7,6 +11,8 @@ const SOCIALS = [
 ];
 
 export default function Footer() {
+  const { t } = useLanguage();
+
   return (
     <footer id="footer">
       <div className="container">
@@ -29,15 +35,14 @@ export default function Footer() {
           ))}
         </div>
         <div className="copyright">
-          Copyright &copy;<strong>{new Date().getFullYear()}</strong>. All Rights
-          Reserved
+          Copyright &copy;<strong>{new Date().getFullYear()}</strong>. {t.footer.allRightsReserved}
         </div>
         <div className="credits">
-          Based on{" "}
+          {t.footer.basedOn}{" "}
           <a href="https://bootstrapmade.com/" target="_blank" rel="noopener noreferrer">
             BootstrapMade
-          </a>{" "}
-          Design.
+          </a>
+          {t.footer.design && ` ${t.footer.design}`}
         </div>
       </div>
     </footer>

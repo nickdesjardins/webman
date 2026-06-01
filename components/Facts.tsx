@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useLanguage } from "@/lib/i18n";
 
 /** Animated count-up that triggers when scrolled into view (replaces PureCounter). */
 function CountUp({
@@ -60,18 +61,19 @@ function LiveHours() {
 }
 
 export default function Facts() {
+  const { t } = useLanguage();
+  const f = t.facts;
+
   return (
     <section id="facts" className="facts">
       <div className="container" data-aos="fade-up">
         <div className="section-title">
-          <h2>Facts</h2>
+          <h2>{f.title}</h2>
           <p>
-            These numbers are all taken out of context to make me look good.{" "}
+            {f.description1}{" "}
             <br />
-            Years of studies are counted from the first year of elementary school
-            to the last year of university attended. <br />
-            Hours of support are calculated as 24/7 since I opened my company
-            PcSquad back in 2012.
+            {f.description2} <br />
+            {f.description3}
           </p>
         </div>
 
@@ -80,7 +82,7 @@ export default function Facts() {
             <div className="count-box">
               <i className="bi bi-award" />
               <CountUp end={20} />
-              <p>Years of Studies</p>
+              <p>{f.yearsOfStudies}</p>
             </div>
           </div>
 
@@ -88,7 +90,7 @@ export default function Facts() {
             <div className="count-box">
               <i className="bi bi-headset" />
               <LiveHours />
-              <p>Hours Of Support</p>
+              <p>{f.hoursOfSupport}</p>
             </div>
           </div>
 
@@ -96,7 +98,7 @@ export default function Facts() {
             <div className="count-box">
               <i className="bi bi-emoji-smile" />
               <CountUp end={98.94} decimals={2} />
-              <p>% of Happy customers</p>
+              <p>{f.happyCustomers}</p>
             </div>
           </div>
 
@@ -104,7 +106,7 @@ export default function Facts() {
             <div className="count-box">
               <i className="bi bi-journal-richtext" />
               <CountUp end={68.6} decimals={1} />
-              <p>% of stats on the web are lies</p>
+              <p>{f.statsLies}</p>
             </div>
           </div>
         </div>

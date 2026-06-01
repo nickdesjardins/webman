@@ -2,19 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import Typed from "typed.js";
-
-const TYPED_STRINGS = [
-  "Software Developer",
-  "Digital Marketer",
-  "UX Designer",
-  "Front End Developer",
-  "Back End Developer",
-  "Fullstack Developer",
-  "Photo Editor",
-  "Music Producer",
-  "Video Editor",
-  "... your next hire!",
-];
+import { useLanguage } from "@/lib/i18n";
 
 const SOCIALS = [
   { href: "https://github.com/nickdesjardins", cls: "twitter", icon: "bxl-github" },
@@ -25,26 +13,29 @@ const SOCIALS = [
 ];
 
 export default function Hero() {
+  const { t } = useLanguage();
   const typedEl = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
     if (!typedEl.current) return;
     const typed = new Typed(typedEl.current, {
-      strings: TYPED_STRINGS,
+      strings: t.hero.typedStrings as string[],
       loop: true,
       typeSpeed: 100,
       backSpeed: 50,
       backDelay: 2000,
     });
     return () => typed.destroy();
-  }, []);
+  // Re-initialise Typed when the language changes so strings update.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [t.hero.typedStrings]);
 
   return (
     <section id="hero" className="d-flex flex-column justify-content-center">
       <div className="container" data-aos="zoom-in" data-aos-delay="100">
         <h1>Nicolas Desjardins</h1>
         <p>
-          I&apos;m a <span className="typed" ref={typedEl} />
+          {t.hero.iam} <span className="typed" ref={typedEl} />
         </p>
         <div className="social-links">
           {SOCIALS.map((s) => (

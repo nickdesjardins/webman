@@ -4,15 +4,19 @@
 import { useMemo, useState } from "react";
 import { portfolioItems, PortfolioFilter } from "@/data/portfolio";
 import Lightbox, { LightboxSlide } from "./Lightbox";
-
-const FILTERS: { label: string; value: "*" | PortfolioFilter }[] = [
-  { label: "All", value: "*" },
-  { label: "Applications", value: "filter-app" },
-  { label: "Landing Pages", value: "filter-card" },
-  { label: "Websites", value: "filter-web" },
-];
+import { useLanguage } from "@/lib/i18n";
 
 export default function Portfolio() {
+  const { t } = useLanguage();
+  const p = t.portfolio;
+
+  const FILTERS: { label: string; value: "*" | PortfolioFilter }[] = [
+    { label: p.filters.all, value: "*" },
+    { label: p.filters.apps, value: "filter-app" },
+    { label: p.filters.landingPages, value: "filter-card" },
+    { label: p.filters.websites, value: "filter-web" },
+  ];
+
   const [activeFilter, setActiveFilter] = useState<"*" | PortfolioFilter>("*");
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
@@ -38,8 +42,8 @@ export default function Portfolio() {
     <section id="portfolio" className="portfolio section-bg">
       <div className="container" data-aos="fade-up">
         <div className="section-title">
-          <h2>Portfolio</h2>
-          <p>Small selection of projects I&apos;ve worked on.</p>
+          <h2>{p.title}</h2>
+          <p>{p.description}</p>
         </div>
 
         <div className="row">

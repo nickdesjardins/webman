@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useLanguage } from "@/lib/i18n";
 
 const SKILLS_LEFT = [
   { name: "HTML5", value: 100 },
@@ -35,6 +36,7 @@ function Skill({ name, value, animate }: { name: string; value: number; animate:
 }
 
 export default function Skills() {
+  const { t } = useLanguage();
   const contentRef = useRef<HTMLDivElement>(null);
   const [animate, setAnimate] = useState(false);
 
@@ -58,13 +60,12 @@ export default function Skills() {
     <section id="skills" className="skills section-bg">
       <div className="container" data-aos="fade-up">
         <div className="section-title">
-          <h2>Skills</h2>
+          <h2>{t.skills.title}</h2>
           <p>
-            This is only an overview of the many skills, languages, frameworks
-            and other knowledge aquired through the years. <br />
+            {t.skills.description} <br />
             See more in the{" "}
             <a href="#services" className="scrollto">
-              tools
+              {t.skills.toolsLinkText}
             </a>{" "}
             section.
           </p>
