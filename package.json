@@ -1,0 +1,33 @@
+{
+  "name": "webman",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "aos": "^2.3.4",
+    "bootstrap": "^5.3.3",
+    "bootstrap-icons": "^1.11.3",
+    "boxicons": "^2.1.4",
+    "next": "^16.2.6",
+    "nodemailer": "^6.10.1",
+    "react": "^19.2.6",
+    "react-dom": "^19.2.6",
+    "swiper": "^11.2.1",
+    "typed.js": "^2.1.0"
+  },
+  "devDependencies": {
+    "@types/aos": "^3.0.7",
+    "@types/node": "^22.10.7",
+    "@types/nodemailer": "^6.4.23",
+    "@types/react": "^19.0.7",
+    "@types/react-dom": "^19.0.3",
+    "eslint": "^9.18.0",
+    "eslint-config-next": "^16.2.6",
+    "typescript": "^5.7.3"
+  }
+}
