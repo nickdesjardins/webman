@@ -6,28 +6,42 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "resume": "tsx scripts/resume/build.tsx",
+    "icons": "node scripts/brand-sprite.mjs",
+    "predev": "npm run icons",
+    "prebuild": "npm run icons"
   },
   "dependencies": {
-    "aos": "^2.3.4",
-    "bootstrap": "^5.3.3",
-    "bootstrap-icons": "^1.11.3",
-    "boxicons": "^2.1.4",
-    "next": "^16.2.6",
+    "@react-three/drei": "^10.7.9",
+    "@react-three/fiber": "^9.8.1",
+    "@tailwindcss/postcss": "^4.3.3",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "framer-motion": "^14.0.0",
+    "lucide-react": "^1.54.0",
+    "next": "^16.4.0",
     "nodemailer": "^6.10.1",
-    "react": "^19.2.6",
-    "react-dom": "^19.2.6",
-    "swiper": "^11.2.1",
-    "typed.js": "^2.1.0"
+    "radix-ui": "^1.7.0",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "simple-icons": "^16.34.0",
+    "tailwind-merge": "^3.7.0",
+    "tailwindcss": "^4.3.3",
+    "three": "^0.186.1",
+    "tw-animate-css": "^1.4.0",
+    "zod": "^4.6.5"
   },
   "devDependencies": {
-    "@types/aos": "^3.0.7",
-    "@types/node": "^22.10.7",
+    "@react-pdf/renderer": "^4.9.0",
+    "@types/node": "^22.20.5",
     "@types/nodemailer": "^6.4.23",
-    "@types/react": "^19.0.7",
-    "@types/react-dom": "^19.0.3",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@types/three": "^0.186.0",
     "eslint": "^9.18.0",
-    "eslint-config-next": "^16.2.6",
-    "typescript": "^5.7.3"
+    "eslint-config-next": "^16.4.0",
+    "tsx": "^4.23.15",
+    "typescript": "^5.9.3"
   }
 }

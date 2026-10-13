@@ -1,0 +1,227 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* ------------------------------------------------------------------
+   Design tokens: dark-mode-first, high contrast, cool graphite base
+   with a cyan "signal" accent. Semantic states map to the hero
+   simulation: primary = routing, success = schema valid,
+   warning = fallback, destructive = rejected.
+------------------------------------------------------------------- */
+:root {
+  color-scheme: dark;
+
+  --background: oklch(0.145 0.012 260);
+  --foreground: oklch(0.955 0.006 250);
+
+  --card: oklch(0.185 0.012 260);
+  --card-foreground: oklch(0.955 0.006 250);
+  --popover: oklch(0.2 0.012 260);
+  --popover-foreground: oklch(0.955 0.006 250);
+
+  --primary: oklch(0.86 0.13 195);
+  --primary-foreground: oklch(0.16 0.03 220);
+
+  --secondary: oklch(0.24 0.012 260);
+  --secondary-foreground: oklch(0.93 0.006 250);
+
+  --muted: oklch(0.22 0.01 260);
+  --muted-foreground: oklch(0.70 0.012 250);
+
+  --accent: oklch(0.26 0.02 230);
+  --accent-foreground: oklch(0.96 0.006 250);
+
+  --destructive: oklch(0.68 0.19 20);
+  --destructive-foreground: oklch(0.98 0 0);
+
+  --success: oklch(0.80 0.17 155);
+  --success-foreground: oklch(0.18 0.04 155);
+
+  --warning: oklch(0.84 0.16 80);
+  --warning-foreground: oklch(0.22 0.05 80);
+
+  --border: oklch(0.30 0.012 260);
+  --input: oklch(0.30 0.012 260);
+  --ring: oklch(0.86 0.13 195 / 0.6);
+
+  --chart-1: oklch(0.86 0.13 195);
+  --chart-2: oklch(0.80 0.17 155);
+  --chart-3: oklch(0.84 0.16 80);
+  --chart-4: oklch(0.72 0.17 300);
+  --chart-5: oklch(0.68 0.19 20);
+
+  --radius: 0.75rem;
+
+  /* Grid / matrix accents */
+  --grid-line: oklch(0.95 0.006 250 / 0.045);
+  --grid-dot: oklch(0.86 0.13 195 / 0.16);
+  --glow: oklch(0.86 0.13 195 / 0.35);
+}
+
+@theme inline {
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, "JetBrains Mono", monospace;
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 10px);
+
+  --breakpoint-3xl: 120rem;
+
+  --animate-pulse-glow: pulse-glow 2.4s ease-in-out infinite;
+  --animate-marquee: marquee 40s linear infinite;
+  --animate-scan: scan 7s linear infinite;
+
+  @keyframes pulse-glow {
+    0%, 100% { box-shadow: 0 0 0 0 var(--glow); }
+    50% { box-shadow: 0 0 24px 2px var(--glow); }
+  }
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  @keyframes scan {
+    from { transform: translateY(-100%); }
+    to { transform: translateY(100vh); }
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 5.5rem;
+    -webkit-text-size-adjust: 100%;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+  }
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-feature-settings: "ss01", "cv11";
+    text-rendering: optimizeLegibility;
+  }
+  ::selection {
+    background: oklch(0.86 0.13 195 / 0.35);
+    color: var(--foreground);
+  }
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-ring;
+  }
+  h1, h2, h3, h4 {
+    @apply tracking-tight text-balance;
+  }
+  p {
+    @apply text-pretty;
+  }
+  code, kbd, pre, samp {
+    @apply font-mono;
+  }
+}
+
+@utility container-site {
+  @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 3xl:max-w-[96rem];
+}
+
+@utility bg-grid {
+  background-image:
+    linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+@utility bg-dots {
+  background-image: radial-gradient(var(--grid-dot) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+@utility mask-fade-y {
+  mask-image: linear-gradient(to bottom, transparent, black 12%, black 88%, transparent);
+}
+
+@utility mask-fade-edges {
+  mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+}
+
+@utility text-gradient {
+  @apply bg-clip-text text-transparent;
+  background-image: linear-gradient(
+    110deg,
+    oklch(0.97 0.006 250) 0%,
+    oklch(0.86 0.13 195) 55%,
+    oklch(0.80 0.17 155) 100%
+  );
+}
+
+/*
+  Deferred rendering for below-the-fold sections. Chrome skips style, layout
+  and paint of the subtree until it nears the viewport, so the first paint only
+  waits for the header and the hero instead of the whole 4,400-element page.
+  --defer-size seeds the placeholder height before the first render; "auto"
+  then remembers the real size. The moment the URL carries a fragment (a hash
+  load, an anchor click, or the scrollspy's replaceState) :has(:target) turns
+  the real layout back on, so in-page jumps always measure true positions.
+*/
+@utility defer-render {
+  content-visibility: auto;
+  contain-intrinsic-size: auto var(--defer-size, 1200px);
+}
+
+/* Un-layered on purpose so it wins over the utilities layer. */
+html:has(:target) .defer-render {
+  content-visibility: visible;
+}
+@media print {
+  .defer-render {
+    content-visibility: visible;
+  }
+}
+
+@utility glass {
+  background: oklch(0.145 0.012 260 / 0.65);
+  backdrop-filter: blur(14px) saturate(140%);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  border-color: oklch(0.95 0.006 250 / 0.08);
+}
+
+@utility card-glow {
+  position: relative;
+  background:
+    linear-gradient(var(--card), var(--card)) padding-box,
+    linear-gradient(135deg, oklch(0.86 0.13 195 / 0.45), oklch(0.95 0.006 250 / 0.06) 40%, oklch(0.80 0.17 155 / 0.35)) border-box;
+  border: 1px solid transparent;
+}

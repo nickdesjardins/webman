@@ -1,0 +1,68 @@
+# Nicolas Desjardins (webman.dev)
+
+> Nicolas Desjardins is an Applied AI Engineer and Lead Systems Engineer in Montreal with 8+ years of production full-stack and infrastructure experience. He builds schema-enforced extraction services, hybrid retrieval engines, LangGraph agent pipelines, and LLMOps evaluation gateways.
+
+- [webman.dev](https://webman.dev): portfolio, English edition
+- [webman.dev/fr](https://webman.dev/fr): portfolio, French edition
+- [Resume (PDF, English)](https://webman.dev/Nicolas-Desjardins-Resume.pdf)
+- [CV (PDF, French)](https://webman.dev/Nicolas-Desjardins-CV.pdf)
+
+## Who
+
+- Name: Nicolas Desjardins (also Nick Desjardins)
+- Title: Lead Systems Engineer Turned Applied AI Architect
+- Positioning: Applied AI Engineering for production, not demos
+- Tagline: Bridging frontier foundation models with deterministic enterprise infrastructure. Building production RAG engines, self-correcting agent state machines, and schema-enforced extraction services.
+- Location: Greater Montreal Area, QC, Canada
+- Building for the web since 2004
+- Proof points: 8+ years owning production systems; 30+ digital properties migrated with zero downtime; 200k+ lines of TypeScript shipped as an open-source CMS (NextBlock)
+
+## Flagship product: NextBlock CMS
+
+- [NextBlock CMS](https://nextblock.dev): the open-source, full-stack AI-native CMS for Next.js 16, Supabase, and Tailwind CSS. Nicolas Desjardins is its creator, architect, and principal engineer.
+- [Source on GitHub](https://github.com/nextblock-cms/nextblock): Nx monorepo.
+- [Live sandbox](https://cms.nextblock.dev/): demo@nextblock.dev / password, resets every 15 minutes.
+- Install: npm create nextblock@latest
+- Scale (October 2026): 200k+ lines of TypeScript; 8 npm packages at v0.21.3 (create-nextblock and @nextblock-cms/ui, utils, db, editor, sdk, ecom, cortex); 191 CLI releases since October 2025; 11.5k CLI downloads in the 30 days to 7 October 2026; 620+ commits; 146 Vitest test files; 21 forward-only SQL migrations.
+- Architecture: Nx monorepo. Every content block is a JSONB row in Supabase PostgreSQL under row-level security; data-driven custom block types render with no rebuild; Live Draft Mode and revisions; linked EN/FR translations; SEO graded as you type. Public routes are React Server Components.
+- Cortex AI: the CMS is an MCP server (Streamable HTTP, scoped bearer tokens, 56 tools, confirmation-gated mutations) listed in the official MCP Registry as dev.nextblock/nextblock. OpenRouter routing through the Vercel AI SDK with free-model fallback. AES-256-GCM encrypted bring-your-own-key storage.
+- Commerce Pro: Stripe for physical goods, Freemius for digital licensing, multi-currency with rounding modes, scheduled sales, shipping zones, taxes, inventory, orders.
+- Distribution: one-click Vercel deploy with zero environment variables (Supabase provisioned and keys injected before the first build), self-hosted Docker stack (Postgres, GoTrue, PostgREST, Kong, MinIO), npm run update applied as a git three-way merge.
+- Performance: 100/100 Lighthouse in all four categories on the production build (0.3 s FCP, 0.8 s LCP, 0 ms TBT, 0 CLS).
+
+## Projects
+
+- [Invoice Extraction Service, live documentation](https://nickdesjardins.github.io/Invoice-Extraction-Service/): Phase 1, Production Live & Open Source. An asynchronous FastAPI microservice that turns messy, unstructured documents into a guaranteed, schema-validated invoice record. Resilience comes from routing across models, not vendors: a free primary model cascades to a second provider on rate limits, timeouts, or schema exceptions, at zero marginal cost.
+- [Invoice Extraction Service, source on GitHub](https://github.com/nickdesjardins/Invoice-Extraction-Service): FastAPI, Pydantic, pytest, Docker.
+- Context-Aware Hybrid Compliance Retrieval Engine (Phase 2, In Active Pipeline, Delivery: Days 31 to 60): A retrieval engine for regulatory documents, SOPs, and product dossiers that answers with paragraph-level citations instead of plausible guesses. Dense and sparse retrieval run in parallel inside PostgreSQL, candidates are fused, then compressed to a handful of high-confidence passages by a cross-encoder.
+- Autonomous Multi-Agent Operations Pipeline (Phase 3, In Active Pipeline, Delivery: Days 61 to 90): A cyclic LangGraph workflow that coordinates SQL inventory queries, channel-specific copy synthesis, and regulatory compliance auditing. Validation failures loop back with structured revision notes. High-risk mutations pause for a human before anything leaves the system.
+- Production LLMOps Gateway & Evaluation CI/CD Suite (Phase 4, In Active Pipeline, Delivery: Days 91 to 120): An enterprise reverse proxy in front of every model call. Semantically similar queries resolve from a Redis vector cache in milliseconds, every transaction is traced, and a CI pipeline runs regression evaluations against golden datasets so a bad prompt change never reaches main.
+
+## Production web work
+
+- [newrootsherbal.com](https://newrootsherbal.com/): employer work for New Roots Herbal Inc. Full platform revamp on Laravel 13, a custom PHP CMS and e-commerce store written from scratch, with a Google Maps store locator and a real-time inventory system.
+- Eighteen campaign and education microsites for New Roots Herbal product lines (employer work): standalone Next.js sites such as [vitamins.newrootsherbal.com](https://vitamins.newrootsherbal.com/), [probiotics.newrootsherbal.com](https://probiotics.newrootsherbal.com/), [coughandcold.ca](https://www.coughandcold.ca/) and [prostateperform.ca](https://prostateperform.ca/), plus Laravel-served pages such as [newrootsherbal.com/cardiac-health](https://newrootsherbal.com/cardiac-health).
+- [MusiqueSD](https://www.musiquesd.com/): independent client site. Bilingual FR/EN marketing site for a Montreal recording studio, DJ and event animation business.
+- [Ryūgū: Ten Nights to the Dragon Palace](https://japan.webman.dev/): independent. A chaptered travel companion for an eleven-day voyage around Japan and Jeju.
+- [Thieves' Cant Translator](https://www.thethievescant.com/): independent. A D&D 5e rogue's companion that translates English or French into Thieves' Cant, with a dictionary, symbols and hobo signs.
+- [pcsquad.ca](https://pcsquad.ca/): own business, founded 2012. The bilingual site of Nicolas's first company, a computer repair and website shop he owned and ran from 2012 to 2018.
+- [Civalgo Punch](https://civalgo-punch.vercel.app/): experiment kept online for show. A real-time worker check-in system.
+- [React Hooks Guide](https://react-hooks-delta-umber.vercel.app/): experiment kept online for show. An interactive guide to React hooks.
+
+## Experience
+
+- Creator & Principal Engineer, NextBlock CMS (open source), Greater Montreal Area, QC (Oct 2025 to Present): Designed and built an open-source, AI-native CMS for Next.js 16 and Supabase as an Nx monorepo: database schema and row-level security, block editor, commerce, MCP server, CLI, and the release pipeline for eight npm packages.
+- Lead Web Developer & Applied AI Integration, New Roots Herbal Inc., Vaudreuil-Dorion, QC (Nov 2018 to Present): Own production reliability, data architecture, and infrastructure across the company's digital estate, and lead the integration of generative AI into day-to-day operations.
+- Technical Founder, PcSquad, Les Coteaux, QC (2012 to 2018): Founded and operated a regional IT solutions and web infrastructure consultancy.
+- Armed Forces Veteran, Royal Canadian Electrical and Mechanical Engineers (RCEME), CFB Valcartier, QC (2013 to 2016): Military discipline, electro-mechanical diagnostics, precision systems maintenance, and calm execution under mission-critical conditions.
+
+Education: Computer Science, General Program, Concordia University, Montreal (2016 to 2018); DEC in Computer Science, John Abbott College, Sainte-Anne-de-Bellevue (2009 to 2012).
+
+## Contact
+
+- [Email](mailto:nick.desjardins@live.com): nick.desjardins@live.com
+- [GitHub](https://github.com/nickdesjardins): nickdesjardins
+- [LinkedIn](https://www.linkedin.com/in/nicolas-desjardins/): nicolas-desjardins
+- Location: Greater Montreal Area, QC, Canada. Open to local, hybrid, and remote US/Canada engagements.
+- Availability: Available for Senior Applied AI & Forward Deployed roles (Montreal / Remote US & CA)
+- Response time: Replies within one business day.
