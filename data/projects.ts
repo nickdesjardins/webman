@@ -1,10 +1,12 @@
 /**
  * Enterprise Applied AI projects.
  *
- * Project 1 is live. Its proof points are taken from the repository's own
- * README and dated benchmark records, so every number here can be checked.
- * Projects 2 to 4 are scheduled milestone architectures from a 120-day
- * delivery plan; their metrics are explicit design targets, labelled as such.
+ * Projects 1 and 2 are live. Their proof points are taken from each
+ * repository's own README and dated records (the 7 October 2026 benchmark for
+ * project 1, the runs recorded on 14 October 2026 for project 2), so every
+ * number here can be checked. Projects 3 and 4 are scheduled milestone
+ * architectures from a 120-day delivery plan; their metrics are explicit
+ * design targets, labelled as such.
  */
 
 export type ProjectStatus = "live" | "pipeline";
@@ -44,7 +46,6 @@ export interface Project {
   proofPoints: string[];
   metrics: ProjectMetric[];
   links?: ProjectLink[];
-  featured?: boolean;
 }
 
 export const projects: Project[] = [
@@ -56,7 +57,6 @@ export const projects: Project[] = [
     shortTitle: "Invoice Extraction",
     status: "live",
     statusLabel: "Production Live & Open Source",
-    featured: true,
     summary:
       "An asynchronous FastAPI microservice that turns messy, unstructured documents into a guaranteed, schema-validated invoice record. Resilience comes from routing across models, not vendors: a free primary model cascades to a second provider on rate limits, timeouts, or schema exceptions, at zero marginal cost.",
     problem:
@@ -144,49 +144,90 @@ export const projects: Project[] = [
   {
     id: "hybrid-compliance-retrieval-engine",
     index: "02",
-    phase: "Phase 2 · Milestone",
+    phase: "Phase 2 · Shipped",
     title: "Context-Aware Hybrid Compliance Retrieval Engine",
     shortTitle: "Hybrid Retrieval Engine",
-    status: "pipeline",
-    statusLabel: "In Active Pipeline",
-    delivery: "Delivery: Days 31 to 60",
+    status: "live",
+    statusLabel: "Live Demo & Open Source",
     summary:
-      "A retrieval engine for regulatory documents, SOPs, and product dossiers that answers with paragraph-level citations instead of plausible guesses. Dense and sparse retrieval run in parallel inside PostgreSQL, candidates are fused, then compressed to a handful of high-confidence passages by a cross-encoder.",
+      "A retrieval engine for SOPs and regulatory manuals that answers only by quoting the source. Vector and keyword search run in one PostgreSQL statement and are fused, a cross-encoder keeps the three best passages, and every quote the model returns is checked against the stored document before anyone sees it. When the documents do not say it, the answer says so. The public demo runs at zero cost on free models.",
     problem:
-      "Naive RAG chunks text by character count and ranks by cosine similarity alone. It misses exact SKU codes and regulatory terms, fragments context, and invites hallucinated citations. In a compliance setting that is not a quality issue, it is a liability.",
+      "Naive RAG cuts text by character count and ranks by cosine similarity alone. It blurs exact identifiers such as 21 CFR Part 11 or SOP-QA-017, strips a clause of the document it came from, and leaves the model free to misquote a number or cite a page it never saw. In a compliance setting that is not a quality issue, it is a liability.",
     architecture:
-      "Multi-page documents are segmented on structural boundaries. Following Anthropic's Contextual Retrieval pattern, a model worker prepends document and section context to every chunk before indexing. Chunks are stored once in PostgreSQL with a pgvector HNSW index (m=16, ef_construction=64) and a native tsvector inverted index. Queries execute dense and BM25 retrieval concurrently, merge the lists with Reciprocal Rank Fusion (k=60), and pass the top 50 to Cohere Rerank 3. The top 3 passages reach the model, which is constrained to a Pydantic schema containing the answer, verbatim supporting quotes, and exact source identifiers, or an explicit insufficient-context verdict.",
+      "PyMuPDF extracts layout blocks per page, and a structural chunker packs them along headings into 400-token chunks with a 60-token overlap. Following Anthropic's Contextual Retrieval pattern, every chunk is stored with a situational preamble, and both its embedding and a generated tsvector column are built from that text. One SQL statement runs a pgvector cosine search over an HNSW index (m=16, ef_construction=64) and a full-text search over a GIN index, then fuses the two lists with Reciprocal Rank Fusion (k=60) in a CTE. A cross-encoder reads the question with each of up to 50 fused candidates and keeps 3. The model must return strict JSON with an answer, a confidence score, and verbatim quotes, or an explicit insufficient-context verdict. The server re-anchors every quote to the stored chunk text, drops what does not match, fills titles and page numbers from the database, and withholds any answer with no surviving quote. Generation runs on an ordered chain of free OpenRouter models with fallback; Claude, OpenAI embeddings, and Cohere Rerank v3.5 are drop-in settings.",
     stack: [
+      "Python 3.12",
+      "FastAPI",
+      "Pydantic v2",
       "PostgreSQL",
       "pgvector (HNSW)",
-      "tsvector / BM25",
+      "tsvector (GIN)",
       "Reciprocal Rank Fusion",
-      "Cohere Rerank 3",
-      "Anthropic Contextual Retrieval",
-      "Claude Sonnet",
-      "FastAPI",
+      "fastembed (ONNX)",
+      "OpenRouter",
+      "PyMuPDF",
+      "Render",
     ],
     pipeline: [
-      { name: "Ingest", detail: "Structural chunking, contextual preamble per chunk" },
-      { name: "Index", detail: "pgvector HNSW + tsvector in one PostgreSQL schema" },
-      { name: "Retrieve", detail: "Dense and BM25 in parallel, top 50 each" },
-      { name: "Fuse", detail: "Reciprocal Rank Fusion, k=60" },
-      { name: "Rerank", detail: "Cohere Rerank 3 cross-attention, 50 to 3" },
       {
-        name: "Answer",
-        detail: "Schema-constrained output with verbatim quotes and source ids",
+        name: "Ingest",
+        detail: "PyMuPDF blocks, heading-aware 400-token chunks, contextual preamble",
+      },
+      { name: "Index", detail: "pgvector HNSW and a generated tsvector GIN index, one table" },
+      { name: "Retrieve", detail: "Dense cosine and full-text search in one SQL statement" },
+      { name: "Fuse", detail: "Reciprocal Rank Fusion CTE, k=60, up to 50 candidates" },
+      { name: "Rerank", detail: "Cross-encoder reads question and passage together, keeps 3" },
+      {
+        name: "Verify",
+        detail: "Strict JSON answer, quotes re-anchored to stored text, pages from the database",
       },
     ],
     proofPoints: [
-      "Hallucinated URLs and citations are eliminated structurally: the model can only cite identifiers that exist in the retrieved set.",
-      "One database for vectors, lexical search, and relational metadata removes a separate vector store from the operational surface.",
-      "Unit tests run against mock embedding vectors, so retrieval logic is verified without a model or an API key.",
+      "Seven real runs recorded on 14 October 2026 and published as the service returned them. They show that the pipeline works, not how often it is right, and a test re-finds every recorded quote verbatim in the sample PDF, on the page it cites.",
+      "A citation cannot be invented. Quotes are matched against the stored chunk, never the generated preamble, after Unicode and typographic folding, and the model never supplies a page number.",
+      "The hermetic suite needs no network, database, or API key, and runs with ruff on every push. Opt-in live PostgreSQL tests assert that the SQL fusion matches its Python twin to 1e-9 and that EXPLAIN uses the HNSW index.",
+      "Fits a 512 MB free instance: three memory changes, including turning off ONNX Runtime's memory arena, took the service from 856 MB to 441 MB at peak with both local models loaded.",
+      "Closed by design for the open internet: uploads need the operator's key, questions are budgeted per visitor and per day, and the day's free allowance is read from OpenRouter itself, so a restart cannot erase it.",
+      "Median over the seven runs: 1.4 s retrieval (embed, SQL, re-rank) and 6.8 s end to end on free models. The SQL itself takes about 170 ms; generation is most of the rest.",
     ],
     metrics: [
-      { value: "< 800 ms", label: "p95 end-to-end latency", kind: "target" },
-      { value: "98%+", label: "context faithfulness on the golden set", kind: "target" },
-      { value: "50 to 3", label: "candidate compression before generation", kind: "target" },
-      { value: "0", label: "ungrounded citations by construction", kind: "target" },
+      {
+        value: "6 / 6",
+        label: "recorded questions answered with verified citations",
+        kind: "measured",
+      },
+      {
+        value: "1 / 1",
+        label: "out-of-corpus question declined, not guessed",
+        kind: "measured",
+      },
+      {
+        value: "441 MB",
+        label: "peak memory with both local models, on a 512 MB instance",
+        kind: "measured",
+      },
+      {
+        value: "$0.00",
+        label: "marginal cost per question on the free stack",
+        kind: "measured",
+      },
+    ],
+    links: [
+      {
+        label: "Project page",
+        href: "https://nickdesjardins.github.io/hybrid-knowledge-rag/",
+        kind: "docs",
+      },
+      {
+        label: "Live demo",
+        href: "https://hybrid-retrieval-engine.onrender.com/",
+        kind: "demo",
+      },
+      {
+        label: "Source on GitHub",
+        href: "https://github.com/nickdesjardins/hybrid-knowledge-rag",
+        kind: "github",
+      },
     ],
   },
   {
@@ -284,5 +325,3 @@ export const projects: Project[] = [
     ],
   },
 ];
-
-export const featuredProject = projects.find((p) => p.featured) ?? projects[0];

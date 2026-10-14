@@ -80,7 +80,7 @@ export function MetricKindTag({ kind, locale, className }: MetricKindTagProps) {
 interface MetricTileProps {
   metric: ProjectMetric;
   locale: Locale;
-  /** "lg" is the featured 2x2 grid, "sm" is the card mini grid. */
+  /** "lg" is the live-project 2x2 grid, "sm" is the card mini grid. */
   size?: "sm" | "lg";
   className?: string;
 }

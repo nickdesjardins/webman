@@ -12,8 +12,8 @@
  * or prototyped, "legacy" was used professionally and has since been retired.
  *
  * History the contexts lean on: web work since 2004, PcSquad IT consultancy
- * (2012 to 2018), New Roots Herbal web lead since 2018, NextBlock CMS, and
- * the Invoice Extraction Service.
+ * (2012 to 2018), New Roots Herbal web lead since 2018, NextBlock CMS, the
+ * Invoice Extraction Service, and the Hybrid Compliance Retrieval Engine.
  */
 
 export type ToolTier = "production" | "active" | "evaluating" | "legacy";
@@ -70,7 +70,7 @@ export const arsenal: ArsenalCategory[] = [
       { name: "OpenAI SDK", mono: "OAI", tier: "production", context: "Structured Outputs with strict JSON schema; exponential backoff with jitter on rate limits.", href: "https://platform.openai.com/docs" },
       { name: "Google GenAI SDK", icon: "siGooglegemini", tier: "production", context: "Gemini in the internal asset pipeline that cut catalog turnaround from weeks to 40 minutes per SKU.", href: "https://ai.google.dev/" },
       { name: "Groq", mono: "GQ", tier: "evaluating", context: "Low-latency inference tier for classification and routing steps where time-to-first-token dominates.", href: "https://groq.com/" },
-      { name: "OpenRouter", icon: "siOpenrouter", tier: "production", context: "One vendor, many models: the multi-provider fallback chain behind the live extraction service.", href: "https://openrouter.ai/" },
+      { name: "OpenRouter", icon: "siOpenrouter", tier: "production", context: "One vendor, many models: the multi-provider fallback chain behind both live AI services.", href: "https://openrouter.ai/" },
       { name: "Ollama", icon: "siOllama", tier: "production", context: "Local models for offline evaluation runs and privacy-sensitive prototypes.", href: "https://ollama.com/" },
       { name: "Model Context Protocol", mono: "MCP", tier: "production", context: "NextBlock's Cortex AI exposes the CMS as a Streamable HTTP MCP server with 56 tools, scoped bearer tokens, and confirmation-gated mutations. Listed in the official MCP Registry.", href: "https://modelcontextprotocol.io/" },
       { name: "Vercel AI SDK", icon: "siVercel", mono: "AI", tier: "production", context: "generateText over an OpenAI-compatible provider pointed at OpenRouter, behind NextBlock's free-model fallback runner and rate-limit detection.", href: "https://ai-sdk.dev/" },
@@ -92,7 +92,7 @@ export const arsenal: ArsenalCategory[] = [
       { name: "Perplexity", icon: "siPerplexity", tier: "production", context: "Grounded research with citations during architecture reviews.", href: "https://www.perplexity.ai/" },
       { name: "Mistral", icon: "siMistralai", tier: "evaluating", context: "European-hosted option when data residency is a constraint.", href: "https://mistral.ai/" },
       { name: "Llama", icon: "siMeta", tier: "evaluating", context: "Self-hosted through Ollama for offline evaluation runs.", href: "https://www.llama.com/" },
-      { name: "Nemotron", icon: "siNvidia", tier: "production", context: "Primary model in the live extraction chain's dated snapshot: 21 of 21 fully correct.", href: "https://www.nvidia.com/en-us/ai-data-science/foundation-models/nemotron/" },
+      { name: "Nemotron", icon: "siNvidia", tier: "production", context: "Primary model of both live AI services: 21 of 21 fully correct in the extraction snapshot, and the generator behind all seven recorded retrieval runs.", href: "https://www.nvidia.com/en-us/ai-data-science/foundation-models/nemotron/" },
     ],
   },
   {
@@ -104,9 +104,9 @@ export const arsenal: ArsenalCategory[] = [
     lucide: "database",
     tools: [
       { name: "PostgreSQL", icon: "siPostgresql", tier: "production", context: "System of record since 2018. NextBlock stores every content block as JSONB under row-level security; the retrieval engine adds vectors and lexical search to the same database.", href: "https://www.postgresql.org/" },
-      { name: "pgvector (HNSW / IVFFlat)", icon: "siPostgresql", mono: "PGV", tier: "active", context: "Hybrid RAG indexing with HNSW (m=16, ef_construction=64); IVFFlat where memory is the constraint.", href: "https://github.com/pgvector/pgvector" },
-      { name: "tsvector / BM25", mono: "BM25", tier: "active", context: "Sparse lexical retrieval so SKU codes and regulatory terms are never lost to cosine similarity.", href: "https://www.postgresql.org/docs/current/textsearch.html" },
-      { name: "Cohere Rerank", mono: "CO", tier: "active", context: "Cross-encoder re-ranking: 50 fused candidates compressed to 3 high-confidence passages.", href: "https://cohere.com/rerank" },
+      { name: "pgvector (HNSW / IVFFlat)", icon: "siPostgresql", mono: "PGV", tier: "production", context: "The live retrieval engine's dense arm: cosine search over HNSW (m=16, ef_construction=64), fused with full-text search in one SQL statement. IVFFlat where memory is the constraint.", href: "https://github.com/pgvector/pgvector" },
+      { name: "tsvector / BM25", mono: "BM25", tier: "production", context: "A generated tsvector column under a GIN index: the keyword arm of the live retrieval engine, so identifiers like 21 CFR Part 11 are never lost to cosine similarity.", href: "https://www.postgresql.org/docs/current/textsearch.html" },
+      { name: "Cohere Rerank", mono: "CO", tier: "active", context: "Default re-ranker of the retrieval engine (rerank-v3.5), cutting up to 50 fused candidates to 3; the free public demo swaps in a local ONNX cross-encoder.", href: "https://cohere.com/rerank" },
       { name: "ChromaDB", mono: "CH", tier: "evaluating", context: "Lightweight local vector store for evaluation harnesses and prototypes.", href: "https://www.trychroma.com/" },
       { name: "Qdrant", icon: "siQdrant", tier: "evaluating", context: "Benchmarked for payload filtering at scale; pgvector preferred when one database is enough.", href: "https://qdrant.tech/" },
       { name: "Redis", icon: "siRedis", tier: "active", context: "Semantic cache keyed by prompt embedding; rate-limit counters; LangGraph checkpoint store.", href: "https://redis.io/" },
@@ -206,7 +206,7 @@ export const arsenal: ArsenalCategory[] = [
       { name: "GitHub Actions", icon: "siGithubactions", tier: "production", context: "Test suites on every push, a scheduled job that re-tests free models and publishes the tested chain, and NextBlock's daily upstream sync and MCP registry publish.", href: "https://github.com/features/actions" },
       { name: "Vercel", icon: "siVercel", tier: "production", context: "Edge deployment for Next.js properties, including this one. NextBlock's one-click deploy provisions Supabase and injects keys before the first build.", href: "https://vercel.com/" },
       { name: "Cloudflare (Workers, R2)", icon: "siCloudflare", tier: "production", context: "SmartStack, the New Roots Herbal supplement-tracking PWA, runs on Workers; NextBlock stores media in R2 or MinIO.", href: "https://www.cloudflare.com/" },
-      { name: "Render", icon: "siRender", tier: "production", context: "Hosts the live Invoice Extraction Service as a FastAPI container deployed straight from the repository.", href: "https://render.com/" },
+      { name: "Render", icon: "siRender", tier: "production", context: "Hosts both live AI services as FastAPI containers deployed straight from their repositories; the retrieval engine fits two local ONNX models into a 512 MB free instance.", href: "https://render.com/" },
       { name: "DigitalOcean", icon: "siDigitalocean", tier: "production", context: "Droplets for right-sized VPS hosting and short-lived staging boxes.", href: "https://www.digitalocean.com/" },
       { name: "Google Cloud Platform", icon: "siGooglecloud", tier: "production", context: "Project, billing, and API quota management for the Maps Platform store locator and the Gemini asset pipeline.", href: "https://cloud.google.com/" },
       { name: "Tailscale", icon: "siTailscale", tier: "production", context: "Zero-config private networking between the home lab, servers, and CI runners.", href: "https://tailscale.com/" },
@@ -246,7 +246,7 @@ export const arsenal: ArsenalCategory[] = [
     tools: [
       { name: "VS Code", mono: "VSC", tier: "production", context: "Primary editor since 2018, with remote SSH sessions into the Linux hosts and the Claude Code and Codex extensions alongside.", href: "https://code.visualstudio.com/" },
       { name: "Git", icon: "siGit", tier: "production", context: "Centralised workflows, protected branches, and architectural review checkpoints.", href: "https://git-scm.com/" },
-      { name: "GitHub", icon: "siGithub", tier: "production", context: "Home of NextBlock CMS, the Invoice Extraction Service, and this site: issues, pull requests, protected branches, and releases.", href: "https://github.com/nickdesjardins" },
+      { name: "GitHub", icon: "siGithub", tier: "production", context: "Home of NextBlock CMS, both live AI services, and this site: issues, pull requests, protected branches, releases, and the GitHub Pages project sites.", href: "https://github.com/nickdesjardins" },
       { name: "Git Bash", mono: "GB", tier: "production", context: "POSIX shell on the Windows workstation so the same scripts run locally and on the Linux hosts.", href: "https://gitforwindows.org/" },
       { name: "Claude Code", icon: "siClaude", tier: "production", context: "Agentic coding in the terminal; NextBlock ships a Claude Code plugin so the agent can build pages over MCP.", href: "https://claude.com/claude-code" },
       { name: "Cursor", icon: "siCursor", tier: "production", context: "AI-first editor for exploratory refactors; NextBlock ships a Cursor agent plugin over MCP.", href: "https://cursor.com/" },

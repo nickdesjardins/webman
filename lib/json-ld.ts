@@ -2,8 +2,8 @@
  * JSON-LD structured data for https://webman.dev, one edition per locale.
  *
  * One @graph with stable @id anchors so every node can reference the
- * Person without repeating it: Person, WebSite, ProfilePage, and for the
- * live featured project a SoftwareApplication plus its SoftwareSourceCode.
+ * Person without repeating it: Person, WebSite, ProfilePage, and for each
+ * live project a SoftwareApplication plus its SoftwareSourceCode.
  * The anchors are derived from the canonical (default locale) origin, so the
  * English and French editions describe the same entities; only the prose,
  * the page url and inLanguage change per locale.
@@ -55,7 +55,7 @@ const AGPL_URL = "https://www.gnu.org/licenses/agpl-3.0.html";
 export function buildJsonLd(locale: Locale): JsonLdGraph {
   const {
     site,
-    featuredProject,
+    projects,
     nextblock,
     experience: { experience, education },
   } = getContent(locale);
@@ -66,9 +66,6 @@ export function buildJsonLd(locale: Locale): JsonLdGraph {
   const pageUrl = `${site.url}${localePath(locale)}`;
 
   const employer = experience.find((item) => item.kind === "work" && !item.end);
-  const docsLink = featuredProject.links?.find((link) => link.kind === "docs")?.href;
-  const githubLink = featuredProject.links?.find((link) => link.kind === "github")?.href;
-  const appId = githubLink ? `${githubLink}#app` : `${ORIGIN}/#${featuredProject.id}`;
 
   const person: JsonLdNode = {
     "@type": "Person",
@@ -120,12 +117,16 @@ export function buildJsonLd(locale: Locale): JsonLdGraph {
 
   const graph: JsonLdNode[] = [person, website, profilePage];
 
-  if (featuredProject.status === "live") {
+  for (const project of projects.filter((p) => p.status === "live")) {
+    const docsLink = project.links?.find((link) => link.kind === "docs")?.href;
+    const githubLink = project.links?.find((link) => link.kind === "github")?.href;
+    const appId = githubLink ? `${githubLink}#app` : `${ORIGIN}/#${project.id}`;
+
     graph.push({
       "@type": "SoftwareApplication",
       "@id": appId,
-      name: featuredProject.title,
-      description: featuredProject.summary,
+      name: project.title,
+      description: project.summary,
       applicationCategory: "DeveloperApplication",
       operatingSystem: "Linux, Docker",
       url: docsLink ?? githubLink,
@@ -139,8 +140,8 @@ export function buildJsonLd(locale: Locale): JsonLdGraph {
       graph.push({
         "@type": "SoftwareSourceCode",
         "@id": `${githubLink}#code`,
-        name: featuredProject.title,
-        description: featuredProject.summary,
+        name: project.title,
+        description: project.summary,
         codeRepository: githubLink,
         programmingLanguage: "Python",
         runtimePlatform: "Python 3.12",

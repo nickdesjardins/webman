@@ -117,7 +117,7 @@ const CATEGORY_LABELS: Record<Locale, Record<string, string>> = {
 
 export function buildResume(locale: Locale): ResumeContent {
   const c = getContent(locale);
-  const { site, nextblock, featuredProject, projects } = c;
+  const { site, nextblock, projects } = c;
   const edu = c.experience.education;
   const fr = locale === "fr";
 
@@ -127,13 +127,24 @@ export function buildResume(locale: Locale): ResumeContent {
     items: cat.tools.map((t) => t.name),
   }));
 
-  const links = {
-    live: fr ? "Documentation en ligne" : "Live documentation",
-    source: fr ? "Code source" : "Source",
+  /** The live Applied AI services, by id; their metrics are condensed per locale below. */
+  const project = (id: string) => {
+    const found = projects.find((p) => p.id === id);
+    if (!found) throw new Error(`Unknown project: ${id}`);
+    return found;
   };
-
-  const invoiceDocs = featuredProject.links?.find((l) => l.kind === "docs")?.href ?? "";
-  const invoiceRepo = featuredProject.links?.find((l) => l.kind === "github")?.href ?? "";
+  /**
+   * Project page and repository, printed as bare URLs so both fit one line
+   * (github.io reads as the docs, github.com as the source). The live demo is
+   * one click from the project page, so it is left out here.
+   */
+  const bareLinks = (p: (typeof projects)[number]) =>
+    (["docs", "github"] as const)
+      .map((kind) => p.links?.find((l) => l.kind === kind)?.href)
+      .filter((url): url is string => Boolean(url))
+      .map((url) => ({ label: url.replace(/^https?:\/\//, "").replace(/\/$/, ""), href: url }));
+  const invoice = project("invoice-extraction-service");
+  const retrieval = project("hybrid-compliance-retrieval-engine");
   const milestones = projects.filter((p) => p.status === "pipeline");
   const milestoneRows = milestones.map((p) => ({
     title: p.title,
@@ -276,17 +287,22 @@ export function buildResume(locale: Locale): ResumeContent {
       serviceTitle: "Military service",
       service: ["RCEME Weapons Technician, Canadian Armed Forces", "2013 to 2016, CFB Valcartier, QC"],
       projectsTitle: "Selected projects",
-      projectsNote: "Measured numbers come from saved benchmark records and public registries.",
+      projectsNote: "Measured numbers come from saved benchmark records, recorded runs, and public registries.",
       projects: [
         {
-          title: featuredProject.title,
+          title: invoice.title,
           status: "Production live, open source",
-          summary: featuredProject.summary,
-          metrics: featuredProject.metrics.map((m) => `${m.value} ${m.label}`),
-          links: [
-            { label: links.live, href: invoiceDocs },
-            { label: links.source, href: invoiceRepo },
-          ],
+          summary: invoice.summary,
+          metrics: ["21 / 21 fully correct, primary model", "10 failure classes, offline", "0 network calls in tests", "$0.00 per request"],
+          links: bareLinks(invoice),
+        },
+        {
+          title: retrieval.title,
+          status: "Live demo, open source",
+          summary:
+            "Hybrid RAG over SOPs and regulatory manuals: pgvector and full-text search fused by Reciprocal Rank Fusion in one PostgreSQL statement, a cross-encoder keeps 3 passages, and every quote is verified against the stored text before it is shown. Runs at zero cost on free models.",
+          metrics: ["6 / 6 answers with verified quotes", "1 / 1 out-of-corpus declined", "441 MB peak, 512 MB host", "$0.00 per question"],
+          links: bareLinks(retrieval),
         },
         {
           title: "NextBlock CMS",
@@ -306,7 +322,7 @@ export function buildResume(locale: Locale): ResumeContent {
         },
       ],
       milestonesTitle: "Scheduled milestone architectures",
-      milestonesNote: "Part of a 120-day Applied AI plan; figures are design targets, not measurements.",
+      milestonesNote: "Phases 3 and 4 of a 120-day Applied AI plan whose first two phases have shipped (page 2). Figures are design targets, not measurements.",
       milestones: milestoneRows,
       webTitle: "Production web work",
       webNote: "Employer work is credited to New Roots Herbal Inc.; the rest is independent.",
@@ -411,17 +427,22 @@ export function buildResume(locale: Locale): ResumeContent {
     serviceTitle: "Service militaire",
     service: ["Technicien d'armement, GEMRC, Forces armées canadiennes", "2013 à 2016, BFC Valcartier, QC"],
     projectsTitle: "Projets choisis",
-    projectsNote: "Les chiffres mesurés proviennent d'enregistrements de référence sauvegardés et de registres publics.",
+    projectsNote: "Les chiffres mesurés proviennent d'enregistrements de référence sauvegardés, d'exécutions enregistrées et de registres publics.",
     projects: [
       {
-        title: featuredProject.title,
+        title: invoice.title,
         status: "En production, code ouvert",
-        summary: featuredProject.summary,
-        metrics: featuredProject.metrics.map((m) => `${m.value} ${m.label}`),
-        links: [
-          { label: links.live, href: invoiceDocs },
-          { label: links.source, href: invoiceRepo },
-        ],
+        summary: invoice.summary,
+        metrics: ["21 / 21 corrects, modèle principal", "10 défaillances testées hors ligne", "0 appel réseau en test", "0,00 $ par requête"],
+        links: bareLinks(invoice),
+      },
+      {
+        title: retrieval.title,
+        status: "Démo en ligne, code ouvert",
+        summary:
+          "RAG hybride sur des procédures et manuels réglementaires : pgvector et recherche plein texte fusionnés par Reciprocal Rank Fusion dans une seule requête PostgreSQL, un cross-encoder retient 3 passages, et chaque citation est vérifiée contre le texte stocké avant d'être affichée. Modèles gratuits, coût nul.",
+        metrics: ["6 / 6 réponses vérifiées", "1 / 1 question hors corpus déclinée", "441 Mo au pic, hôte de 512 Mo", "0,00 $ par question"],
+        links: bareLinks(retrieval),
       },
       {
         title: "NextBlock CMS",
@@ -441,7 +462,7 @@ export function buildResume(locale: Locale): ResumeContent {
       },
     ],
     milestonesTitle: "Architectures jalons planifiées",
-    milestonesNote: "Issues d'un plan d'IA appliquée de 120 jours; les chiffres sont des cibles de conception, pas des mesures.",
+    milestonesNote: "Phases 3 et 4 d'un plan d'IA appliquée de 120 jours dont les deux premières phases sont livrées (page 2). Les chiffres sont des cibles de conception, pas des mesures.",
     milestones: milestoneRows,
     webTitle: "Réalisations web en production",
     webNote: "Le travail en emploi est crédité à New Roots Herbal Inc.; le reste est indépendant.",

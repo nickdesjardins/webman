@@ -22,7 +22,6 @@ export interface Content {
   locale: Locale;
   site: enSite.SiteContent;
   projects: enProjects.Project[];
-  featuredProject: enProjects.Project;
   nextblock: enNextblock.NextblockContent;
   work: {
     workIntro: enWork.WorkIntro;
@@ -67,7 +66,6 @@ function bundle(
     locale,
     site: m.site.site,
     projects: m.projects.projects,
-    featuredProject: m.projects.featuredProject,
     nextblock: m.nextblock.nextblock,
     work: {
       workIntro: m.work.workIntro,

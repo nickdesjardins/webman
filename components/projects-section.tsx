@@ -2,7 +2,7 @@
 
 import { useLocale } from "@/components/locale-provider";
 import type { ReactNode } from "react";
-import { CheckCircle2, ExternalLink, FileText } from "lucide-react";
+import { CheckCircle2, ExternalLink, FileText, MonitorPlay } from "lucide-react";
 import { BrandIcon } from "@/components/brand-icon";
 import { Reveal } from "@/components/motion/reveal";
 import { PipelineFlow } from "@/components/pipeline-flow";
@@ -26,7 +26,7 @@ const STRINGS = {
     eyebrow: "Enterprise Applied AI Projects",
     title: "Deterministic AI systems, built for production.",
     description:
-      "One live open-source microservice and three scheduled milestone architectures from a 120-day delivery plan. Measured numbers come from saved benchmark records. Target numbers are explicit SLOs, and they are labelled as such.",
+      "Two live open-source services and two scheduled milestone architectures from a 120-day delivery plan. Measured numbers come from saved benchmark records and recorded runs. Target numbers are explicit SLOs, and they are labelled as such.",
     legend: "Metric legend",
     measured: "Measured",
     target: "Target",
@@ -43,7 +43,7 @@ const STRINGS = {
     eyebrow: "Projets d'IA appliquée en entreprise",
     title: "Des systèmes d'IA déterministes, conçus pour la production.",
     description:
-      "Un microservice à code source ouvert en production et trois architectures de jalons planifiées, issues d'un plan de livraison de 120 jours. Les chiffres mesurés proviennent d'enregistrements de bancs d'essai sauvegardés. Les chiffres cibles sont des SLO explicites, et ils sont identifiés comme tels.",
+      "Deux services à code source ouvert en ligne et deux architectures de jalons planifiées, issues d'un plan de livraison de 120 jours. Les chiffres mesurés proviennent de bancs d'essai et d'exécutions enregistrés. Les chiffres cibles sont des SLO explicites, et ils sont identifiés comme tels.",
     legend: "Légende des métriques",
     measured: "Mesuré",
     target: "Cible",
@@ -89,11 +89,12 @@ function MetricLegend({ locale, className }: { locale: Locale; className?: strin
 }
 
 /* ------------------------------------------------------------------ */
-/* Featured project                                                    */
+/* Live project                                                        */
 /* ------------------------------------------------------------------ */
 
 function LinkIcon({ kind }: { kind: ProjectLink["kind"] }) {
   if (kind === "docs") return <FileText aria-hidden="true" />;
+  if (kind === "demo") return <MonitorPlay aria-hidden="true" />;
   if (kind === "github") {
     // The link text already names the destination, so the glyph is decorative.
     return (
@@ -132,7 +133,7 @@ function LabelledBlock({ label, children }: { label: string; children: ReactNode
   );
 }
 
-function FeaturedProject({ project, locale }: { project: Project; locale: Locale }) {
+function LiveProject({ project, locale }: { project: Project; locale: Locale }) {
   const t = STRINGS[locale];
   const titleId = `${project.id}-title`;
 
@@ -236,9 +237,9 @@ function FeaturedProject({ project, locale }: { project: Project; locale: Locale
 export function ProjectsSection() {
   const locale = useLocale();
   const t = STRINGS[locale];
-  const { projects, featuredProject } = getContent(locale);
-  const featured = featuredProject;
-  const pipelineProjects = projects.filter((p) => p.id !== featured.id);
+  const { projects } = getContent(locale);
+  const liveProjects = projects.filter((p) => p.status === "live");
+  const pipelineProjects = projects.filter((p) => p.status !== "live");
 
   return (
     <Section
@@ -251,14 +252,18 @@ export function ProjectsSection() {
         <MetricLegend locale={locale} className="-mt-4 mb-8 lg:-mt-6 lg:mb-10" />
       </Reveal>
 
-      <FeaturedProject project={featured} locale={locale} />
+      <div className="grid gap-8 lg:gap-10">
+        {liveProjects.map((project) => (
+          <LiveProject key={project.id} project={project} locale={locale} />
+        ))}
+      </div>
 
       {pipelineProjects.length > 0 && (
         <>
           <Reveal>
             <p className={cn(projectLabelClass, "mt-14 lg:mt-16")}>{t.scheduled}</p>
           </Reveal>
-          <div className="mt-5 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+          <div className="mt-5 grid gap-6 md:grid-cols-2">
             {pipelineProjects.map((project, i) => (
               <Reveal key={project.id} index={i} className="h-full">
                 <ProjectCard project={project} locale={locale} />
