@@ -384,8 +384,8 @@ export interface ArsenalIntro {
 }
 
 export const arsenalIntro: ArsenalIntro = {
-  eyebrow: "The Engineering Arsenal",
-  heading: "Production stack and tooling.",
+  eyebrow: "Skills and tools",
+  heading: "What I work with, and how deep it goes.",
   description:
     "Nearly two hundred tools, and every one of them has a job in a real system, from the 2012 consultancy years to the current Applied AI work. Hover or tap a tile to see where it is used and how deep the experience runs.",
 };

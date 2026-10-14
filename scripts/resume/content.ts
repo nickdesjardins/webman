@@ -218,11 +218,11 @@ export function buildResume(locale: Locale): ResumeContent {
       ],
       profileTitle: "Profile",
       profile:
-        "Lead web developer and systems engineer with 8+ years of production ownership across 30+ digital properties, and the creator of NextBlock CMS, an open-source AI-native CMS for Next.js 16 and Supabase (200k+ lines of TypeScript, 8 npm packages, an MCP server with 56 tools). I bring what production AI actually needs: typed schemas, fallbacks that are tested, telemetry, and evaluation gates. Available for Senior Applied AI, AI Solutions, and Forward Deployed Engineer roles.",
+        "Lead web developer and applied AI developer with 8+ years of production ownership across 30+ digital properties, and the creator of NextBlock CMS, an open-source AI-native CMS for Next.js 16 and Supabase (200k+ lines of TypeScript, 8 npm packages, an MCP server with 56 tools). I bring what production AI actually needs: typed schemas, fallbacks that are tested, telemetry, and evaluation gates. Open to full-time roles, contracts, and agency placements in Applied AI, AI Solutions, and Forward Deployed Engineer roles.",
       experienceTitle: "Experience",
       roles: [
         {
-          title: "Creator & Principal Engineer",
+          title: "Creator & Lead Developer",
           org: "NextBlock CMS (open source)",
           period: "Oct 2025 to present",
           place: "Greater Montreal Area, QC",
@@ -358,11 +358,11 @@ export function buildResume(locale: Locale): ResumeContent {
     ],
     profileTitle: "Profil",
     profile:
-      "Développeur web principal et ingénieur systèmes, plus de 8 ans de responsabilité en production sur plus de 30 propriétés, et créateur de NextBlock CMS, un CMS ouvert et natif IA pour Next.js 16 et Supabase (200k+ lignes de TypeScript, 8 paquets npm, serveur MCP de 56 outils). J'apporte ce dont l'IA en production a besoin : schémas typés, replis testés, télémétrie et barrières d'évaluation. Disponible pour des rôles seniors en IA appliquée, solutions IA et Forward Deployed Engineer.",
+      "Développeur web principal et développeur en IA appliquée, plus de 8 ans de responsabilité en production sur plus de 30 propriétés, et créateur de NextBlock CMS, un CMS ouvert et natif IA pour Next.js 16 et Supabase (200k+ lignes de TypeScript, 8 paquets npm, serveur MCP de 56 outils). J'apporte ce dont l'IA en production a besoin : schémas typés, replis testés, télémétrie et barrières d'évaluation. Ouvert aux postes permanents, aux contrats et aux placements par agence en IA appliquée, en solutions IA et comme Forward Deployed Engineer.",
     experienceTitle: "Expérience",
     roles: [
       {
-        title: "Créateur et ingénieur principal",
+        title: "Créateur et développeur principal",
         org: "NextBlock CMS (code ouvert)",
         period: "Oct. 2025 à aujourd'hui",
         place: "Grand Montréal, QC",

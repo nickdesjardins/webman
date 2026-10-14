@@ -8,6 +8,7 @@ import * as enArsenal from "@/data/arsenal";
 import * as enExperience from "@/data/experience";
 import * as enNextblock from "@/data/nextblock";
 import * as enProjects from "@/data/projects";
+import * as enServices from "@/data/services";
 import * as enSite from "@/data/site";
 import * as enWork from "@/data/work";
 import * as frAbout from "@/data/fr/about";
@@ -15,6 +16,7 @@ import * as frArsenal from "@/data/fr/arsenal";
 import * as frExperience from "@/data/fr/experience";
 import * as frNextblock from "@/data/fr/nextblock";
 import * as frProjects from "@/data/fr/projects";
+import * as frServices from "@/data/fr/services";
 import * as frSite from "@/data/fr/site";
 import * as frWork from "@/data/fr/work";
 
@@ -22,6 +24,7 @@ export interface Content {
   locale: Locale;
   site: enSite.SiteContent;
   projects: enProjects.Project[];
+  services: { intro: enServices.ServicesIntro; items: enServices.ServiceItem[] };
   nextblock: enNextblock.NextblockContent;
   work: {
     workIntro: enWork.WorkIntro;
@@ -55,6 +58,7 @@ function bundle(
   m: {
     site: typeof enSite;
     projects: typeof enProjects;
+    services: typeof enServices;
     nextblock: typeof enNextblock;
     work: typeof enWork;
     arsenal: typeof enArsenal;
@@ -66,6 +70,7 @@ function bundle(
     locale,
     site: m.site.site,
     projects: m.projects.projects,
+    services: { intro: m.services.servicesIntro, items: m.services.services },
     nextblock: m.nextblock.nextblock,
     work: {
       workIntro: m.work.workIntro,
@@ -96,6 +101,7 @@ const content: Record<Locale, Content> = {
   en: bundle("en", {
     site: enSite,
     projects: enProjects,
+    services: enServices,
     nextblock: enNextblock,
     work: enWork,
     arsenal: enArsenal,
@@ -105,6 +111,7 @@ const content: Record<Locale, Content> = {
   fr: bundle("fr", {
     site: frSite,
     projects: frProjects,
+    services: frServices,
     nextblock: frNextblock,
     work: frWork,
     arsenal: frArsenal,

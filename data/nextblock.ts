@@ -86,7 +86,7 @@ export interface NextblockContent {
 export const nextblock: NextblockContent = {
   name: "NextBlock CMS",
   wordmark: "NextBlock",
-  role: "Creator, architect, and principal engineer",
+  role: "Creator, designer, and lead developer",
   eyebrow: "Flagship product · Open source",
   heading: "NextBlock CMS: a full-stack, AI-native CMS, built end to end.",
   tagline:

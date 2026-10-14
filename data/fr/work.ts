@@ -13,7 +13,7 @@ import type { SubIntro, WorkAttribution, WorkItem, WorkIntro, WorkKind } from "@
 
 export const workIntro: WorkIntro = {
   eyebrow: "Travail web en production",
-  heading: "Livré pour le web depuis 2004.",
+  heading: "Des sites web et des boutiques en ligne depuis 2004.",
   description:
     "Avant les modèles de fondation, il y avait des boutiques en ligne, des systèmes de contenu et des pages de campagne qui devaient fonctionner le jour du lancement. Une sélection, regroupée par usage. Le travail accompli en emploi est attribué à l'employeur; tout le reste est indépendant.",
 };

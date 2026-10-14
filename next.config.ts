@@ -8,6 +8,16 @@ const nextConfig: NextConfig = {
   images: {
     formats: ["image/avif", "image/webp"],
   },
+  /*
+   * Addresses from the pre-2026 site that search engines still list:
+   * /assets/resume.pdf is in the index and returned 404 after the rebuild.
+   */
+  async redirects() {
+    return [
+      { source: "/assets/resume.pdf", destination: "/Nicolas-Desjardins-Resume.pdf", permanent: true },
+      { source: "/assets/:path*", destination: "/", permanent: true },
+    ];
+  },
   async headers() {
     return [
       {

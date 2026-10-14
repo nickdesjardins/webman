@@ -40,7 +40,7 @@ export interface SubIntro {
 
 export const workIntro: WorkIntro = {
   eyebrow: "Production Web Work",
-  heading: "Shipped for the web since 2004.",
+  heading: "Building websites and online stores since 2004.",
   description:
     "Before foundation models there were storefronts, content systems, and campaign pages that had to work on launch day. A selection, grouped by what it was for. Work done as an employee is attributed to the employer; everything else is independent.",
 };

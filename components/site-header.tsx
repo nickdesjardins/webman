@@ -133,7 +133,9 @@ export function SiteHeader() {
   const { site } = getContent(locale);
   const t = STRINGS[locale];
   const socialLinks = getSocialLinks(locale);
-  const homeHref = `${localePath(locale, "/")}#overview`;
+  const home = localePath(locale, "/");
+  const homeHref = `${home}#overview`;
+  const visibleNav = site.nav.filter((item) => !item.hidden);
 
   const scrolled = useSyncExternalStore(subscribeToScroll, getScrolled, getServerScrolled);
   const active = useActiveSection(site.nav);
@@ -174,18 +176,23 @@ export function SiteHeader() {
           <span className="flex size-8 items-center justify-center rounded-md bg-primary font-mono text-sm font-bold text-primary-foreground">
             {monogram(site.name)}
           </span>
-          <span className="font-mono text-sm font-medium text-foreground">{site.domain}</span>
+          <span className="flex flex-col leading-none">
+            <span className="text-sm font-semibold tracking-tight text-foreground">{site.name}</span>
+            <span className="mt-1 hidden font-mono text-[10px] tracking-wider text-muted-foreground sm:block">
+              {site.domain}
+            </span>
+          </span>
           <span className="sr-only">, {t.backToOverview}</span>
         </a>
 
         {/* Primary navigation (lg and up) */}
         <nav aria-label={t.primaryNav} className="hidden lg:block">
           <ul className="flex items-center gap-1">
-            {site.nav.map((item) => {
+            {visibleNav.map((item) => {
               const isActive = active === item.id;
               return (
                 <li key={item.id}>
-                  <NavLink id={item.id} label={item.label} active={isActive}>
+                  <NavLink id={item.id} base={home} label={item.label} active={isActive}>
                     {isActive && (
                       <motion.span
                         layoutId="nav-underline"
@@ -204,7 +211,7 @@ export function SiteHeader() {
         {/* Actions */}
         <div className="flex items-center gap-1.5 sm:gap-2">
 
-          <div className="hidden items-center md:flex">
+          <div className="hidden items-center md:flex lg:hidden xl:flex">
             {socialLinks.map(({ id, label, href, Icon }) => (
               <Button key={id} asChild variant="ghost" size="icon">
                 <a
@@ -248,10 +255,11 @@ export function SiteHeader() {
 
               <nav aria-label={t.sectionsNav} className="px-3 py-4">
                 <ul className="flex flex-col">
-                  {site.nav.map((item) => (
+                  {visibleNav.map((item) => (
                     <li key={item.id}>
                       <NavLink
                         id={item.id}
+                        base={home}
                         label={item.label}
                         active={active === item.id}
                         onClick={() => setOpen(false)}

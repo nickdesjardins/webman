@@ -1,25 +1,36 @@
 # Nicolas Desjardins (webman.dev)
 
-> Nicolas Desjardins is an Applied AI Engineer and Lead Systems Engineer in Montreal with 8+ years of production full-stack and infrastructure experience. He builds schema-enforced extraction services, hybrid retrieval engines, LangGraph agent pipelines, and LLMOps evaluation gateways.
+> Nicolas (Nick) Desjardins is an applied AI developer and senior full-stack developer in the Greater Montreal Area, Quebec, working in English and French. He builds AI that reads documents, answers from a company's own files with the source quoted, and keeps working when a provider fails, backed by 8+ years running production web systems for New Roots Herbal Inc. He is open to full-time roles, contracts and agency placements, hybrid in Montreal or remote across Canada and the US.
 
-- [webman.dev](https://webman.dev): portfolio, English edition
+- [webman.dev](https://webman.dev/): portfolio, English edition
 - [webman.dev/fr](https://webman.dev/fr): portfolio, French edition
+- [Invoice data extraction with AI](https://webman.dev/projects/invoice-data-extraction): case study (French: https://webman.dev/fr/projects/invoice-data-extraction)
+- [Document search with cited sources (RAG)](https://webman.dev/projects/compliance-document-search): case study (French: https://webman.dev/fr/projects/compliance-document-search)
 - [Resume (PDF, English)](https://webman.dev/Nicolas-Desjardins-Resume.pdf)
 - [CV (PDF, French)](https://webman.dev/Nicolas-Desjardins-CV.pdf)
+
+## What he can build for a company (plain language)
+
+- Invoices, purchase orders and forms that are still retyped by hand: document data extraction with a validated schema and model fallback. Proof: 21 of 21 test invoices fully correct on the 7 October 2026 benchmark.
+- Staff who cannot find answers in procedures and regulatory manuals: hybrid retrieval (RAG) that quotes the exact passage and page, and says so when the documents do not cover the question. Proof: 6 of 6 recorded questions answered with verified quotes, 1 of 1 out-of-scope question declined (14 October 2026).
+- Multi-step back-office work where a person must approve the risky steps: supervised AI agents (LangGraph). Planned; its figures are targets.
+- Knowing whether answers got worse after a change: evaluation in CI, tracing and caching (LLMOps). Planned; its figures are targets.
+- Websites and online stores that must not go down when servers change: 30+ websites migrated with zero downtime at New Roots Herbal Inc.
+- A website a team can edit itself and AI tools can operate safely: NextBlock CMS, an AI-native CMS with an MCP server.
 
 ## Who
 
 - Name: Nicolas Desjardins (also Nick Desjardins)
-- Title: Lead Systems Engineer Turned Applied AI Architect
-- Positioning: Applied AI Engineering for production, not demos
-- Tagline: Bridging frontier foundation models with deterministic enterprise infrastructure. Building production RAG engines, self-correcting agent state machines, and schema-enforced extraction services.
-- Location: Greater Montreal Area, QC, Canada
+- Role: Applied AI Developer and Senior Full-Stack Developer (French: Développeur en IA appliquée et full-stack senior).
+- Open to: full-time roles, contracts, and agency placements. Roles such as Applied AI Engineer, Forward Deployed Engineer, AI Solutions, and Senior Full-Stack Developer with an AI focus.
+- Location: Greater Montreal Area, QC, Canada. Hybrid in Montreal or remote across Canada and the US.
+- Languages: English and French.
 - Building for the web since 2004
-- Proof points: 8+ years owning production systems; 30+ digital properties migrated with zero downtime; 200k+ lines of TypeScript shipped as an open-source CMS (NextBlock)
+- Proof points: 8+ years running production systems; 30+ websites migrated with zero downtime; 200k+ lines of TypeScript shipped as an open-source CMS (NextBlock)
 
 ## Flagship product: NextBlock CMS
 
-- [NextBlock CMS](https://nextblock.dev): the open-source, full-stack AI-native CMS for Next.js 16, Supabase, and Tailwind CSS. Nicolas Desjardins is its creator, architect, and principal engineer.
+- [NextBlock CMS](https://nextblock.dev): the open-source, full-stack AI-native CMS for Next.js 16, Supabase, and Tailwind CSS. Nicolas Desjardins is its creator, designer, and lead developer.
 - [Source on GitHub](https://github.com/nextblock-cms/nextblock): Nx monorepo.
 - [Live sandbox](https://cms.nextblock.dev/): demo@nextblock.dev / password, resets every 15 minutes.
 - Install: npm create nextblock@latest
@@ -51,7 +62,7 @@
 
 ## Experience
 
-- Creator & Principal Engineer, NextBlock CMS (open source), Greater Montreal Area, QC (Oct 2025 to Present): Designed and built an open-source, AI-native CMS for Next.js 16 and Supabase as an Nx monorepo: database schema and row-level security, block editor, commerce, MCP server, CLI, and the release pipeline for eight npm packages.
+- Creator & Lead Developer, NextBlock CMS (open source), Greater Montreal Area, QC (Oct 2025 to Present): Designed and built an open-source, AI-native CMS for Next.js 16 and Supabase as an Nx monorepo: database schema and row-level security, block editor, commerce, MCP server, CLI, and the release pipeline for eight npm packages.
 - Lead Web Developer & Applied AI Integration, New Roots Herbal Inc., Vaudreuil-Dorion, QC (Nov 2018 to Present): Own production reliability, data architecture, and infrastructure across the company's digital estate, and lead the integration of generative AI into day-to-day operations.
 - Technical Founder, PcSquad, Les Coteaux, QC (2012 to 2018): Founded and operated a regional IT solutions and web infrastructure consultancy.
 - Armed Forces Veteran, Royal Canadian Electrical and Mechanical Engineers (RCEME), CFB Valcartier, QC (2013 to 2016): Military discipline, electro-mechanical diagnostics, precision systems maintenance, and calm execution under mission-critical conditions.

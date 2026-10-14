@@ -54,6 +54,11 @@ export function ContactSection() {
             </span>
           </p>
 
+          <div className="space-y-3 text-sm leading-relaxed text-muted-foreground">
+            <p>{site.availability.roles}</p>
+            <p>{site.contact.technical}</p>
+          </div>
+
           <div>
             <h3 className="mb-4 font-mono text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">
               {t.directChannels}

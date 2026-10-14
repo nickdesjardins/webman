@@ -2,6 +2,7 @@
 
 import { useLocale } from "@/components/locale-provider";
 import { getContent } from "@/lib/content";
+import { localePath } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 
 interface AvailabilityBadgeProps {
@@ -22,7 +23,7 @@ export function AvailabilityBadge({ variant = "compact", className }: Availabili
   const text = variant === "full" ? availability.label : availability.short;
   return (
     <a
-      href="#contact"
+      href={`${localePath(locale, "/")}#contact`}
       title={availability.label}
       className={cn(
         "inline-flex items-center gap-2 rounded-full border border-success/30 bg-success/10 px-3 py-1 text-xs font-medium whitespace-nowrap text-success transition-colors hover:bg-success/15",

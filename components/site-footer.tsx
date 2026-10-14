@@ -5,7 +5,7 @@ import { Download, Mail, MapPin } from "lucide-react";
 
 import { getSocialLinks } from "@/components/nav-link";
 import { getContent } from "@/lib/content";
-import type { Locale } from "@/lib/i18n";
+import { localePath, type Locale } from "@/lib/i18n";
 
 const STRINGS = {
   en: {
@@ -44,6 +44,7 @@ export function SiteFooter() {
   const t = STRINGS[locale];
   const socialLinks = getSocialLinks(locale);
   const year = new Date().getFullYear();
+  const home = localePath(locale, "/");
 
   return (
     <footer className="border-t border-border/60">
@@ -53,19 +54,20 @@ export function SiteFooter() {
           <div className="space-y-3">
             <p className="text-base font-semibold text-foreground">{site.name}</p>
             <p className="text-sm text-muted-foreground">{site.title}</p>
+            <p className="text-sm text-muted-foreground">{site.availability.short}</p>
             <p className="flex items-start gap-2 text-sm text-muted-foreground">
               <MapPin aria-hidden="true" className="mt-0.5 size-4 shrink-0" />
               <span>{site.location.label}</span>
             </p>
           </div>
 
-          {/* Section links (pure in-page anchors, locale-agnostic) */}
+          {/* Section links: home-page anchors, so they also work from a project page */}
           <nav aria-label={t.footerNav}>
-            <h2 className={headingClass}>{t.navigate}</h2>
+            <p className={headingClass}>{t.navigate}</p>
             <ul className="grid grid-cols-2 gap-x-6 gap-y-2 sm:grid-cols-1">
               {site.nav.map((item) => (
                 <li key={item.id}>
-                  <a href={`#${item.id}`} className={linkClass}>
+                  <a href={`${home}#${item.id}`} className={linkClass}>
                     {item.label}
                   </a>
                 </li>
@@ -75,7 +77,7 @@ export function SiteFooter() {
 
           {/* Contact channels */}
           <div>
-            <h2 className={headingClass}>{t.connect}</h2>
+            <p className={headingClass}>{t.connect}</p>
             <ul className="space-y-2">
               <li>
                 <a href={`mailto:${site.email}`} className={linkClass}>

@@ -337,8 +337,8 @@ export const tierLabel: Record<ToolTier, string> = {
 };
 
 export const arsenalIntro: ArsenalIntro = {
-  eyebrow: "L'arsenal technique",
-  heading: "Pile de production et outillage.",
+  eyebrow: "Compétences et outils",
+  heading: "Avec quoi je travaille, et à quel point.",
   description:
     "Près de deux cents outils, et chacun a un rôle dans un système réel, des années de consultation en 2012 jusqu'au travail actuel en IA appliquée. Survolez ou touchez une tuile pour voir où elle est utilisée et jusqu'où va l'expérience.",
 };

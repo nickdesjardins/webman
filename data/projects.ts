@@ -35,6 +35,14 @@ export interface Project {
   phase: string;
   title: string;
   shortTitle: string;
+  /** URL segment of the project page (live projects only): /projects/<slug>, /fr/projects/<slug>. */
+  slug: string;
+  /** Plain-language name a non-technical reader understands; the technical title becomes its subtitle. */
+  plainTitle: string;
+  /** What it does for a business, in two or three plain sentences. No jargon, no new numbers. */
+  plain: string;
+  /** Search title of the project page (live projects): the query a buyer would type, about 40 characters. */
+  seoTitle?: string;
   status: ProjectStatus;
   statusLabel: string;
   delivery?: string;
@@ -51,6 +59,11 @@ export interface Project {
 export const projects: Project[] = [
   {
     id: "invoice-extraction-service",
+    slug: "invoice-data-extraction",
+    seoTitle: "Invoice data extraction with AI",
+    plainTitle: "Invoice reader",
+    plain:
+      "Turns PDFs, scans and forwarded emails into clean invoice data your accounting system can import. If one AI provider is slow or down, it switches to another on its own, and every total is re-added to the cent before anything comes out.",
     index: "01",
     phase: "Phase 1 · Shipped",
     title: "Invoice Extraction Service",
@@ -143,6 +156,11 @@ export const projects: Project[] = [
   },
   {
     id: "hybrid-compliance-retrieval-engine",
+    slug: "compliance-document-search",
+    seoTitle: "Document search with cited sources (RAG)",
+    plainTitle: "Ask your manuals",
+    plain:
+      "Staff ask a question about your procedures or regulations and get an answer that quotes the exact passage and the page it came from. When the documents do not say it, the answer says so.",
     index: "02",
     phase: "Phase 2 · Shipped",
     title: "Context-Aware Hybrid Compliance Retrieval Engine",
@@ -232,6 +250,10 @@ export const projects: Project[] = [
   },
   {
     id: "multi-agent-operations-pipeline",
+    slug: "multi-agent-operations",
+    plainTitle: "Supervised operations agents",
+    plain:
+      "An AI assistant that checks inventory, writes product copy for each sales channel, checks every claim against the regulations, and waits for a person to approve anything risky.",
     index: "03",
     phase: "Phase 3 · Milestone",
     title: "Autonomous Multi-Agent Operations Pipeline",
@@ -283,6 +305,10 @@ export const projects: Project[] = [
   },
   {
     id: "llmops-gateway-evaluation-suite",
+    slug: "llmops-gateway",
+    plainTitle: "AI quality gate",
+    plain:
+      "A checkpoint in front of every AI call: it records what happened and what it cost, reuses answers to repeated questions, and blocks a change that makes answers worse before it reaches customers.",
     index: "04",
     phase: "Phase 4 · Capstone",
     title: "Production LLMOps Gateway & Evaluation CI/CD Suite",

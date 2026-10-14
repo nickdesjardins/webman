@@ -13,10 +13,9 @@ export const contentType = "image/png";
 
 /** UI strings that are not part of the data modules. */
 const STRINGS = {
-  en: { availability: "Available · Senior Applied AI · Montreal / Remote US & CA" },
+  en: { availability: "Open to full-time, contract & agency work · Montreal / Remote" },
   fr: {
-    availability:
-      "Disponible · IA appliquée senior · Montréal / Télétravail Canada et États-Unis",
+    availability: "Permanent, contrat ou agence · Montréal / à distance",
   },
 } satisfies Record<Locale, Record<string, string>>;
 
@@ -37,9 +36,10 @@ const mono = "ui-monospace, SFMono-Regular, Menlo, monospace";
 
 /** Splits the tagline into its sentences so each sits on its own line. */
 function taglineLines(tagline: string): string[] {
-  const [first, ...rest] = tagline.split(". ");
-  const lines = [first ? `${first}.` : "", rest.join(". ")];
-  return lines.filter((line) => line.length > 0);
+  return tagline
+    .split(/(?<=[.!?])\s+/)
+    .map((line) => line.trim())
+    .filter((line) => line.length > 0);
 }
 
 export function renderOgImage(locale: Locale) {
@@ -97,7 +97,7 @@ export function renderOgImage(locale: Locale) {
               color: palette.accent,
             }}
           >
-            {site.hero.eyebrow}
+            {site.hero.place}
           </div>
         </div>
 

@@ -16,6 +16,11 @@ import type { Project } from "@/data/projects";
 export const projects: Project[] = [
   {
     id: "invoice-extraction-service",
+    slug: "invoice-data-extraction",
+    seoTitle: "Extraction de données de factures par IA",
+    plainTitle: "Lecteur de factures",
+    plain:
+      "Transforme les PDF, les numérisations et les courriels transférés en données de facture propres, prêtes pour votre logiciel comptable. Si un fournisseur d'IA est lent ou en panne, il passe tout seul à un autre, et chaque total est recalculé au cent près avant toute sortie.",
     index: "01",
     phase: "Phase 1 · Livré",
     title: "Service d'extraction de factures",
@@ -108,6 +113,11 @@ export const projects: Project[] = [
   },
   {
     id: "hybrid-compliance-retrieval-engine",
+    slug: "compliance-document-search",
+    seoTitle: "Recherche dans vos documents, sources citées",
+    plainTitle: "Interrogez vos manuels",
+    plain:
+      "Vos équipes posent une question sur vos procédures ou vos règlements et reçoivent une réponse qui cite le passage exact et la page d'où il vient. Quand les documents ne le disent pas, la réponse le dit.",
     index: "02",
     phase: "Phase 2 · Livré",
     title: "Moteur de recherche hybride et contextuel pour la conformité",
@@ -197,6 +207,10 @@ export const projects: Project[] = [
   },
   {
     id: "multi-agent-operations-pipeline",
+    slug: "multi-agent-operations",
+    plainTitle: "Agents d'opérations supervisés",
+    plain:
+      "Un assistant IA qui vérifie l'inventaire, rédige les fiches produits pour chaque canal de vente, vérifie chaque affirmation au regard de la réglementation et attend qu'une personne approuve tout ce qui est risqué.",
     index: "03",
     phase: "Phase 3 · Jalon",
     title: "Pipeline d'opérations multiagent autonome",
@@ -248,6 +262,10 @@ export const projects: Project[] = [
   },
   {
     id: "llmops-gateway-evaluation-suite",
+    slug: "llmops-gateway",
+    plainTitle: "Contrôle qualité de l'IA",
+    plain:
+      "Un point de contrôle devant chaque appel à l'IA\xa0: il enregistre ce qui s'est passé et ce que ça a coûté, réutilise les réponses aux questions répétées et bloque un changement qui dégrade les réponses avant qu'il n'atteigne vos clients.",
     index: "04",
     phase: "Phase 4 · Projet synthèse",
     title: "Passerelle LLMOps de production et suite d'évaluation CI/CD",

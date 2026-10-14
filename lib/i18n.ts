@@ -1,6 +1,8 @@
 /**
  * Locale primitives shared by the proxy, the route tree, and components.
  * English is the default and lives at "/"; French lives under "/fr".
+ * Both editions are prerendered and reachable by URL, which is what lets
+ * search engines index the French one.
  */
 export const locales = ["en", "fr"] as const;
 export type Locale = (typeof locales)[number];
@@ -21,11 +23,22 @@ export function isLocale(value: string | null | undefined): value is Locale {
 }
 
 /**
- * Public path for a locale. Both languages live at the same URL (the proxy
- * picks the edition per request), so this only normalises the path.
+ * Public path for a locale: English is unprefixed ("/", "/projects/x"),
+ * French lives under "/fr" ("/fr", "/fr/projects/x"). Each edition has its
+ * own crawlable URL; the header switch still swaps instantly on the client
+ * and rewrites the address bar with this function (see LocaleProvider).
  */
-export function localePath(_locale: Locale, path = "/"): string {
-  return path.startsWith("/") ? path : `/${path}`;
+export function localePath(locale: Locale, path = "/"): string {
+  const clean = path.startsWith("/") ? path : `/${path}`;
+  if (locale === defaultLocale) return clean;
+  return clean === "/" ? `/${locale}` : `/${locale}${clean}`;
+}
+
+/** Removes a leading "/fr" (or "/en") so a public path can be re-prefixed for the other edition. */
+export function stripLocale(pathname: string): string {
+  const [, first = "", ...rest] = pathname.split("/");
+  if (!isLocale(first)) return pathname || "/";
+  return `/${rest.join("/")}`;
 }
 
 export function otherLocale(locale: Locale): Locale {

@@ -4,7 +4,7 @@ import Link from "next/link";
 
 import { useLocale } from "@/components/locale-provider";
 import { Button } from "@/components/ui/button";
-import type { Locale } from "@/lib/i18n";
+import { localePath, type Locale } from "@/lib/i18n";
 
 const STRINGS = {
   en: {
@@ -44,7 +44,7 @@ export default function NotFound() {
         {t.body}
       </p>
       <Button asChild size="lg" className="mt-10">
-        <Link href="/">{t.back}</Link>
+        <Link href={localePath(locale, "/")}>{t.back}</Link>
       </Button>
     </main>
   );

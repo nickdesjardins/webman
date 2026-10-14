@@ -8,7 +8,7 @@ import type { CareerSummary, EducationItem, ExperienceItem } from "@/data/experi
 export const experience: ExperienceItem[] = [
   {
     id: "nextblock",
-    role: "Créateur et ingénieur principal",
+    role: "Créateur et développeur principal",
     company: "NextBlock CMS (open source)",
     location: "Grand Montréal, QC",
     period: "Oct. 2025 à aujourd'hui",

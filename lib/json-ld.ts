@@ -9,8 +9,10 @@
  * the page url and inLanguage change per locale.
  * Every fact is read through getContent(locale).
  */
+import type { Project } from "@/data/projects";
 import { getContent } from "@/lib/content";
 import { defaultLocale, hreflang, localePath, type Locale } from "@/lib/i18n";
+import { CONTENT_UPDATED } from "@/lib/seo";
 
 type JsonLdNode = Record<string, unknown>;
 
@@ -19,10 +21,17 @@ export interface JsonLdGraph {
   "@graph": JsonLdNode[];
 }
 
+/**
+ * Matches the visible role line. Not "Engineer" / "Ingénieur": both are
+ * reserved titles in Quebec and Nicolas is not a member of the OIQ.
+ */
 const JOB_TITLE: Record<Locale, string> = {
-  en: "Applied AI Engineer",
-  fr: "Ingénieur en IA appliquée",
+  en: "Applied AI Developer",
+  fr: "Développeur en IA appliquée",
 };
+
+/** A JPEG crop of the real portrait (structured data prefers JPEG/PNG over AVIF). */
+const PORTRAIT_PATH = "/img/nicolas-desjardins-headshot.jpg";
 
 /** Canonical origin shared by both editions; keeps the @id anchors identical across locales. */
 const ORIGIN = getContent(defaultLocale).site.url;
@@ -74,8 +83,13 @@ export function buildJsonLd(locale: Locale): JsonLdGraph {
     alternateName: site.shortName,
     url: site.url,
     jobTitle,
-    description: site.description,
+    description: site.summary,
+    image: `${ORIGIN}${PORTRAIT_PATH}`,
     email: `mailto:${site.email}`,
+    knowsLanguage: [
+      { "@type": "Language", name: "English", alternateName: "en" },
+      { "@type": "Language", name: "French", alternateName: "fr" },
+    ],
     address: {
       "@type": "PostalAddress",
       addressLocality: site.location.city,
@@ -101,6 +115,7 @@ export function buildJsonLd(locale: Locale): JsonLdGraph {
     "@id": WEBSITE_ID,
     url: pageUrl,
     name: site.name,
+    alternateName: site.domain,
     description: site.description,
     publisher: { "@id": PERSON_ID },
     inLanguage,
@@ -111,6 +126,7 @@ export function buildJsonLd(locale: Locale): JsonLdGraph {
     "@id": PROFILE_ID,
     url: pageUrl,
     inLanguage,
+    dateModified: CONTENT_UPDATED,
     mainEntity: { "@id": PERSON_ID },
     isPartOf: { "@id": WEBSITE_ID },
   };
@@ -187,4 +203,55 @@ export function buildJsonLd(locale: Locale): JsonLdGraph {
     "@context": "https://schema.org",
     "@graph": graph,
   };
+}
+
+/**
+ * Graph for one project page: the page itself (a TechArticle by the Person),
+ * its breadcrumb, and a pointer to the source code. The Person, WebSite and
+ * ProfilePage nodes live on the home page and are referenced by @id.
+ */
+export function buildProjectJsonLd(locale: Locale, project: Project): JsonLdGraph {
+  const { site } = getContent(locale);
+  const path = `/projects/${project.slug}`;
+  const pageUrl = `${ORIGIN}${localePath(locale, path)}`;
+  const homeUrl = `${ORIGIN}${localePath(locale, "/")}`;
+  const githubLink = project.links?.find((link) => link.kind === "github")?.href;
+
+  const article: JsonLdNode = {
+    "@type": "TechArticle",
+    "@id": `${pageUrl}#article`,
+    url: pageUrl,
+    headline: `${project.plainTitle}: ${project.title}`,
+    description: project.plain,
+    inLanguage: hreflang[locale],
+    dateModified: CONTENT_UPDATED,
+    author: { "@id": PERSON_ID },
+    publisher: { "@id": PERSON_ID },
+    isPartOf: { "@id": WEBSITE_ID },
+    image: `${ORIGIN}${PORTRAIT_PATH}`,
+    about: githubLink ? { "@id": `${githubLink}#code` } : undefined,
+    keywords: project.stack.join(", "),
+  };
+
+  const breadcrumb: JsonLdNode = {
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: site.name, item: homeUrl },
+      { "@type": "ListItem", position: 2, name: project.plainTitle, item: pageUrl },
+    ],
+  };
+
+  const graph: JsonLdNode[] = [article, breadcrumb];
+  if (githubLink) {
+    graph.push({
+      "@type": "SoftwareSourceCode",
+      "@id": `${githubLink}#code`,
+      name: project.title,
+      description: project.summary,
+      codeRepository: githubLink,
+      programmingLanguage: "Python",
+      author: { "@id": PERSON_ID },
+    });
+  }
+  return { "@context": "https://schema.org", "@graph": graph };
 }

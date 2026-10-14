@@ -263,7 +263,7 @@ const timeline: NextblockTimelineItem[] = [
 export const nextblock: NextblockContent = {
   name: "NextBlock CMS",
   wordmark: "NextBlock",
-  role: "Créateur, architecte et ingénieur principal",
+  role: "Créateur, concepteur et développeur principal",
   eyebrow: "Produit phare · Code source ouvert",
   heading: "NextBlock CMS: un CMS full-stack natif IA, construit de bout en bout.",
   tagline:

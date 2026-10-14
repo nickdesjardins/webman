@@ -68,8 +68,14 @@ export function getSocialLinks(locale: Locale): readonly SocialLink[] {
 }
 
 interface NavLinkProps extends Omit<ComponentProps<"a">, "href" | "children"> {
-  /** Section id; rendered as an in-page anchor ("#" + id). */
+  /** Section id; rendered as an anchor to that section of the home page. */
   id: string;
+  /**
+   * The edition's home path ("/" or "/fr"). The href is base + "#" + id, so
+   * the link scrolls in place on the home page (same document, only the
+   * fragment differs) and navigates home from a project page.
+   */
+  base?: string;
   label: string;
   active?: boolean;
   /** Optional indicator slot (the header renders its animated underline here). */
@@ -80,12 +86,11 @@ interface NavLinkProps extends Omit<ComponentProps<"a">, "href" | "children"> {
  * In-page anchor for the primary navigation. Relies on native anchor
  * navigation and the global smooth scroll-behavior; marks the active
  * section with aria-current for assistive tech and styling hooks.
- * Pure "#section" hrefs are locale-agnostic by design.
  */
-export function NavLink({ id, label, active = false, className, children, ...props }: NavLinkProps) {
+export function NavLink({ id, label, base = "", active = false, className, children, ...props }: NavLinkProps) {
   return (
     <a
-      href={`#${id}`}
+      href={`${base}#${id}`}
       aria-current={active ? "true" : undefined}
       className={cn(
         "relative inline-flex items-center rounded-md px-2 py-2 text-[13px] font-medium whitespace-nowrap text-muted-foreground transition-colors hover:text-foreground aria-[current=true]:text-foreground xl:px-3 xl:text-sm",

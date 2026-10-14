@@ -2,7 +2,7 @@
 
 import { useLocale } from "@/components/locale-provider";
 import type { ReactNode } from "react";
-import { CheckCircle2, ExternalLink, FileText, MonitorPlay } from "lucide-react";
+import { ArrowRight, CheckCircle2, ChevronDown, ExternalLink, FileText, MonitorPlay } from "lucide-react";
 import { BrandIcon } from "@/components/brand-icon";
 import { Reveal } from "@/components/motion/reveal";
 import { PipelineFlow } from "@/components/pipeline-flow";
@@ -18,43 +18,53 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import type { Project, ProjectLink } from "@/data/projects";
 import { getContent } from "@/lib/content";
-import type { Locale } from "@/lib/i18n";
+import { localePath, type Locale } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 
 const STRINGS = {
   en: {
-    eyebrow: "Enterprise Applied AI Projects",
-    title: "Deterministic AI systems, built for production.",
+    eyebrow: "AI projects",
+    title: "AI tools that check their own work.",
     description:
-      "Two live open-source services and two scheduled milestone architectures from a 120-day delivery plan. Measured numbers come from saved benchmark records and recorded runs. Target numbers are explicit SLOs, and they are labelled as such.",
+      "Two services are live, with public code you can read. Two more are planned. Numbers marked Measured were recorded in dated tests. Numbers marked Target are goals, not results.",
     legend: "Metric legend",
     measured: "Measured",
     target: "Target",
     newTab: "(opens in a new tab)",
-    problem: "Problem",
+    problem: "The problem it solves",
     architecture: "Architecture",
+    technicalSummary: "In technical terms",
+    stack: "Stack",
     metrics: "Metrics",
     proof: "Proof points",
+    howItWorks: "How it works",
+    howItWorksHint: "for engineers and technical reviewers",
+    caseStudy: "Read the case study",
     requestPipeline: "Request pipeline",
     requestPipelineStages: "Request pipeline stages",
-    scheduled: "Scheduled milestone architectures",
+    scheduled: "Planned next",
   },
   fr: {
-    eyebrow: "Projets d'IA appliquée en entreprise",
-    title: "Des systèmes d'IA déterministes, conçus pour la production.",
+    eyebrow: "Projets IA",
+    title: "Des outils d'IA qui vérifient leur propre travail.",
     description:
-      "Deux services à code source ouvert en ligne et deux architectures de jalons planifiées, issues d'un plan de livraison de 120 jours. Les chiffres mesurés proviennent de bancs d'essai et d'exécutions enregistrés. Les chiffres cibles sont des SLO explicites, et ils sont identifiés comme tels.",
+      "Deux services sont en ligne, au code public. Deux autres sont planifiés. Les chiffres marqués Mesuré ont été enregistrés lors de tests datés. Les chiffres marqués Cible sont des objectifs, pas des résultats.",
     legend: "Légende des métriques",
     measured: "Mesuré",
     target: "Cible",
     newTab: "(s'ouvre dans un nouvel onglet)",
-    problem: "Problème",
+    problem: "Le problème réglé",
     architecture: "Architecture",
+    technicalSummary: "En termes techniques",
+    stack: "Pile technique",
     metrics: "Métriques",
     proof: "Éléments de preuve",
+    howItWorks: "Comment ça marche",
+    howItWorksHint: "pour les équipes techniques",
+    caseStudy: "Lire l'étude de cas",
     requestPipeline: "Pipeline de requête",
     requestPipelineStages: "Étapes du pipeline de requête",
-    scheduled: "Architectures de jalons planifiées",
+    scheduled: "Prochaines étapes planifiées",
   },
 } satisfies Record<Locale, Record<string, string>>;
 
@@ -74,7 +84,7 @@ function LegendChip({ tone, label }: { tone: "success" | "warning"; label: strin
   );
 }
 
-function MetricLegend({ locale, className }: { locale: Locale; className?: string }) {
+export function MetricLegend({ locale, className }: { locale: Locale; className?: string }) {
   const t = STRINGS[locale];
   return (
     <ul aria-label={t.legend} className={cn("flex flex-wrap items-center gap-2", className)}>
@@ -106,12 +116,21 @@ function LinkIcon({ kind }: { kind: ProjectLink["kind"] }) {
   return <ExternalLink aria-hidden="true" />;
 }
 
-function ProjectLinkButton({ link, locale }: { link: ProjectLink; locale: Locale }) {
+export function ProjectLinkButton({
+  link,
+  locale,
+  variant,
+}: {
+  link: ProjectLink;
+  locale: Locale;
+  /** Forces a variant; by default the docs link is primary and the rest are outlined. */
+  variant?: "default" | "outline";
+}) {
   const t = STRINGS[locale];
   return (
     <Button
       asChild
-      variant={link.kind === "docs" ? "default" : "outline"}
+      variant={variant ?? (link.kind === "docs" ? "default" : "outline")}
       className="w-full sm:w-auto"
     >
       <a href={link.href} target="_blank" rel="noopener noreferrer">
@@ -144,7 +163,7 @@ function LiveProject({ project, locale }: { project: Project; locale: Locale }) 
         className="card-glow rounded-2xl p-5 shadow-[0_0_120px_-48px_var(--glow)] sm:p-8 lg:p-10"
       >
         <div className="grid gap-10 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:gap-12">
-          {/* Left column: narrative */}
+          {/* Left column: what it does, in plain words */}
           <div className="min-w-0">
             <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
               <Badge
@@ -161,62 +180,110 @@ function LiveProject({ project, locale }: { project: Project; locale: Locale }) 
 
             <h3
               id={titleId}
-              className="mt-5 text-2xl leading-tight font-semibold tracking-tight text-foreground sm:text-3xl"
+              className="mt-5 text-3xl leading-tight font-semibold tracking-tight text-foreground sm:text-4xl"
             >
-              {project.title}
+              {project.plainTitle}
             </h3>
-            <p className="mt-4 text-base leading-relaxed text-muted-foreground sm:text-lg">
-              {project.summary}
-            </p>
+            <p className="mt-2 font-mono text-xs leading-relaxed text-muted-foreground sm:text-sm">{project.title}</p>
+            <p className="mt-5 text-base leading-relaxed text-foreground/90 sm:text-lg">{project.plain}</p>
 
-            <div className="mt-8 grid gap-6">
+            <div className="mt-8">
               <LabelledBlock label={t.problem}>{project.problem}</LabelledBlock>
-              <LabelledBlock label={t.architecture}>{project.architecture}</LabelledBlock>
             </div>
 
-            <StackChips stack={project.stack} locale={locale} className="mt-8" />
-
-            {project.links && project.links.length > 0 && (
-              <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-                {project.links.map((link) => (
-                  <ProjectLinkButton key={link.href} link={link} locale={locale} />
-                ))}
-              </div>
-            )}
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+              <Button asChild className="group w-full sm:w-auto">
+                <a href={localePath(locale, `/projects/${project.slug}`)}>
+                  {t.caseStudy}
+                  <ArrowRight
+                    aria-hidden="true"
+                    className="transition-transform group-hover:translate-x-0.5 motion-reduce:transition-none"
+                  />
+                </a>
+              </Button>
+              {project.links?.map((link) => (
+                <ProjectLinkButton key={link.href} link={link} locale={locale} variant="outline" />
+              ))}
+            </div>
           </div>
 
           {/* Right column: evidence */}
-          <div className="flex min-w-0 flex-col gap-8">
-            <div>
-              <p className={projectLabelClass}>{t.metrics}</p>
-              <ul className="mt-3 grid grid-cols-2 gap-3" aria-label={t.metrics}>
-                {project.metrics.map((metric) => (
-                  <MetricTile
-                    key={`${metric.value}-${metric.label}`}
-                    metric={metric}
-                    locale={locale}
-                    size="lg"
-                  />
-                ))}
-              </ul>
-            </div>
-
-            <div>
-              <p className={projectLabelClass}>{t.proof}</p>
-              <ul className="mt-3 space-y-3">
-                {project.proofPoints.map((point) => (
-                  <li key={point} className="flex gap-3 text-sm leading-relaxed text-foreground/90">
-                    <CheckCircle2 aria-hidden="true" className="mt-0.5 size-4 shrink-0 text-success" />
-                    <span className="min-w-0">{point}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
+          <div className="min-w-0">
+            <p className={projectLabelClass}>{t.metrics}</p>
+            <ul className="mt-3 grid grid-cols-2 gap-3" aria-label={t.metrics}>
+              {project.metrics.map((metric) => (
+                <MetricTile
+                  key={`${metric.value}-${metric.label}`}
+                  metric={metric}
+                  locale={locale}
+                  size="lg"
+                />
+              ))}
+            </ul>
           </div>
         </div>
 
-        {/* Full-width pipeline */}
-        <div className="mt-10 border-t border-border/70 pt-8">
+        <HowItWorks project={project} locale={locale} />
+      </article>
+    </Reveal>
+  );
+}
+
+/**
+ * The technical layer, one click down: the engineering summary, architecture,
+ * stack, proof points and the request pipeline. A native <details> element,
+ * so it works without JavaScript and its text stays in the HTML for search
+ * engines and screen readers. The project page renders it open.
+ */
+export function HowItWorks({
+  project,
+  locale,
+  open = false,
+}: {
+  project: Project;
+  locale: Locale;
+  open?: boolean;
+}) {
+  const t = STRINGS[locale];
+  return (
+    <details
+      open={open}
+      className="group/how mt-10 rounded-xl border border-border/70 bg-background/40 open:bg-background/60"
+    >
+      <summary className="flex cursor-pointer list-none items-center justify-between gap-4 rounded-xl px-5 py-4 transition-colors hover:bg-card/60 [&::-webkit-details-marker]:hidden">
+        <span className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+          <span className="text-base font-semibold text-foreground">{t.howItWorks}</span>
+          <span className="font-mono text-xs text-muted-foreground">{t.howItWorksHint}</span>
+        </span>
+        <ChevronDown
+          aria-hidden="true"
+          className="size-5 shrink-0 text-muted-foreground transition-transform group-open/how:rotate-180 motion-reduce:transition-none"
+        />
+      </summary>
+
+      <div className="grid gap-8 border-t border-border/70 px-5 py-6 sm:px-6 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:gap-12">
+        <div className="grid min-w-0 content-start gap-6">
+          <LabelledBlock label={t.technicalSummary}>{project.summary}</LabelledBlock>
+          <LabelledBlock label={t.architecture}>{project.architecture}</LabelledBlock>
+          <div>
+            <p className={projectLabelClass}>{t.stack}</p>
+            <StackChips stack={project.stack} locale={locale} className="mt-3" />
+          </div>
+        </div>
+
+        <div className="min-w-0">
+          <p className={projectLabelClass}>{t.proof}</p>
+          <ul className="mt-3 space-y-3">
+            {project.proofPoints.map((point) => (
+              <li key={point} className="flex gap-3 text-sm leading-relaxed text-foreground/90">
+                <CheckCircle2 aria-hidden="true" className="mt-0.5 size-4 shrink-0 text-success" />
+                <span className="min-w-0">{point}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div className="min-w-0 lg:col-span-2">
           <p className={projectLabelClass}>{t.requestPipeline}</p>
           <PipelineFlow
             stages={project.pipeline}
@@ -225,8 +292,8 @@ function LiveProject({ project, locale }: { project: Project; locale: Locale }) 
             label={t.requestPipelineStages}
           />
         </div>
-      </article>
-    </Reveal>
+      </div>
+    </details>
   );
 }
 

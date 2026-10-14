@@ -27,7 +27,7 @@ export interface EducationItem {
 export const experience: ExperienceItem[] = [
   {
     id: "nextblock",
-    role: "Creator & Principal Engineer",
+    role: "Creator & Lead Developer",
     company: "NextBlock CMS (open source)",
     location: "Greater Montreal Area, QC",
     period: "Oct 2025 to Present",

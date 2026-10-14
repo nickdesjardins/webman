@@ -196,13 +196,16 @@ export function ProjectCard({ project, locale, className }: ProjectCardProps) {
             {project.statusLabel}
           </Badge>
         </div>
-        <h3 id={titleId} className="text-xl leading-snug font-semibold tracking-tight text-foreground">
-          {project.title}
-        </h3>
+        <div>
+          <h3 id={titleId} className="text-xl leading-snug font-semibold tracking-tight text-foreground">
+            {project.plainTitle}
+          </h3>
+          <p className="mt-1.5 font-mono text-xs leading-relaxed text-muted-foreground">{project.title}</p>
+        </div>
       </CardHeader>
 
       <CardContent className="flex flex-col gap-5">
-        <p className="text-sm leading-relaxed text-muted-foreground">{project.summary}</p>
+        <p className="text-sm leading-relaxed text-foreground/90">{project.plain}</p>
         <StackChips stack={project.stack} locale={locale} limit={MAX_STACK_CHIPS} />
         <ul className="grid grid-cols-2 gap-x-4 gap-y-3" aria-label={t.metrics}>
           {project.metrics.map((metric) => (
