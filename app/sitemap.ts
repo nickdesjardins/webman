@@ -15,6 +15,7 @@ import { CONTENT_UPDATED, languageAlternates } from "@/lib/seo";
 export default function sitemap(): MetadataRoute.Sitemap {
   const paths = [
     "/",
+    getContent("en").automation.path,
     ...getContent("en")
       .projects.filter((project) => project.status === "live")
       .map((project) => `/projects/${project.slug}`),

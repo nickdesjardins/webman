@@ -8,7 +8,7 @@
  */
 
 export type ServiceStatus = "measured" | "target" | "record";
-export type ServiceIcon = "file-text" | "book-open" | "workflow" | "gauge" | "server" | "layout";
+export type ServiceIcon = "file-text" | "book-open" | "workflow" | "gauge" | "server" | "layout" | "plug";
 
 export interface ServiceItem {
   id: string;
@@ -31,17 +31,20 @@ export interface ServicesIntro {
   termLabel: string;
   proofLabel: string;
   cta: string;
+  /** Link under the cards to the dedicated /ai-automation page. */
+  more: string;
   status: Record<ServiceStatus, string>;
 }
 
 export const servicesIntro: ServicesIntro = {
-  eyebrow: "What I can build for your company",
+  eyebrow: "AI automation and web platforms for your company",
   title: "You don't need to know the technical name.",
   description:
-    "Describe the problem in your own words. Each card shows what I build for it, what engineers call it, and the proof you can check on this site.",
+    "Describe the problem in your own words. Each card shows the AI automation or web platform I build for it, what engineers call it, and the proof you can check on this site.",
   termLabel: "What it's called",
   proofLabel: "Proof",
   cta: "See how it works",
+  more: "AI automation services in detail, with answers to common questions",
   status: { measured: "Measured", target: "Planned", record: "Track record" },
 };
 

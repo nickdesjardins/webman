@@ -2,8 +2,9 @@
  * JSON-LD structured data for https://webman.dev, one edition per locale.
  *
  * One @graph with stable @id anchors so every node can reference the
- * Person without repeating it: Person, WebSite, ProfilePage, and for each
- * live project a SoftwareApplication plus its SoftwareSourceCode.
+ * Person without repeating it: Person, the Webman ProfessionalService he
+ * founded (areas served and offer catalog), WebSite, ProfilePage, and for
+ * each live project a SoftwareApplication plus its SoftwareSourceCode.
  * The anchors are derived from the canonical (default locale) origin, so the
  * English and French editions describe the same entities; only the prose,
  * the page url and inLanguage change per locale.
@@ -36,11 +37,56 @@ const PORTRAIT_PATH = "/img/nicolas-desjardins-headshot.jpg";
 /** Canonical origin shared by both editions; keeps the @id anchors identical across locales. */
 const ORIGIN = getContent(defaultLocale).site.url;
 const PERSON_ID = `${ORIGIN}/#person`;
+const BUSINESS_ID = `${ORIGIN}/#business`;
 const WEBSITE_ID = `${ORIGIN}/#website`;
 const PROFILE_ID = `${ORIGIN}/#profile`;
 
+/**
+ * Accounts that belong to the Webman brand rather than to the person. The
+ * Person's sameAs keeps only profiles of Nicolas himself: a product site in
+ * sameAs would tell search engines the person and the product are one entity.
+ */
+const BUSINESS_SAME_AS = ["https://github.com/Webman-Dev"];
+
+/** Places served, in the edition's spelling: Canada first for local search, then remote work anywhere. They match the visible copy on /ai-automation. */
+const AREA_SERVED: Record<Locale, JsonLdNode[]> = {
+  en: [
+    { "@type": "Country", name: "Canada" },
+    { "@type": "AdministrativeArea", name: "Quebec" },
+    { "@type": "City", name: "Montreal" },
+    { "@type": "City", name: "Salaberry-de-Valleyfield" },
+    { "@type": "Place", name: "Worldwide (remote)" },
+  ],
+  fr: [
+    { "@type": "Country", name: "Canada" },
+    { "@type": "AdministrativeArea", name: "Québec" },
+    { "@type": "City", name: "Montréal" },
+    { "@type": "City", name: "Salaberry-de-Valleyfield" },
+    { "@type": "Place", name: "Monde entier (à distance)" },
+  ],
+};
+
+/** What the business is known for: the buyer-side names of the work. */
+const BUSINESS_KNOWS_ABOUT = [
+  "AI Workflow Automation",
+  "Business Process Automation",
+  "Custom AI Agents",
+  "Model Context Protocol (MCP)",
+  "LLM Integration",
+  "RAG Pipelines",
+  "Document Processing",
+  "Next.js",
+  "TypeScript",
+  "Supabase",
+  "PostgreSQL",
+  "E-Commerce Architecture",
+];
+
 /** Topics drawn from the arsenal and the project themes (technical nouns, not translated). */
 const KNOWS_ABOUT = [
+  "AI Automation",
+  "Custom AI Agents",
+  "LLM Integration",
   "Retrieval-Augmented Generation",
   "pgvector",
   "LangGraph",
@@ -61,6 +107,53 @@ const KNOWS_ABOUT = [
 
 const AGPL_URL = "https://www.gnu.org/licenses/agpl-3.0.html";
 
+/**
+ * Webman, the working name behind webman.dev: founded and run by the Person,
+ * serving Montreal, Quebec and Canada, with one Offer per service line. Emitted
+ * on the home page and on /ai-automation, where the offers are described.
+ */
+function businessNode(locale: Locale): JsonLdNode {
+  const { site, automation } = getContent(locale);
+  const areaServed = AREA_SERVED[locale];
+  return {
+    "@type": "ProfessionalService",
+    "@id": BUSINESS_ID,
+    name: site.brand,
+    alternateName: site.brandAliases,
+    description: automation.description,
+    url: `${ORIGIN}${localePath(locale, automation.path)}`,
+    logo: `${ORIGIN}/icon-512.png`,
+    image: `${ORIGIN}${PORTRAIT_PATH}`,
+    email: site.email,
+    founder: { "@id": PERSON_ID },
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: site.location.city,
+      addressRegion: site.location.region,
+      addressCountry: site.location.country,
+    },
+    areaServed,
+    knowsAbout: BUSINESS_KNOWS_ABOUT,
+    knowsLanguage: ["en", "fr"],
+    sameAs: BUSINESS_SAME_AS,
+    hasOfferCatalog: {
+      "@type": "OfferCatalog",
+      name: automation.catalogName,
+      itemListElement: automation.offers.map((offer) => ({
+        "@type": "Offer",
+        itemOffered: {
+          "@type": "Service",
+          name: offer.name,
+          serviceType: offer.name,
+          description: offer.description,
+          provider: { "@id": BUSINESS_ID },
+          areaServed,
+        },
+      })),
+    },
+  };
+}
+
 export function buildJsonLd(locale: Locale): JsonLdGraph {
   const {
     site,
@@ -80,7 +173,7 @@ export function buildJsonLd(locale: Locale): JsonLdGraph {
     "@type": "Person",
     "@id": PERSON_ID,
     name: site.name,
-    alternateName: site.shortName,
+    alternateName: [site.shortName, site.brand],
     url: site.url,
     jobTitle,
     description: site.summary,
@@ -103,6 +196,7 @@ export function buildJsonLd(locale: Locale): JsonLdGraph {
       name: item.institution,
     })),
     worksFor: employer ? { "@type": "Organization", name: employer.company } : undefined,
+    brand: { "@id": BUSINESS_ID },
     hasOccupation: {
       "@type": "Occupation",
       name: jobTitle,
@@ -114,10 +208,11 @@ export function buildJsonLd(locale: Locale): JsonLdGraph {
     "@type": "WebSite",
     "@id": WEBSITE_ID,
     url: pageUrl,
-    name: site.name,
-    alternateName: site.domain,
+    name: site.brand,
+    alternateName: [...site.brandAliases, site.name],
     description: site.description,
     publisher: { "@id": PERSON_ID },
+    about: { "@id": BUSINESS_ID },
     inLanguage,
   };
 
@@ -131,7 +226,7 @@ export function buildJsonLd(locale: Locale): JsonLdGraph {
     isPartOf: { "@id": WEBSITE_ID },
   };
 
-  const graph: JsonLdNode[] = [person, website, profilePage];
+  const graph: JsonLdNode[] = [person, businessNode(locale), website, profilePage];
 
   for (const project of projects.filter((p) => p.status === "live")) {
     const docsLink = project.links?.find((link) => link.kind === "docs")?.href;
@@ -199,6 +294,27 @@ export function buildJsonLd(locale: Locale): JsonLdGraph {
     author: { "@id": PERSON_ID },
   });
 
+  /* Cortex AI is NextBlock's AI module and MCP server; its own node ties the name to its creator. */
+  const cortex = nextblock.pillars.find((pillar) => pillar.id === "ai");
+  if (cortex) {
+    graph.push({
+      "@type": "SoftwareApplication",
+      "@id": `${nextblock.links.repo.href}#cortex`,
+      name: "Cortex AI",
+      alternateName: "NextBlock Cortex AI",
+      description: cortex.description,
+      applicationCategory: "DeveloperApplication",
+      applicationSubCategory: "Model Context Protocol server",
+      operatingSystem: "Web",
+      url: nextblock.links.mcp.href,
+      isPartOf: { "@id": nextblockAppId },
+      creator: { "@id": PERSON_ID },
+      author: { "@id": PERSON_ID },
+      license: AGPL_URL,
+      offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+    });
+  }
+
   return {
     "@context": "https://schema.org",
     "@graph": graph,
@@ -254,4 +370,43 @@ export function buildProjectJsonLd(locale: Locale, project: Project): JsonLdGrap
     });
   }
   return { "@context": "https://schema.org", "@graph": graph };
+}
+
+/**
+ * Graph for /ai-automation: the page as an FAQPage (its questions are the
+ * visible FAQ), its breadcrumb, and the full ProfessionalService node, since
+ * this is the page that describes the offers. The Person is referenced by @id.
+ */
+export function buildAutomationJsonLd(locale: Locale): JsonLdGraph {
+  const { site, automation } = getContent(locale);
+  const pageUrl = `${ORIGIN}${localePath(locale, automation.path)}`;
+  const homeUrl = `${ORIGIN}${localePath(locale, "/")}`;
+
+  const page: JsonLdNode = {
+    "@type": "FAQPage",
+    "@id": `${pageUrl}#faq`,
+    url: pageUrl,
+    name: automation.metaTitle,
+    description: automation.description,
+    inLanguage: hreflang[locale],
+    dateModified: CONTENT_UPDATED,
+    isPartOf: { "@id": WEBSITE_ID },
+    about: { "@id": BUSINESS_ID },
+    author: { "@id": PERSON_ID },
+    mainEntity: automation.faq.map((item) => ({
+      "@type": "Question",
+      name: item.question,
+      acceptedAnswer: { "@type": "Answer", text: item.answer },
+    })),
+  };
+
+  const breadcrumb: JsonLdNode = {
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: site.name, item: homeUrl },
+      { "@type": "ListItem", position: 2, name: automation.breadcrumb, item: pageUrl },
+    ],
+  };
+
+  return { "@context": "https://schema.org", "@graph": [page, breadcrumb, businessNode(locale)] };
 }

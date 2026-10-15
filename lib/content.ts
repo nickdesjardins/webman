@@ -4,6 +4,7 @@
  */
 import type { Locale } from "@/lib/i18n";
 import * as enAbout from "@/data/about";
+import * as enAutomation from "@/data/automation";
 import * as enArsenal from "@/data/arsenal";
 import * as enExperience from "@/data/experience";
 import * as enNextblock from "@/data/nextblock";
@@ -12,6 +13,7 @@ import * as enServices from "@/data/services";
 import * as enSite from "@/data/site";
 import * as enWork from "@/data/work";
 import * as frAbout from "@/data/fr/about";
+import * as frAutomation from "@/data/fr/automation";
 import * as frArsenal from "@/data/fr/arsenal";
 import * as frExperience from "@/data/fr/experience";
 import * as frNextblock from "@/data/fr/nextblock";
@@ -25,6 +27,7 @@ export interface Content {
   site: enSite.SiteContent;
   projects: enProjects.Project[];
   services: { intro: enServices.ServicesIntro; items: enServices.ServiceItem[] };
+  automation: enAutomation.AutomationContent;
   nextblock: enNextblock.NextblockContent;
   work: {
     workIntro: enWork.WorkIntro;
@@ -59,6 +62,7 @@ function bundle(
     site: typeof enSite;
     projects: typeof enProjects;
     services: typeof enServices;
+    automation: typeof enAutomation;
     nextblock: typeof enNextblock;
     work: typeof enWork;
     arsenal: typeof enArsenal;
@@ -71,6 +75,7 @@ function bundle(
     site: m.site.site,
     projects: m.projects.projects,
     services: { intro: m.services.servicesIntro, items: m.services.services },
+    automation: m.automation.automation,
     nextblock: m.nextblock.nextblock,
     work: {
       workIntro: m.work.workIntro,
@@ -102,6 +107,7 @@ const content: Record<Locale, Content> = {
     site: enSite,
     projects: enProjects,
     services: enServices,
+    automation: enAutomation,
     nextblock: enNextblock,
     work: enWork,
     arsenal: enArsenal,
@@ -112,6 +118,7 @@ const content: Record<Locale, Content> = {
     site: frSite,
     projects: frProjects,
     services: frServices,
+    automation: frAutomation,
     nextblock: frNextblock,
     work: frWork,
     arsenal: frArsenal,

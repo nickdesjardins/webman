@@ -24,6 +24,13 @@ export interface Cta {
 export interface SiteContent {
   name: string;
   shortName: string;
+  /**
+   * The working name behind webman.dev: the WebSite and ProfessionalService
+   * name in JSON-LD and the Open Graph site name. The person stays site.name.
+   */
+  brand: string;
+  /** Other spellings of the brand that search engines should tie to it. */
+  brandAliases: string[];
   handle: string;
   domain: string;
   url: string;
@@ -61,6 +68,23 @@ export interface SiteContent {
     demoCaption: string;
     portraitAlt: string;
   };
+  /**
+   * Slim band under the hero for the readers who skip technical terms: a
+   * business owner and a recruiter. Rendered by components/plain-words-strip.tsx
+   * as a sibling of the hero, so nothing here touches the first fold.
+   */
+  doors: {
+    /** Accessible name of the strip's <nav>, which wraps only the two links. */
+    ariaLabel: string;
+    /** Mono eyebrow over the sentence. Addresses every reader; names no audience. */
+    eyebrow: string;
+    /** One sentence: what the plain-words page covers, in a buyer's words. */
+    lead: string;
+    /** Question-first link to automation.path ("/ai-automation"); the component adds the edition prefix. */
+    business: string;
+    /** Question-first link to "#experience", where the resume card also lives. */
+    hiring: string;
+  };
   contact: { heading: string; body: string; technical: string; responseTime: string };
   founded: number;
   businessOpened: Date;
@@ -69,28 +93,30 @@ export interface SiteContent {
 export const site: SiteContent = {
   name: "Nicolas Desjardins",
   shortName: "Nick Desjardins",
+  brand: "Webman",
+  brandAliases: ["Webman Dev", "webman.dev"],
   handle: "nickdesjardins",
   domain: "webman.dev",
   url: "https://webman.dev",
   title: "Applied AI Developer & Senior Full-Stack Developer",
-  metaTitle: "Nicolas Desjardins | Applied AI Developer, Montreal",
+  metaTitle: "Nicolas Desjardins (Webman) | AI Automation Developer, Montreal",
   tagline:
     "I build AI that reads your documents, answers from your own files, and shows you the source.",
   description:
-    "Nicolas (Nick) Desjardins, applied AI developer in Montreal. AI that reads your documents and answers with sources. Open to full-time, contract or agency work.",
+    "Webman is Nicolas (Nick) Desjardins, AI automation developer in Montreal: custom AI agents, document processing and MCP integrations. Full-time or contract.",
   summary:
-    "Nicolas (Nick) Desjardins is an applied AI developer and senior full-stack developer in the Greater Montreal Area, Quebec, working in English and French. He builds AI that reads documents, answers from a company's own files with the source quoted, and keeps working when a provider fails, backed by 8+ years running production web systems for New Roots Herbal Inc. He is open to full-time roles, contracts and agency placements, hybrid in Montreal or remote across Canada and the US.",
+    "Nicolas (Nick) Desjardins, who works as Webman (webman.dev), is an applied AI developer and senior full-stack developer in the Greater Montreal Area, Quebec, working in English and French. He builds AI automation for businesses in Quebec and across Canada: document processing, custom AI agents with human approval, private knowledge-base search with cited answers, and MCP integrations. His AI reads documents, answers from a company's own files with the source quoted, and keeps working when a provider fails, backed by 8+ years running production web systems for New Roots Herbal Inc. He is open to full-time roles, contracts and agency placements, hybrid in Montreal, or fully remote across Canada, the US and the rest of the world.",
   email: "nick.desjardins@live.com",
   location: {
     label: "Greater Montreal Area, QC, Canada",
     city: "Montreal",
     region: "QC",
     country: "CA",
-    note: "Full-time, contract or agency placement. Local, hybrid, or remote across Canada and the US.",
+    note: "Full-time, contract or agency placement. Local, hybrid, or fully remote anywhere in the world.",
   },
   availability: {
     status: "available",
-    label: "Open to full-time, contract and agency work · Montreal, hybrid or remote (Canada & US)",
+    label: "Open to full-time, contract and agency work · Montreal, hybrid or remote worldwide",
     short: "Open to full-time, contract & agency work",
     roles:
       "Roles I'm open to: Applied AI Engineer, Forward Deployed Engineer, AI Solutions, and Senior Full-Stack Developer with an AI focus.",
@@ -130,6 +156,15 @@ export const site: SiteContent = {
     demoLabel: "Watch it work",
     demoCaption: "A messy invoice goes in. Clean, checked data comes out.",
     portraitAlt: "Nicolas Desjardins",
+  },
+  /* The two questions echo contact.heading, so the page opens and closes on the same two readers. */
+  doors: {
+    ariaLabel: "Shortcuts for recruiters and business owners",
+    eyebrow: "In plain words",
+    lead:
+      "One page explains what I can build for your company, how it connects to the tools your team already uses, and where your data goes.",
+    business: "Work piling up? See what I can do for your company",
+    hiring: "Hiring? See my experience",
   },
   contact: {
     heading: "Hiring, or is work piling up? Let's talk.",

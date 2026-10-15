@@ -1,53 +1,63 @@
-# Nicolas Desjardins (webman.dev)
+# Webman (webman.dev): Nicolas Desjardins, AI automation and full-stack development
 
-> Nicolas (Nick) Desjardins is an applied AI developer and senior full-stack developer in the Greater Montreal Area, Quebec, working in English and French. He builds AI that reads documents, answers from a company's own files with the source quoted, and keeps working when a provider fails, backed by 8+ years running production web systems for New Roots Herbal Inc. He is open to full-time roles, contracts and agency placements, hybrid in Montreal or remote across Canada and the US.
+> Webman is the working name of Nicolas (Nick) Desjardins, an applied AI developer and senior full-stack developer in the Greater Montreal Area, Quebec, Canada, working in English and French. webman.dev is his official site. He builds AI automation for businesses in Quebec and across Canada: document processing that ends manual data entry, private knowledge-base search that quotes its sources, custom AI agents that wait for a person before risky steps, and Model Context Protocol (MCP) servers that connect AI assistants to existing company systems. He created the open-source NextBlock CMS and its Cortex AI MCP server, and has run production web systems for New Roots Herbal Inc. for 8+ years. He takes contracts and is open to full-time roles and agency placements, on site or hybrid in Montreal, or fully remote across Canada, the US and the rest of the world.
 
+- [AI automation services](https://webman.dev/ai-automation): services, how integrations connect to existing tools, service area, FAQ (French: https://webman.dev/fr/ai-automation)
 - [webman.dev](https://webman.dev/): portfolio, English edition
 - [webman.dev/fr](https://webman.dev/fr): portfolio, French edition
 - [Invoice data extraction with AI](https://webman.dev/projects/invoice-data-extraction): case study (French: https://webman.dev/fr/projects/invoice-data-extraction)
 - [Document search with cited sources (RAG)](https://webman.dev/projects/compliance-document-search): case study (French: https://webman.dev/fr/projects/compliance-document-search)
+- [AI agents with human approval (LangGraph)](https://webman.dev/projects/multi-agent-operations): case study (French: https://webman.dev/fr/projects/multi-agent-operations)
 - [Resume (PDF, English)](https://webman.dev/Nicolas-Desjardins-Resume.pdf)
 - [CV (PDF, French)](https://webman.dev/Nicolas-Desjardins-CV.pdf)
 
-## What he can build for a company (plain language)
+## AI automation services in Canada
 
-- Invoices, purchase orders and forms that are still retyped by hand: document data extraction with a validated schema and model fallback. Proof: 21 of 21 test invoices fully correct on the 7 October 2026 benchmark.
-- Staff who cannot find answers in procedures and regulatory manuals: hybrid retrieval (RAG) that quotes the exact passage and page, and says so when the documents do not cover the question. Proof: 6 of 6 recorded questions answered with verified quotes, 1 of 1 out-of-scope question declined (14 October 2026).
-- Multi-step back-office work where a person must approve the risky steps: supervised AI agents (LangGraph). Planned; its figures are targets.
-- Knowing whether answers got worse after a change: evaluation in CI, tracing and caching (LLMOps). Planned; its figures are targets.
-- Websites and online stores that must not go down when servers change: 30+ websites migrated with zero downtime at New Roots Herbal Inc.
-- A website a team can edit itself and AI tools can operate safely: NextBlock CMS, an AI-native CMS with an MCP server.
+Each service is tied to public, dated proof. "Measured" figures come from saved benchmark records and recorded runs; "track record" is employment work attributed to New Roots Herbal Inc.
+
+- Document processing and data entry automation: invoices, purchase orders, forms and incoming emails become validated records in an accounting system, ERP or database, with no retyping. Measured: 21 of 21 test invoices fully correct on the 7 October 2026 benchmark.
+- Private knowledge base AI and internal copilots (RAG): answers from a company's own procedures, manuals and regulatory documents that quote the exact passage and page, and decline when the documents do not cover the question. Measured: 6 of 6 recorded questions answered with verified quotes, 1 of 1 out-of-scope question declined (14 October 2026).
+- Custom AI agents with human approval: multi-step back-office workflows (data lookups, drafting, compliance checks) that pause for a person before anything is sent, published or changed. Measured: 6 scenarios recorded on 15 October 2026, every dispatch behind a recorded human decision.
+- MCP servers and LLM integration: company systems exposed to AI assistants such as Claude, ChatGPT or Cursor through the Model Context Protocol, with scoped tokens, typed tools, confirmation before changes, and provider fallback. Measured: NextBlock's Cortex AI MCP server has 56 tools and is listed in the official MCP Registry.
+- Full-stack Next.js, Supabase and e-commerce development: Next.js, React and TypeScript applications, Supabase and PostgreSQL back ends, headless CMS, custom API integrations, Laravel and PHP platforms, and enterprise e-commerce migrations. Track record: 30+ websites migrated with zero downtime and hosting costs cut by over 40% at New Roots Herbal Inc.
+- Planned, not yet measured: an AI quality gate (evaluation in CI, tracing, semantic caching). Its figures are targets.
+
+French search terms he serves: automatisation IA Montréal et Québec, consultant en intelligence artificielle et en automatisation des processus d'affaires, développeur full-stack senior.
+
+## Service area
+
+- Based in the Greater Montreal Area, QC, Canada.
+- On site or hybrid in Montreal and the surrounding region, including Salaberry-de-Valleyfield, and elsewhere in Quebec.
+- Fully remote across Canada, the US and anywhere else in the world.
+- English and French.
 
 ## Who
 
-- Name: Nicolas Desjardins (also Nick Desjardins)
+- Name: Nicolas Desjardins (also Nick Desjardins). Works on the web as Webman (webman.dev); he first used the name for Webman Solutions, his web studio from 2016 to 2018.
 - Role: Applied AI Developer and Senior Full-Stack Developer (French: Développeur en IA appliquée et full-stack senior).
-- Open to: full-time roles, contracts, and agency placements. Roles such as Applied AI Engineer, Forward Deployed Engineer, AI Solutions, and Senior Full-Stack Developer with an AI focus.
-- Location: Greater Montreal Area, QC, Canada. Hybrid in Montreal or remote across Canada and the US.
-- Languages: English and French.
-- Building for the web since 2004
-- Proof points: 8+ years running production systems; 30+ websites migrated with zero downtime; 200k+ lines of TypeScript shipped as an open-source CMS (NextBlock)
+- Open to: contracts, full-time roles, and agency placements. Roles such as Applied AI Engineer, Forward Deployed Engineer, AI Solutions, and Senior Full-Stack Developer with an AI focus.
+- Building for the web since 2004.
+- Proof points: 8+ years running production systems; 30+ websites migrated with zero downtime; 200k+ lines of TypeScript shipped as an open-source CMS (NextBlock); three AI services live with public code.
 
-## Flagship product: NextBlock CMS
+## Flagship product: NextBlock CMS and Cortex AI
 
 - [NextBlock CMS](https://nextblock.dev): the open-source, full-stack AI-native CMS for Next.js 16, Supabase, and Tailwind CSS. Nicolas Desjardins is its creator, designer, and lead developer.
 - [Source on GitHub](https://github.com/nextblock-cms/nextblock): Nx monorepo.
 - [Live sandbox](https://cms.nextblock.dev/): demo@nextblock.dev / password, resets every 15 minutes.
 - Install: npm create nextblock@latest
 - Scale (October 2026): 200k+ lines of TypeScript; 8 npm packages at v0.21.3 (create-nextblock and @nextblock-cms/ui, utils, db, editor, sdk, ecom, cortex); 191 CLI releases since October 2025; 11.5k CLI downloads in the 30 days to 7 October 2026; 620+ commits; 146 Vitest test files; 21 forward-only SQL migrations.
-- Architecture: Nx monorepo. Every content block is a JSONB row in Supabase PostgreSQL under row-level security; data-driven custom block types render with no rebuild; Live Draft Mode and revisions; linked EN/FR translations; SEO graded as you type. Public routes are React Server Components.
+- Architecture: every content block is a JSONB row in Supabase PostgreSQL under row-level security; data-driven custom block types render with no rebuild; Live Draft Mode and revisions; linked EN/FR translations; SEO graded as you type. Public routes are React Server Components.
 - Cortex AI: the CMS is an MCP server (Streamable HTTP, scoped bearer tokens, 56 tools, confirmation-gated mutations) listed in the official MCP Registry as dev.nextblock/nextblock. OpenRouter routing through the Vercel AI SDK with free-model fallback. AES-256-GCM encrypted bring-your-own-key storage.
 - Commerce Pro: Stripe for physical goods, Freemius for digital licensing, multi-currency with rounding modes, scheduled sales, shipping zones, taxes, inventory, orders.
 - Distribution: one-click Vercel deploy with zero environment variables (Supabase provisioned and keys injected before the first build), self-hosted Docker stack (Postgres, GoTrue, PostgREST, Kong, MinIO), npm run update applied as a git three-way merge.
 - Performance: 100/100 Lighthouse in all four categories on the production build (0.3 s FCP, 0.8 s LCP, 0 ms TBT, 0 CLS).
 
-## Projects
+## AI projects (open source)
 
-- [Invoice Extraction Service, live documentation](https://nickdesjardins.github.io/Invoice-Extraction-Service/): Phase 1, Production Live & Open Source. An asynchronous FastAPI microservice that turns messy, unstructured documents into a guaranteed, schema-validated invoice record. Resilience comes from routing across models, not vendors: a free primary model cascades to a second provider on rate limits, timeouts, or schema exceptions, at zero marginal cost.
-- [Invoice Extraction Service, source on GitHub](https://github.com/nickdesjardins/Invoice-Extraction-Service): FastAPI, Pydantic, pytest, Docker.
-- Context-Aware Hybrid Compliance Retrieval Engine (Phase 2, In Active Pipeline, Delivery: Days 31 to 60): A retrieval engine for regulatory documents, SOPs, and product dossiers that answers with paragraph-level citations instead of plausible guesses. Dense and sparse retrieval run in parallel inside PostgreSQL, candidates are fused, then compressed to a handful of high-confidence passages by a cross-encoder.
-- Autonomous Multi-Agent Operations Pipeline (Phase 3, In Active Pipeline, Delivery: Days 61 to 90): A cyclic LangGraph workflow that coordinates SQL inventory queries, channel-specific copy synthesis, and regulatory compliance auditing. Validation failures loop back with structured revision notes. High-risk mutations pause for a human before anything leaves the system.
-- Production LLMOps Gateway & Evaluation CI/CD Suite (Phase 4, In Active Pipeline, Delivery: Days 91 to 120): An enterprise reverse proxy in front of every model call. Semantically similar queries resolve from a Redis vector cache in milliseconds, every transaction is traced, and a CI pipeline runs regression evaluations against golden datasets so a bad prompt change never reaches main.
+- Invoice Extraction Service (Phase 1, shipped): an asynchronous FastAPI microservice that turns messy documents into a schema-validated invoice record. A free primary model cascades to a second provider on rate limits, timeouts, or schema exceptions, at zero marginal cost. [Project page](https://nickdesjardins.github.io/Invoice-Extraction-Service/), [source](https://github.com/nickdesjardins/Invoice-Extraction-Service).
+- Context-Aware Hybrid Compliance Retrieval Engine (Phase 2, shipped): answers from SOPs and regulatory manuals only by quoting the source. Vector and keyword search run in one PostgreSQL statement and are fused, a cross-encoder keeps the best passages, and every quote is checked against the stored document. Measured on 14 October 2026: 6 of 6 recorded questions answered with verified citations, 1 of 1 out-of-corpus question declined, 441 MB peak memory on a 512 MB instance. [Project page](https://nickdesjardins.github.io/hybrid-knowledge-rag/), [source](https://github.com/nickdesjardins/hybrid-knowledge-rag), [live demo](https://hybrid-retrieval-engine.onrender.com/) (free tier, about a minute to wake).
+- Autonomous Multi-Agent Operations and Marketing Pipeline (Phase 3, shipped): a cyclic LangGraph state machine that turns one inventory SKU into channel marketing copy for a licensed Natural Health Product and sends nothing until a person signs it off. Violations loop back to the writer a bounded number of times, then the graph pauses on a PostgreSQL checkpoint; approval fires one HMAC-signed webhook. Measured on 15 October 2026: 3 of 3 dispatches behind a recorded human decision, 504 hermetic tests, $0.00 marginal cost per run. [Project page](https://nickdesjardins.github.io/autonomous-operation-marketing/), [source](https://github.com/nickdesjardins/autonomous-operation-marketing), [live demo](https://multi-agent-ops-pipeline.onrender.com/).
+- Production LLMOps Gateway and Evaluation CI/CD Suite (Phase 4, in active pipeline): semantic caching, tracing, and regression evaluations in CI. Planned; its figures are targets.
 
 ## Production web work
 
@@ -55,25 +65,25 @@
 - Eighteen campaign and education microsites for New Roots Herbal product lines (employer work): standalone Next.js sites such as [vitamins.newrootsherbal.com](https://vitamins.newrootsherbal.com/), [probiotics.newrootsherbal.com](https://probiotics.newrootsherbal.com/), [coughandcold.ca](https://www.coughandcold.ca/) and [prostateperform.ca](https://prostateperform.ca/), plus Laravel-served pages such as [newrootsherbal.com/cardiac-health](https://newrootsherbal.com/cardiac-health).
 - [MusiqueSD](https://www.musiquesd.com/): independent client site. Bilingual FR/EN marketing site for a Montreal recording studio, DJ and event animation business.
 - [Ryūgū: Ten Nights to the Dragon Palace](https://japan.webman.dev/): independent. A chaptered travel companion for an eleven-day voyage around Japan and Jeju.
-- [Thieves' Cant Translator](https://www.thethievescant.com/): independent. A D&D 5e rogue's companion that translates English or French into Thieves' Cant, with a dictionary, symbols and hobo signs.
+- [Thieves' Cant Translator](https://www.thethievescant.com/): independent. A D&D 5e rogue's companion that translates English or French into Thieves' Cant.
 - [pcsquad.ca](https://pcsquad.ca/): own business, founded 2012. The bilingual site of Nicolas's first company, a computer repair and website shop he owned and ran from 2012 to 2018.
-- [Civalgo Punch](https://civalgo-punch.vercel.app/): experiment kept online for show. A real-time worker check-in system.
-- [React Hooks Guide](https://react-hooks-delta-umber.vercel.app/): experiment kept online for show. An interactive guide to React hooks.
+- [Civalgo Punch](https://civalgo-punch.vercel.app/) and [React Hooks Guide](https://react-hooks-delta-umber.vercel.app/): experiments kept online for show.
 
 ## Experience
 
-- Creator & Lead Developer, NextBlock CMS (open source), Greater Montreal Area, QC (Oct 2025 to Present): Designed and built an open-source, AI-native CMS for Next.js 16 and Supabase as an Nx monorepo: database schema and row-level security, block editor, commerce, MCP server, CLI, and the release pipeline for eight npm packages.
-- Lead Web Developer & Applied AI Integration, New Roots Herbal Inc., Vaudreuil-Dorion, QC (Nov 2018 to Present): Own production reliability, data architecture, and infrastructure across the company's digital estate, and lead the integration of generative AI into day-to-day operations.
-- Technical Founder, PcSquad, Les Coteaux, QC (2012 to 2018): Founded and operated a regional IT solutions and web infrastructure consultancy.
-- Armed Forces Veteran, Royal Canadian Electrical and Mechanical Engineers (RCEME), CFB Valcartier, QC (2013 to 2016): Military discipline, electro-mechanical diagnostics, precision systems maintenance, and calm execution under mission-critical conditions.
+- Creator & Lead Developer, NextBlock CMS (open source), Greater Montreal Area, QC (Oct 2025 to Present).
+- Lead Web Developer & Applied AI Integration, New Roots Herbal Inc., Vaudreuil-Dorion, QC (Nov 2018 to Present): production reliability, data architecture, infrastructure, and the integration of generative AI into day-to-day operations.
+- Founder, Webman Solutions, Greater Montreal Area, QC (2016 to 2018): web studio.
+- Technical Founder, PcSquad, Les Coteaux, QC (2012 to 2018): regional IT solutions and web infrastructure consultancy.
+- Armed Forces Veteran, Royal Canadian Electrical and Mechanical Engineers (RCEME), CFB Valcartier, QC (2013 to 2016).
 
 Education: Computer Science, General Program, Concordia University, Montreal (2016 to 2018); DEC in Computer Science, John Abbott College, Sainte-Anne-de-Bellevue (2009 to 2012).
 
 ## Contact
 
 - [Email](mailto:nick.desjardins@live.com): nick.desjardins@live.com
+- [Contact form](https://webman.dev/#contact)
 - [GitHub](https://github.com/nickdesjardins): nickdesjardins
 - [LinkedIn](https://www.linkedin.com/in/nicolas-desjardins/): nicolas-desjardins
-- Location: Greater Montreal Area, QC, Canada. Open to local, hybrid, and remote US/Canada engagements.
-- Availability: Available for Senior Applied AI & Forward Deployed roles (Montreal / Remote US & CA)
-- Response time: Replies within one business day.
+- Availability: open to contracts, full-time and agency work; Montreal, hybrid, or fully remote worldwide.
+- Response time: replies within one business day.

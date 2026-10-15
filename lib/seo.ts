@@ -31,7 +31,7 @@ export function pageAlternates(locale: Locale, path: string): NonNullable<Metada
 export function baseOpenGraph(locale: Locale): NonNullable<Metadata["openGraph"]> {
   const { site } = getContent(locale);
   return {
-    siteName: site.name,
+    siteName: site.brand,
     locale: ogLocale[locale],
     alternateLocale: [ogLocale[otherLocale(locale)]],
   };

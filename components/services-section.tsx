@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowRight, BookOpen, FileText, Gauge, LayoutTemplate, Server, Workflow } from "lucide-react";
+import { ArrowRight, BookOpen, FileText, Gauge, LayoutTemplate, Plug, Server, Workflow } from "lucide-react";
 import type { ComponentType, SVGProps } from "react";
 
 import { useLocale } from "@/components/locale-provider";
@@ -12,16 +12,17 @@ import { getContent } from "@/lib/content";
 import { localePath, type Locale } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 
-const ICONS: Record<ServiceIcon, ComponentType<SVGProps<SVGSVGElement>>> = {
+export const SERVICE_ICONS: Record<ServiceIcon, ComponentType<SVGProps<SVGSVGElement>>> = {
   "file-text": FileText,
   "book-open": BookOpen,
   workflow: Workflow,
   gauge: Gauge,
   server: Server,
   layout: LayoutTemplate,
+  plug: Plug,
 };
 
-const STATUS_TONE: Record<ServiceStatus, string> = {
+export const SERVICE_STATUS_TONE: Record<ServiceStatus, string> = {
   measured: "border-success/35 bg-success/10 text-success",
   target: "border-warning/35 bg-warning/10 text-warning",
   record: "border-primary/35 bg-primary/10 text-primary",
@@ -34,7 +35,7 @@ function serviceHref(href: string, locale: Locale): string {
 
 function ServiceCard({ item, locale }: { item: ServiceItem; locale: Locale }) {
   const { intro } = getContent(locale).services;
-  const Icon = ICONS[item.icon];
+  const Icon = SERVICE_ICONS[item.icon];
   const titleId = `service-${item.id}`;
 
   return (
@@ -49,7 +50,7 @@ function ServiceCard({ item, locale }: { item: ServiceItem; locale: Locale }) {
         <span
           className={cn(
             "rounded-full border px-2.5 py-0.5 font-mono text-[10px] font-medium tracking-wider uppercase",
-            STATUS_TONE[item.status]
+            SERVICE_STATUS_TONE[item.status]
           )}
         >
           {intro.status[item.status]}
@@ -90,7 +91,10 @@ function ServiceCard({ item, locale }: { item: ServiceItem; locale: Locale }) {
  */
 export function ServicesSection() {
   const locale = useLocale();
-  const { intro, items } = getContent(locale).services;
+  const {
+    services: { intro, items },
+    automation,
+  } = getContent(locale);
 
   return (
     <Section id="services" eyebrow={intro.eyebrow} title={intro.title} description={intro.description}>
@@ -103,6 +107,15 @@ export function ServicesSection() {
           </li>
         ))}
       </ul>
+      <p className="mt-10">
+        <a
+          href={localePath(locale, automation.path)}
+          className="group inline-flex items-center gap-1.5 rounded-md text-sm font-medium text-primary transition-colors hover:text-primary/80"
+        >
+          {intro.more}
+          <ArrowRight aria-hidden="true" className="size-4 transition-transform group-hover:translate-x-0.5 motion-reduce:transition-none" />
+        </a>
+      </p>
     </Section>
   );
 }

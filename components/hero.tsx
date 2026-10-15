@@ -108,6 +108,8 @@ export function Hero() {
             className="mt-7 animate-in text-[3.25rem] leading-[0.95] font-semibold tracking-[-0.035em] text-foreground duration-700 ease-out fill-mode-both slide-in-from-bottom-2 motion-reduce:animate-none sm:text-7xl lg:text-[4.5rem] xl:text-[5.25rem]"
           >
             <span className="block">{first}</span>
+            {/* The spans are blocks, so this space is invisible, but it keeps the heading's text "Nicolas Desjardins". */}
+            {last && " "}
             {last && <span className="block text-gradient pb-1">{last}</span>}
           </h1>
 

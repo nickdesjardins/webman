@@ -40,7 +40,7 @@ const headingClass =
  */
 export function SiteFooter() {
   const locale = useLocale();
-  const { site } = getContent(locale);
+  const { site, automation } = getContent(locale);
   const t = STRINGS[locale];
   const socialLinks = getSocialLinks(locale);
   const year = new Date().getFullYear();
@@ -72,6 +72,11 @@ export function SiteFooter() {
                   </a>
                 </li>
               ))}
+              <li>
+                <a href={localePath(locale, automation.path)} className={linkClass}>
+                  {automation.linkLabel}
+                </a>
+              </li>
             </ul>
           </nav>
 

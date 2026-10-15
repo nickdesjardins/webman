@@ -9,6 +9,7 @@ import { Hero } from "@/components/hero";
 import { JsonLd } from "@/components/json-ld";
 import { PageTitles } from "@/components/locale-provider";
 import { NextblockSection } from "@/components/nextblock-section";
+import { PlainWordsStrip } from "@/components/plain-words-strip";
 import { ProjectsSection } from "@/components/projects-section";
 import { ServicesSection } from "@/components/services-section";
 import { WorkSection } from "@/components/work-section";
@@ -50,6 +51,7 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
       <JsonLd locale={locale} />
       <PageTitles en={getContent("en").site.metaTitle} fr={getContent("fr").site.metaTitle} />
       <Hero />
+      <PlainWordsStrip />
       <ServicesSection />
       <ProjectsSection />
       <NextblockSection />

@@ -55,7 +55,7 @@ export async function generateMetadata({ params }: LayoutProps<"/[locale]">): Pr
       template: `%s | ${site.name}`,
     },
     description: site.description,
-    applicationName: site.name,
+    applicationName: site.brand,
     authors: [{ name: site.name, url: site.url }],
     creator: site.name,
     publisher: site.name,

@@ -5,13 +5,14 @@
 import type { ServiceItem, ServicesIntro } from "@/data/services";
 
 export const servicesIntro: ServicesIntro = {
-  eyebrow: "Ce que je peux construire pour votre entreprise",
+  eyebrow: "Automatisation IA et plateformes web pour votre entreprise",
   title: "Pas besoin de connaître le terme technique.",
   description:
-    "Décrivez le problème dans vos mots. Chaque carte montre ce que je construis pour le régler, le nom que lui donnent les spécialistes, et la preuve vérifiable sur ce site.",
+    "Décrivez le problème dans vos mots. Chaque carte montre l'automatisation IA ou la plateforme web que je construis pour le régler, le nom que lui donnent les spécialistes, et la preuve vérifiable sur ce site.",
   termLabel: "Le terme technique",
   proofLabel: "Preuve",
   cta: "Voir comment ça marche",
+  more: "Les services d'automatisation IA en détail, avec les questions fréquentes",
   status: { measured: "Mesuré", target: "Planifié", record: "Bilan" },
 };
 

@@ -197,7 +197,7 @@ export function buildResume(locale: Locale): ResumeContent {
       github: "github.com/nickdesjardins",
       linkedin: "linkedin.com/in/nicolas-desjardins",
       location: site.location.label,
-      remote: fr ? "Local, hybride ou à distance (Canada, É.-U.)" : "Local, hybrid, or remote US and Canada",
+      remote: fr ? "Local, hybride ou à distance (monde entier)" : "Local, hybrid, or remote worldwide",
     },
     availability: site.availability.label,
     education: edu.map((e) => ({ degree: e.degree, school: e.institution, period: e.period })),
