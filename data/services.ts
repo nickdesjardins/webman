@@ -70,9 +70,10 @@ export const services: ServiceItem[] = [
     icon: "workflow",
     problem: "A multi-step back-office task needs a person to approve the risky steps.",
     term: "Supervised AI agents with human approval (LangGraph)",
-    proof: "Operations agents: planned work, so its numbers are targets, not results.",
-    status: "target",
-    href: "#projects",
+    proof:
+      "Supervised operations agents: 6 scenarios recorded on 15 October 2026, every dispatch behind a recorded human decision, and a swapped probiotic dosage caught by a deterministic check.",
+    status: "measured",
+    href: "/projects/multi-agent-operations",
   },
   {
     id: "quality",

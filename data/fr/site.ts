@@ -64,7 +64,7 @@ export const site: SiteContent = {
       "Je conçois des outils d'IA qui lisent vos documents, répondent à partir de vos propres fichiers et vous montrent la source.",
     promiseAccent: "vous montrent la source",
     support:
-      "Plus de 8 ans à faire tourner des systèmes web en production pour New Roots Herbal Inc. Deux services d'IA en ligne, au code public.",
+      "Plus de 8 ans à faire tourner des systèmes web en production pour New Roots Herbal Inc. Trois services d'IA en ligne, au code public.",
     primaryCta: { label: "Voir ce que je construis", href: "#services" },
     resumeCta: "CV (PDF)",
     proof: [

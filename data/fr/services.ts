@@ -41,9 +41,10 @@ export const services: ServiceItem[] = [
     icon: "workflow",
     problem: "Une tâche administrative en plusieurs étapes exige qu'une personne approuve les étapes à risque.",
     term: "Agents IA supervisés avec approbation humaine (LangGraph)",
-    proof: "Agents d'opérations : travail planifié, ses chiffres sont donc des cibles, pas des résultats.",
-    status: "target",
-    href: "#projects",
+    proof:
+      "Agents d'opérations supervisés : 6 scénarios enregistrés le 15 octobre 2026, chaque envoi précédé d'une décision humaine consignée, et un dosage de probiotiques interverti attrapé par une vérification déterministe.",
+    status: "measured",
+    href: "/projects/multi-agent-operations",
   },
   {
     id: "quality",

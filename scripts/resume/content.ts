@@ -59,15 +59,18 @@ export interface ResumeContent {
   service: string[];
   projectsTitle: string;
   projectsNote: string;
+  /** The live Applied AI services, in delivery order. */
   projects: ProjectBlock[];
-  milestonesTitle: string;
-  milestonesNote: string;
+  flagshipTitle: string;
+  /** NextBlock CMS, printed on the page after the AI services so the four cards never strand one on a page of its own. */
+  flagship: ProjectBlock;
+  /** Planned work, printed after the live projects as a compact entry with its design targets. */
   milestones: { title: string; delivery: string; summary: string; metrics: string[] }[];
   webTitle: string;
   webNote: string;
-  /** Running-head label of the milestones and web work page. */
+  /** Running-head label of the page with the flagship product and the web work. */
   roadmapLabel: string;
-  /** Prefix of the one-line target metrics under each milestone. */
+  /** Prefix of the one-line target metrics under each milestone; it says that they are targets, not measurements. */
   targetsLabel: string;
   /** Separator after a label: ": " in English, no-break space then ": " in French. */
   colon: string;
@@ -145,6 +148,7 @@ export function buildResume(locale: Locale): ResumeContent {
       .map((url) => ({ label: url.replace(/^https?:\/\//, "").replace(/\/$/, ""), href: url }));
   const invoice = project("invoice-extraction-service");
   const retrieval = project("hybrid-compliance-retrieval-engine");
+  const agents = project("multi-agent-operations-pipeline");
   const milestones = projects.filter((p) => p.status === "pipeline");
   const milestoneRows = milestones.map((p) => ({
     title: p.title,
@@ -287,7 +291,7 @@ export function buildResume(locale: Locale): ResumeContent {
       serviceTitle: "Military service",
       service: ["RCEME Weapons Technician, Canadian Armed Forces", "2013 to 2016, CFB Valcartier, QC"],
       projectsTitle: "Selected projects",
-      projectsNote: "Measured numbers come from saved benchmark records, recorded runs, and public registries.",
+      projectsNote: "Measured numbers come from saved benchmark records and recorded runs. The last entry is planned work: its figures are design targets, not measurements.",
       projects: [
         {
           title: invoice.title,
@@ -305,6 +309,16 @@ export function buildResume(locale: Locale): ResumeContent {
           links: bareLinks(retrieval),
         },
         {
+          title: agents.title,
+          status: "Live demo, open source",
+          summary:
+            "A LangGraph state machine that turns one inventory SKU into channel marketing copy for a licensed health product: a read-only SQL lookup, a writer and a compliance auditor under strict JSON schemas, deterministic checks that overrule the model on mechanical rules, a bounded self-correction loop, then a pause on a PostgreSQL checkpoint until a person approves, edits or rejects. Only approval or an edit fires the HMAC-signed webhook. Runs at zero cost on free models.",
+          metrics: ["3 / 3 dispatches behind a human decision", "9 / 9 correct, primary free model", "504 hermetic tests", "$0.00 per run"],
+          links: bareLinks(agents),
+        },
+      ],
+      flagshipTitle: "Flagship product",
+      flagship: {
           title: "NextBlock CMS",
           status: "Flagship product, v0.21.3, AGPL core",
           summary: nextblock.tagline + " " + nextblock.positioning,
@@ -319,15 +333,12 @@ export function buildResume(locale: Locale): ResumeContent {
             { label: "GitHub", href: nextblock.links.repo.href },
             { label: "npm", href: nextblock.links.npm.href },
           ],
-        },
-      ],
-      milestonesTitle: "Scheduled milestone architectures",
-      milestonesNote: "Phases 3 and 4 of a 120-day Applied AI plan whose first two phases have shipped (page 2). Figures are design targets, not measurements.",
+      },
       milestones: milestoneRows,
       webTitle: "Production web work",
       webNote: "Employer work is credited to New Roots Herbal Inc.; the rest is independent.",
-      roadmapLabel: "Milestones and web work",
-      targetsLabel: "Targets",
+      roadmapLabel: "Flagship product and web work",
+      targetsLabel: "Targets, not measurements",
       colon,
       earlierProjectsLabel: "Earlier experience and selected projects",
       web: [
@@ -427,7 +438,7 @@ export function buildResume(locale: Locale): ResumeContent {
     serviceTitle: "Service militaire",
     service: ["Technicien d'armement, GEMRC, Forces armées canadiennes", "2013 à 2016, BFC Valcartier, QC"],
     projectsTitle: "Projets choisis",
-    projectsNote: "Les chiffres mesurés proviennent d'enregistrements de référence sauvegardés, d'exécutions enregistrées et de registres publics.",
+    projectsNote: "Chiffres mesurés : enregistrements de référence sauvegardés et exécutions enregistrées. Dernière entrée : travail planifié, cibles de conception.",
     projects: [
       {
         title: invoice.title,
@@ -445,6 +456,16 @@ export function buildResume(locale: Locale): ResumeContent {
         links: bareLinks(retrieval),
       },
       {
+        title: agents.title,
+        status: "Démo en ligne, code ouvert",
+        summary:
+          "Une machine à états LangGraph qui transforme un SKU d'inventaire en textes marketing par canal pour un produit de santé homologué : consultation SQL en lecture seule, rédacteur et auditeur de conformité sous schémas JSON stricts, vérifications déterministes qui l'emportent sur le modèle, boucle d'autocorrection bornée, puis pause sur un point de contrôle PostgreSQL jusqu'à la décision d'une personne. Seule une approbation ou une modification déclenche le webhook signé HMAC.",
+        metrics: ["3 / 3 envois après décision humaine", "9 / 9 corrects, modèle principal", "504 tests hermétiques", "0,00 $ par exécution"],
+        links: bareLinks(agents),
+      },
+    ],
+    flagshipTitle: "Produit phare",
+    flagship: {
         title: "NextBlock CMS",
         status: "Produit phare, v0.21.3, noyau AGPL",
         summary: nextblock.tagline + " " + nextblock.positioning,
@@ -459,15 +480,12 @@ export function buildResume(locale: Locale): ResumeContent {
           { label: "GitHub", href: nextblock.links.repo.href },
           { label: "npm", href: nextblock.links.npm.href },
         ],
-      },
-    ],
-    milestonesTitle: "Architectures jalons planifiées",
-    milestonesNote: "Phases 3 et 4 d'un plan d'IA appliquée de 120 jours dont les deux premières phases sont livrées (page 2). Les chiffres sont des cibles de conception, pas des mesures.",
+    },
     milestones: milestoneRows,
     webTitle: "Réalisations web en production",
     webNote: "Le travail en emploi est crédité à New Roots Herbal Inc.; le reste est indépendant.",
-    roadmapLabel: "Jalons et réalisations web",
-    targetsLabel: "Cibles",
+    roadmapLabel: "Produit phare et réalisations web",
+    targetsLabel: "Cibles, pas des mesures",
     colon,
     earlierProjectsLabel: "Expérience antérieure et projets choisis",
     web: [

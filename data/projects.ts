@@ -1,12 +1,13 @@
 /**
  * Enterprise Applied AI projects.
  *
- * Projects 1 and 2 are live. Their proof points are taken from each
+ * Projects 1 to 3 are live. Their proof points are taken from each
  * repository's own README and dated records (the 7 October 2026 benchmark for
- * project 1, the runs recorded on 14 October 2026 for project 2), so every
- * number here can be checked. Projects 3 and 4 are scheduled milestone
- * architectures from a 120-day delivery plan; their metrics are explicit
- * design targets, labelled as such.
+ * project 1, the runs recorded on 14 October 2026 for project 2, the benchmark
+ * and the runs recorded on 15 October 2026 for project 3), so every number
+ * here can be checked. Project 4 is a scheduled milestone architecture from a
+ * 120-day delivery plan; its metrics are explicit design targets, labelled as
+ * such.
  */
 
 export type ProjectStatus = "live" | "pipeline";
@@ -251,56 +252,107 @@ export const projects: Project[] = [
   {
     id: "multi-agent-operations-pipeline",
     slug: "multi-agent-operations",
+    seoTitle: "AI agents with human approval (LangGraph)",
     plainTitle: "Supervised operations agents",
     plain:
-      "An AI assistant that checks inventory, writes product copy for each sales channel, checks every claim against the regulations, and waits for a person to approve anything risky.",
+      "Writes product copy for each sales channel from your inventory data, checks every claim against the rules, and sends nothing out until a person has approved it. If the copy still breaks a rule after a rewrite, it is handed to a person instead of being sent, and every decision is on record.",
     index: "03",
-    phase: "Phase 3 · Milestone",
-    title: "Autonomous Multi-Agent Operations Pipeline",
+    phase: "Phase 3 · Shipped",
+    title: "Autonomous Multi-Agent Operations and Marketing Pipeline",
     shortTitle: "Multi-Agent Operations",
-    status: "pipeline",
-    statusLabel: "In Active Pipeline",
-    delivery: "Delivery: Days 61 to 90",
+    status: "live",
+    statusLabel: "Live Demo & Open Source",
     summary:
-      "A cyclic LangGraph workflow that coordinates SQL inventory queries, channel-specific copy synthesis, and regulatory compliance auditing. Validation failures loop back with structured revision notes. High-risk mutations pause for a human before anything leaves the system.",
+      "A cyclic LangGraph state machine that turns one inventory SKU into channel marketing copy for a licensed Natural Health Product and refuses to let it leave until a person has signed it off. A supervisor routes the work through a read-only SQL lookup, a synthesis agent and a compliance validator that answer under strict JSON schemas; violations loop back to the writer a bounded number of times, then the graph pauses on a PostgreSQL checkpoint. Approval or an edit resumes it and fires one HMAC-signed webhook, and a rejection ends the thread with nothing sent. The public demo runs at zero cost on free models.",
     problem:
-      "Launching a product across channels means pulling SKU facts from a transactional database, drafting listings, and checking every claim against regulations such as Health Canada NHP rules. Linear chains cannot retry, cannot pause, and cannot explain what they did.",
+      "Launching a product across channels means pulling SKU facts from a transactional database, drafting a product page, marketplace bullets and a social post, and checking every claim against regulations such as Health Canada's rules for Natural Health Products. A linear chain cannot retry, cannot pause for a reviewer and cannot explain what it did, and a model that grades its own copy misses mechanical errors such as a swapped dosage.",
     architecture:
-      "A supervisor node parses the request and routes work across specialised sub-agents over a typed state schema with explicit reducers: an Inventory SQL Agent with deterministic, read-only tool calls; a Copy Synthesis Agent; and a Compliance Validator Agent. Non-compliant output cycles back to synthesis with structured instructions. If ambiguity persists, the graph raises a Human-in-the-Loop interrupt, persists the thread snapshot to a PostgreSQL checkpointer, and exposes a review endpoint. Only an approved state resumes and dispatches the external webhook.",
+      "A supervisor node validates the request and routes it over a typed state with explicit reducers. The inventory agent is a deterministic, read-only SQL tool: one parameterized lookup, no model call, and an unknown or out-of-stock SKU ends the run before any model is called. The synthesis agent drafts a product page, five marketplace bullets, a social post and an image prompt under a strict JSON schema, and the validator agent audits the draft against the licence under another. A set of deterministic Python checks (licence number displayed, ingredient amounts, mandatory risk statements, prohibited claim patterns) overrules the model on the mechanical rules: their findings always win, and a wording-only objection to a restated authorized claim is discarded. Violations go back to the writer with structured revision instructions for a bounded number of cycles, and a draft that still fails when the budget is spent is escalated to a person. The graph is compiled with interrupt_before the webhook node, so every run stops on a PostgreSQL checkpoint (langgraph-checkpoint-postgres over one psycopg pool) and can wait for its reviewer across restarts. The review endpoint approves, edits or rejects: approval and edits resume the graph, and a rejection is written to the thread as if the webhook node had run, so it never executes. The webhook node refuses to send without a recorded human decision, signs the payload with HMAC-SHA256, retries on 429, 5xx and timeouts, and writes every attempt to an audit log. Generation runs on an ordered chain of free OpenRouter models that repairs itself when a model is withdrawn.",
     stack: [
+      "Python 3.12",
       "LangGraph",
-      "Python",
-      "PostgreSQL Checkpointers",
-      "Structured Tool Calling",
-      "Claude Sonnet",
-      "GPT-4o-mini",
       "FastAPI",
-      "Webhooks",
+      "Pydantic v2",
+      "PostgreSQL",
+      "langgraph-checkpoint-postgres (psycopg)",
+      "OpenRouter",
+      "HMAC-SHA256 webhooks",
+      "Render",
+      "Neon",
+      "GitHub Pages",
     ],
     pipeline: [
-      { name: "Supervise", detail: "Typed state, reducers, conditional routing" },
-      { name: "Query", detail: "Inventory SQL agent, read-only deterministic tools" },
-      { name: "Synthesise", detail: "Channel-specific listing copy" },
-      { name: "Audit", detail: "Compliance validator against regulatory rules" },
-      { name: "Loop", detail: "Structured revision notes back to synthesis" },
+      {
+        name: "Supervise",
+        detail: "Request validated, typed state with reducers, routed by what the state already holds",
+      },
+      {
+        name: "Query",
+        detail: "Read-only parameterized SQL lookup, no model call; an unknown or out-of-stock SKU ends the run",
+      },
+      {
+        name: "Synthesise",
+        detail: "Product page, five bullets, social post, image prompt; strict JSON schema",
+      },
+      {
+        name: "Audit",
+        detail: "Validator model plus deterministic checks that always win; violations loop back, bounded, then escalate",
+      },
       {
         name: "Interrupt",
-        detail: "Human sign-off persisted in PostgreSQL before webhook",
+        detail: "interrupt_before the webhook node; approve, edit or reject through the review endpoint",
+      },
+      {
+        name: "Dispatch",
+        detail: "HMAC-SHA256 signed webhook, retries on 429, 5xx and timeouts, every attempt in the audit log",
       },
     ],
     proofPoints: [
-      "Cyclic graph with self-correcting validation instead of a brittle DAG.",
-      "Every node transition is checkpointed, giving session resumption and a complete audit trail.",
-      "Cheap models handle routing and extraction; the frontier model is reserved for synthesis and compliance reasoning.",
+      "Six scenarios recorded on 15 October 2026 against the live stack and published as the API returned them: happy path, self-correction, escalation, edit, reject and out of stock. The five runs that drafted copy took 19 to 66 seconds on free models, all twelve model calls were answered by the first model of the chain, and each of the three dispatches sat behind a recorded human decision.",
+      "In the escalation run the validator model called the draft compliant, and the deterministic dosage check caught three swapped probiotic amounts (10, 10 and 20 billion CFU where the licence says 20, 20 and 10). The draft went to a person instead of out the door, and the person rejected it.",
+      "In the reject run the validator sent the first draft back for an unauthorized claim and passed the rewrite: one self-correction cycle, 66 seconds. The reviewer then rejected it, and the webhook node never ran.",
+      "Dated model benchmark (15 October 2026): 27 calls across three free models on the pipeline's own cases, every answer saved as JSONL so the figures can be re-derived without calling a model. The Liquid model answered 9 of 9 correctly at a 9.1 s median and the NVIDIA model 8 of 9, which is the order the shipped chain uses.",
+      "504 hermetic tests: no network, no PostgreSQL, no API key. Both HTTP transports raise before a request can leave the process, the real SDK clients cannot be constructed inside the suite, and the README and the project page are held to the code by tests. Four more tests run the compiled graph over a real PostgreSQL checkpointer when a database is provided.",
+      "The webhook is the only mutation. The node refuses to send unless the human review status is approved or edited, a rejection is checkpointed as if the node had run, the receiver verifies the signature in constant time, and every attempt is in the audit log.",
     ],
     metrics: [
       {
-        value: "100%",
-        label: "of high-risk mutations gated by a human checkpoint",
-        kind: "target",
+        value: "3 / 3",
+        label: "dispatches behind a recorded human decision, 15 October 2026",
+        kind: "measured",
       },
-      { value: "Full", label: "state replay from any checkpoint", kind: "target" },
-      { value: "2-tier", label: "model cascade by task complexity", kind: "target" },
+      {
+        value: "9 / 9",
+        label: "correct answers from the primary free model, dated benchmark",
+        kind: "measured",
+      },
+      {
+        value: "504",
+        label: "hermetic tests: no network, no database, no key",
+        kind: "measured",
+      },
+      {
+        value: "$0.00",
+        label: "marginal cost per run on the free stack",
+        kind: "measured",
+      },
+    ],
+    links: [
+      {
+        label: "Project page",
+        href: "https://nickdesjardins.github.io/autonomous-operation-marketing/",
+        kind: "docs",
+      },
+      {
+        label: "Live demo",
+        href: "https://multi-agent-ops-pipeline.onrender.com/",
+        kind: "demo",
+      },
+      {
+        label: "Source on GitHub",
+        href: "https://github.com/nickdesjardins/autonomous-operation-marketing",
+        kind: "github",
+      },
     ],
   },
   {

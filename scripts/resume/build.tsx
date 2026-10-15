@@ -393,35 +393,36 @@ function Resume({ r }: { r: ResumeContent }) {
           {r.projects.slice(1).map((p) => (
             <ProjectCard key={p.title} p={p} colon={r.colon} />
           ))}
+          {r.milestones.map((m) => (
+            <View key={m.title} style={s.milestone} wrap={false}>
+              <View style={s.milestoneHead}>
+                <Text style={s.milestoneTitle}>{m.title}</Text>
+                <Text style={s.milestoneMeta}>{m.delivery}</Text>
+              </View>
+              <Text style={s.cardText}>{m.summary}</Text>
+              {m.metrics.length > 0 && (
+                <Text style={s.milestoneTargets}>
+                  {r.targetsLabel}
+                  {r.colon}
+                  {m.metrics.join(" · ")}
+                </Text>
+              )}
+            </View>
+          ))}
         </View>
 
         <Footer r={r} />
       </Page>
 
-      {/* Page 3: milestone architectures and production web work */}
+      {/* Page 3: the flagship product and production web work */}
       <Page size="LETTER" style={s.page} wrap>
         <PageHead r={r} label={r.roadmapLabel} />
 
         <View style={s.section}>
-          {r.milestones.map((m, i) => (
-            <View key={m.title} wrap={false}>
-              {i === 0 && <SectionHead title={r.milestonesTitle} note={r.milestonesNote} />}
-              <View style={s.milestone}>
-                <View style={s.milestoneHead}>
-                  <Text style={s.milestoneTitle}>{m.title}</Text>
-                  <Text style={s.milestoneMeta}>{m.delivery}</Text>
-                </View>
-                <Text style={s.cardText}>{m.summary}</Text>
-                {m.metrics.length > 0 && (
-                  <Text style={s.milestoneTargets}>
-                    {r.targetsLabel}
-                    {r.colon}
-                    {m.metrics.join(" · ")}
-                  </Text>
-                )}
-              </View>
-            </View>
-          ))}
+          <View wrap={false}>
+            <SectionHead title={r.flagshipTitle} />
+            <ProjectCard p={r.flagship} colon={r.colon} />
+          </View>
         </View>
 
         <View style={s.section}>

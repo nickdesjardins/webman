@@ -4,12 +4,13 @@
  * métriques; seul le texte visible est traduit. Doit exporter exactement
  * les mêmes noms que le module anglais et satisfaire ses interfaces.
  *
- * Les projets 1 et 2 sont en ligne. Leurs preuves proviennent du README de
+ * Les projets 1 à 3 sont en ligne. Leurs preuves proviennent du README de
  * chaque dépôt et de relevés datés (le banc d'essai du 7 octobre 2026 pour le
- * projet 1, les exécutions enregistrées le 14 octobre 2026 pour le projet 2),
- * donc chaque chiffre est vérifiable. Les projets 3 et 4 sont des
- * architectures jalonnées d'un plan de livraison de 120 jours; leurs
- * métriques sont des cibles de conception explicites, étiquetées comme telles.
+ * projet 1, les exécutions enregistrées le 14 octobre 2026 pour le projet 2,
+ * le banc d'essai et les exécutions enregistrées le 15 octobre 2026 pour le
+ * projet 3), donc chaque chiffre est vérifiable. Le projet 4 est une
+ * architecture jalonnée d'un plan de livraison de 120 jours; ses métriques
+ * sont des cibles de conception explicites, étiquetées comme telles.
  */
 import type { Project } from "@/data/projects";
 
@@ -208,56 +209,107 @@ export const projects: Project[] = [
   {
     id: "multi-agent-operations-pipeline",
     slug: "multi-agent-operations",
+    seoTitle: "Agents IA avec approbation humaine (LangGraph)",
     plainTitle: "Agents d'opérations supervisés",
     plain:
-      "Un assistant IA qui vérifie l'inventaire, rédige les fiches produits pour chaque canal de vente, vérifie chaque affirmation au regard de la réglementation et attend qu'une personne approuve tout ce qui est risqué.",
+      "Rédige les fiches produits de chaque canal de vente à partir de vos données d'inventaire, vérifie chaque allégation au regard des règles et n'envoie rien tant qu'une personne n'a pas approuvé. Si le texte enfreint encore une règle après une réécriture, il est remis à une personne au lieu d'être envoyé, et chaque décision est consignée.",
     index: "03",
-    phase: "Phase 3 · Jalon",
-    title: "Pipeline d'opérations multiagent autonome",
+    phase: "Phase 3 · Livré",
+    title: "Pipeline autonome multiagent d'opérations et de marketing",
     shortTitle: "Opérations multiagents",
-    status: "pipeline",
-    statusLabel: "En cours de réalisation",
-    delivery: "Livraison, jours 61 à 90",
+    status: "live",
+    statusLabel: "Démo en ligne, code ouvert",
     summary:
-      "Un flux de travail LangGraph cyclique qui coordonne les requêtes SQL d'inventaire, la rédaction de textes propres à chaque canal et l'audit de conformité réglementaire. Les échecs de validation rebouclent avec des notes de révision structurées. Les mutations à haut risque attendent un humain avant que quoi que ce soit ne quitte le système.",
+      "Une machine à états LangGraph cyclique qui transforme un SKU d'inventaire en textes marketing par canal pour un produit de santé naturel homologué, et refuse de les laisser sortir tant qu'une personne ne les a pas signés. Un superviseur fait passer le travail par une consultation SQL en lecture seule, un agent de rédaction et un validateur de conformité qui répondent sous des schémas JSON stricts; les violations reviennent au rédacteur un nombre borné de fois, puis le graphe se met en pause sur un point de contrôle PostgreSQL. Une approbation ou une modification le reprend et déclenche un seul webhook signé HMAC, et un rejet termine le fil sans rien envoyer. La démo publique fonctionne à coût nul sur des modèles gratuits.",
     problem:
-      "Lancer un produit sur plusieurs canaux suppose d'extraire les données de SKU d'une base transactionnelle, de rédiger les fiches et de vérifier chaque allégation contre la réglementation, comme les règles de Santé Canada sur les PSN. Les chaînes linéaires ne peuvent ni réessayer, ni se mettre en pause, ni expliquer ce qu'elles ont fait.",
+      "Lancer un produit sur plusieurs canaux suppose d'extraire les données du SKU d'une base transactionnelle, de rédiger une fiche produit, des puces de place de marché et une publication sociale, puis de vérifier chaque allégation contre la réglementation, comme les règles de Santé Canada sur les produits de santé naturels. Une chaîne linéaire ne peut ni réessayer, ni attendre un réviseur, ni expliquer ce qu'elle a fait, et un modèle qui note ses propres textes laisse passer des erreurs mécaniques comme un dosage interverti.",
     architecture:
-      "Un nœud superviseur analyse la requête et répartit le travail entre des sous-agents spécialisés, sur un schéma d'état typé avec réducteurs explicites. Un agent SQL d'inventaire effectue des appels d'outils déterministes en lecture seule, un agent de rédaction produit les textes et un agent validateur contrôle la conformité. Une sortie non conforme revient à la rédaction avec des instructions structurées. Si l'ambiguïté persiste, le graphe lève une interruption avec humain dans la boucle, persiste l'instantané du fil dans un checkpointer PostgreSQL et expose un endpoint de révision. Seul un état approuvé reprend et déclenche le webhook externe.",
+      "Un nœud superviseur valide la requête et la route sur un état typé à réducteurs explicites. L'agent d'inventaire est un outil SQL déterministe en lecture seule\xa0: une seule consultation paramétrée, aucun appel de modèle, et un SKU inconnu ou en rupture termine l'exécution avant tout appel de modèle. L'agent de rédaction produit une fiche produit, cinq puces de place de marché, une publication sociale et une consigne d'image sous un schéma JSON strict, et l'agent validateur audite le brouillon contre la licence sous un autre. Un ensemble de vérifications Python déterministes (numéro de licence affiché, quantités d'ingrédients, mises en garde obligatoires, formulations interdites) l'emporte sur le modèle pour les règles mécaniques\xa0: leurs constats gagnent toujours, et une objection de pure formulation sur une allégation autorisée reformulée est écartée. Les violations reviennent au rédacteur avec des instructions de révision structurées pendant un nombre borné de cycles, et un brouillon encore fautif quand le budget est épuisé est remis à une personne. Le graphe est compilé avec interrupt_before sur le nœud webhook, si bien que chaque exécution s'arrête sur un point de contrôle PostgreSQL (langgraph-checkpoint-postgres sur un seul pool psycopg) et peut attendre son réviseur malgré les redémarrages. L'endpoint de révision approuve, modifie ou rejette\xa0: l'approbation et la modification reprennent le graphe, et un rejet est écrit dans le fil comme si le nœud webhook avait tourné, de sorte qu'il ne s'exécute jamais. Le nœud webhook refuse d'envoyer sans décision humaine consignée, signe la charge utile en HMAC-SHA256, réessaie sur 429, 5xx et délais dépassés, et écrit chaque tentative dans un journal d'audit. La génération passe par une chaîne ordonnée de modèles OpenRouter gratuits qui se répare quand un modèle est retiré.",
     stack: [
+      "Python 3.12",
       "LangGraph",
-      "Python",
-      "PostgreSQL Checkpointers",
-      "Structured Tool Calling",
-      "Claude Sonnet",
-      "GPT-4o-mini",
       "FastAPI",
-      "Webhooks",
+      "Pydantic v2",
+      "PostgreSQL",
+      "langgraph-checkpoint-postgres (psycopg)",
+      "OpenRouter",
+      "HMAC-SHA256 webhooks",
+      "Render",
+      "Neon",
+      "GitHub Pages",
     ],
     pipeline: [
-      { name: "Supervision", detail: "État typé, réducteurs, routage conditionnel" },
-      { name: "Requête", detail: "Agent SQL d'inventaire, outils déterministes en lecture seule" },
-      { name: "Rédaction", detail: "Textes de fiches propres à chaque canal" },
-      { name: "Audit", detail: "Validateur de conformité selon les exigences réglementaires" },
-      { name: "Boucle", detail: "Notes de révision structurées renvoyées à la rédaction" },
+      {
+        name: "Supervision",
+        detail: "Requête validée, état typé à réducteurs, routage selon ce que l'état contient déjà",
+      },
+      {
+        name: "Requête",
+        detail: "Consultation SQL paramétrée en lecture seule, sans modèle; un SKU inconnu ou en rupture termine l'exécution",
+      },
+      {
+        name: "Rédaction",
+        detail: "Fiche produit, cinq puces, publication sociale, consigne d'image; schéma JSON strict",
+      },
+      {
+        name: "Audit",
+        detail: "Modèle validateur et vérifications déterministes qui gagnent toujours; les violations rebouclent, un nombre borné de fois, puis remontent à une personne",
+      },
       {
         name: "Interruption",
-        detail: "Approbation humaine persistée dans PostgreSQL avant le webhook",
+        detail: "interrupt_before sur le nœud webhook; approuver, modifier ou rejeter par l'endpoint de révision",
+      },
+      {
+        name: "Envoi",
+        detail: "Webhook signé HMAC-SHA256, réessais sur 429, 5xx et délais dépassés, chaque tentative au journal d'audit",
       },
     ],
     proofPoints: [
-      "Graphe cyclique à validation autocorrective plutôt qu'un DAG fragile.",
-      "Chaque transition de nœud fait l'objet d'un point de contrôle, ce qui permet la reprise de session et une piste d'audit complète.",
-      "Des modèles économiques gèrent le routage et l'extraction, tandis que le modèle de pointe est réservé à la rédaction et au raisonnement de conformité.",
+      "Six scénarios enregistrés le 15 octobre 2026 sur la pile en ligne et publiés tels que l'API les a renvoyés\xa0: cas ordinaire, autocorrection, escalade, modification, rejet et rupture de stock. Les cinq exécutions qui ont rédigé un texte ont pris de 19 à 66 secondes sur des modèles gratuits, les douze appels de modèle ont tous été répondus par le premier modèle de la chaîne, et chacun des trois envois a attendu une décision humaine consignée.",
+      "Dans l'exécution d'escalade, le modèle validateur a jugé le brouillon conforme, et la vérification déterministe des dosages a attrapé trois quantités de probiotiques interverties (10, 10 et 20 milliards d'UFC là où la licence dit 20, 20 et 10). Le brouillon est allé à une personne plutôt que vers la sortie, et la personne l'a rejeté.",
+      "Dans l'exécution de rejet, le validateur a renvoyé le premier brouillon pour une allégation non autorisée et a accepté la réécriture\xa0: un cycle d'autocorrection, 66 secondes. Le réviseur l'a ensuite rejeté, et le nœud webhook n'a jamais tourné.",
+      "Banc d'essai de modèles daté du 15 octobre 2026\xa0: 27 appels répartis sur trois modèles gratuits, sur les propres cas du pipeline, chaque réponse sauvegardée en JSONL pour que les chiffres puissent être recalculés sans appeler de modèle. Le modèle Liquid a répondu correctement 9 fois sur 9 avec une médiane de 9,1 s et le modèle NVIDIA 8 fois sur 9, et c'est l'ordre de la chaîne livrée.",
+      "504 tests hermétiques\xa0: ni réseau, ni PostgreSQL, ni clé API. Les deux transports HTTP lèvent une exception avant qu'une requête ne sorte du processus, les vrais clients SDK ne peuvent pas être construits dans la suite, et le README comme la page du projet sont tenus au code par des tests. Quatre tests de plus font tourner le graphe compilé sur un vrai checkpointer PostgreSQL quand une base est fournie.",
+      "Le webhook est la seule mutation. Le nœud refuse d'envoyer tant que le statut de révision humaine n'est pas approuvé ou modifié, un rejet est inscrit au point de contrôle comme si le nœud avait tourné, le récepteur vérifie la signature en temps constant, et chaque tentative figure au journal d'audit.",
     ],
     metrics: [
       {
-        value: "100%",
-        label: "des mutations à haut risque soumises à un point de contrôle humain",
-        kind: "target",
+        value: "3 / 3",
+        label: "envois précédés d'une décision humaine consignée, 15 octobre 2026",
+        kind: "measured",
       },
-      { value: "Rejeu complet", label: "de l'état depuis n'importe quel point de contrôle", kind: "target" },
-      { value: "2 niveaux", label: "de cascade de modèles selon la complexité de la tâche", kind: "target" },
+      {
+        value: "9 / 9",
+        label: "réponses correctes du modèle gratuit principal, banc d'essai daté",
+        kind: "measured",
+      },
+      {
+        value: "504",
+        label: "tests hermétiques, sans réseau, sans base, sans clé",
+        kind: "measured",
+      },
+      {
+        value: "0,00 $",
+        label: "de coût marginal par exécution sur la pile gratuite",
+        kind: "measured",
+      },
+    ],
+    links: [
+      {
+        label: "Page du projet",
+        href: "https://nickdesjardins.github.io/autonomous-operation-marketing/",
+        kind: "docs",
+      },
+      {
+        label: "Démo en ligne",
+        href: "https://multi-agent-ops-pipeline.onrender.com/",
+        kind: "demo",
+      },
+      {
+        label: "Code source sur GitHub",
+        href: "https://github.com/nickdesjardins/autonomous-operation-marketing",
+        kind: "github",
+      },
     ],
   },
   {
