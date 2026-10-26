@@ -2,8 +2,11 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
-  /* One-page site: the 18 KB stylesheet rides in the HTML and saves a render-blocking round trip. */
-  experimental: { inlineCss: true },
+  experimental: {
+    /* One-page site: the 18 KB stylesheet rides in the HTML and saves a render-blocking round trip. */
+    inlineCss: true,
+    agentUpgrade: "security",
+  },
   poweredByHeader: false,
   images: {
     formats: ["image/avif", "image/webp"],
