@@ -149,6 +149,7 @@ export function buildResume(locale: Locale): ResumeContent {
   const invoice = project("invoice-extraction-service");
   const retrieval = project("hybrid-compliance-retrieval-engine");
   const agents = project("multi-agent-operations-pipeline");
+  const gateway = project("llmops-gateway-evaluation-suite");
   const milestones = projects.filter((p) => p.status === "pipeline");
   const milestoneRows = milestones.map((p) => ({
     title: p.title,
@@ -291,7 +292,7 @@ export function buildResume(locale: Locale): ResumeContent {
       serviceTitle: "Military service",
       service: ["RCEME Weapons Technician, Canadian Armed Forces", "2013 to 2016, CFB Valcartier, QC"],
       projectsTitle: "Selected projects",
-      projectsNote: "Measured numbers come from saved benchmark records and recorded runs. The last entry is planned work: its figures are design targets, not measurements.",
+      projectsNote: "Measured numbers come from saved benchmark records, recorded runs and dated measurements.",
       projects: [
         {
           title: invoice.title,
@@ -315,6 +316,14 @@ export function buildResume(locale: Locale): ResumeContent {
             "A LangGraph state machine that turns one inventory SKU into channel marketing copy for a licensed health product: a read-only SQL lookup, a writer and a compliance auditor under strict JSON schemas, deterministic checks that overrule the model on mechanical rules, a bounded self-correction loop, then a pause on a PostgreSQL checkpoint until a person approves, edits or rejects. Only approval or an edit fires the HMAC-signed webhook. Runs at zero cost on free models.",
           metrics: ["3 / 3 dispatches behind a human decision", "9 / 9 correct, primary free model", "504 hermetic tests", "$0.00 per run"],
           links: bareLinks(agents),
+        },
+        {
+          title: gateway.title,
+          status: "Live demo, open source",
+          summary:
+            "A FastAPI gateway in front of every model call: a Redis 8 semantic cache that refuses look-alike questions, failover across light and heavy chains of free models, Langfuse cost tracing per request, and a DeepEval and Ragas gate on every pull request.",
+          metrics: ["0 / 78 look-alikes served wrong", "79.8% list-price spend avoided", "264 hermetic tests", "$0.00 per request"],
+          links: bareLinks(gateway),
         },
       ],
       flagshipTitle: "Flagship product",
@@ -438,7 +447,7 @@ export function buildResume(locale: Locale): ResumeContent {
     serviceTitle: "Service militaire",
     service: ["Technicien d'armement, GEMRC, Forces armées canadiennes", "2013 à 2016, BFC Valcartier, QC"],
     projectsTitle: "Projets choisis",
-    projectsNote: "Chiffres mesurés : enregistrements de référence sauvegardés et exécutions enregistrées. Dernière entrée : travail planifié, cibles de conception.",
+    projectsNote: "Chiffres mesurés : enregistrements de référence sauvegardés, exécutions enregistrées et mesures datées.",
     projects: [
       {
         title: invoice.title,
@@ -462,6 +471,15 @@ export function buildResume(locale: Locale): ResumeContent {
           "Une machine à états LangGraph qui transforme un SKU d'inventaire en textes marketing par canal pour un produit de santé homologué : consultation SQL en lecture seule, rédacteur et auditeur de conformité sous schémas JSON stricts, vérifications déterministes qui l'emportent sur le modèle, boucle d'autocorrection bornée, puis pause sur un point de contrôle PostgreSQL jusqu'à la décision d'une personne. Seule une approbation ou une modification déclenche le webhook signé HMAC.",
         metrics: ["3 / 3 envois après décision humaine", "9 / 9 corrects, modèle principal", "504 tests hermétiques", "0,00 $ par exécution"],
         links: bareLinks(agents),
+      },
+      {
+        // Shorter than the page title, so it stays on one line beside the status.
+        title: "Passerelle LLMOps de production : évaluations CI/CD et faible latence",
+        status: "Démo en ligne, code ouvert",
+        summary:
+          "Passerelle FastAPI devant chaque appel de modèle : cache sémantique Redis 8 qui refuse les questions semblables, relève entre modèles gratuits légers et lourds, coût par requête dans Langfuse, barrière DeepEval et Ragas sur chaque pull request.",
+        metrics: ["0 / 78 semblables mal servies", "79,8 % de dépense évitée", "264 tests hermétiques", "0,00 $ par requête"],
+        links: bareLinks(gateway),
       },
     ],
     flagshipTitle: "Produit phare",

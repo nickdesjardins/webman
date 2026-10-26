@@ -26,7 +26,7 @@ const STRINGS = {
     eyebrow: "AI projects",
     title: "AI tools that check their own work.",
     description:
-      "Three services are live, with public code you can read. One more is planned. Numbers marked Measured were recorded in dated tests. Numbers marked Target are goals, not results.",
+      "Four services are shipped, with public code you can read. Numbers marked Measured were recorded in dated tests. Numbers marked Target are goals, not results.",
     legend: "Metric legend",
     measured: "Measured",
     target: "Target",
@@ -48,7 +48,7 @@ const STRINGS = {
     eyebrow: "Projets IA",
     title: "Des outils d'IA qui vérifient leur propre travail.",
     description:
-      "Trois services sont en ligne, au code public. Un autre est planifié. Les chiffres marqués Mesuré ont été enregistrés lors de tests datés. Les chiffres marqués Cible sont des objectifs, pas des résultats.",
+      "Quatre services sont livrés, au code public. Les chiffres marqués Mesuré ont été enregistrés lors de tests datés. Les chiffres marqués Cible sont des objectifs, pas des résultats.",
     legend: "Légende des métriques",
     measured: "Mesuré",
     target: "Cible",

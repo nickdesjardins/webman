@@ -12,7 +12,7 @@ import { hreflang, localePath, locales, ogLocale, otherLocale, type Locale } fro
  * it, and search engines only trust lastmod when it is accurate, so bump it
  * when copy or projects change, not on every deploy.
  */
-export const CONTENT_UPDATED = "2026-10-15";
+export const CONTENT_UPDATED = "2026-10-26";
 
 /** "en-CA" and "fr-CA" alternates plus x-default (English), for one public path. */
 export function languageAlternates(path: string): Record<string, string> {

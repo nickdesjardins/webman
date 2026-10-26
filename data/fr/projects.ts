@@ -4,13 +4,13 @@
  * métriques; seul le texte visible est traduit. Doit exporter exactement
  * les mêmes noms que le module anglais et satisfaire ses interfaces.
  *
- * Les projets 1 à 3 sont en ligne. Leurs preuves proviennent du README de
+ * Les quatre projets sont livrés. Leurs preuves proviennent du README de
  * chaque dépôt et de relevés datés (le banc d'essai du 7 octobre 2026 pour le
  * projet 1, les exécutions enregistrées le 14 octobre 2026 pour le projet 2,
  * le banc d'essai et les exécutions enregistrées le 15 octobre 2026 pour le
- * projet 3), donc chaque chiffre est vérifiable. Le projet 4 est une
- * architecture jalonnée d'un plan de livraison de 120 jours; ses métriques
- * sont des cibles de conception explicites, étiquetées comme telles.
+ * projet 3, les mesures de cache, de relecture et de recherche du 23 octobre
+ * 2026 pour le projet 4), donc chaque chiffre est vérifiable. Les résultats
+ * d'évaluation jugée du projet 4 s'ajoutent quand sa barrière de qualité passe.
  */
 import type { Project } from "@/data/projects";
 
@@ -315,48 +315,108 @@ export const projects: Project[] = [
   {
     id: "llmops-gateway-evaluation-suite",
     slug: "llmops-gateway",
+    seoTitle: "Passerelle LLM avec cache sémantique et évaluations",
     plainTitle: "Contrôle qualité de l'IA",
     plain:
-      "Un point de contrôle devant chaque appel à l'IA\xa0: il enregistre ce qui s'est passé et ce que ça a coûté, réutilise les réponses aux questions répétées et bloque un changement qui dégrade les réponses avant qu'il n'atteigne vos clients.",
+      "Se place devant chaque appel à l'IA. Une question à laquelle il a déjà répondu revient de sa mémoire en quelques millisecondes, une question simple va à un modèle économique et une question difficile à un modèle puissant, et chaque réponse est consignée avec ce qu'elle a coûté. Avant qu'un changement soit livré, une série fixe de questions est reposée, et le changement est bloqué si les réponses se sont dégradées.",
     index: "04",
-    phase: "Phase 4 · Projet synthèse",
-    title: "Passerelle LLMOps de production et suite d'évaluation CI/CD",
+    phase: "Phase 4 · Livré",
+    title: "Passerelle LLMOps de production\xa0: évaluation CI/CD et optimisation de la latence",
     shortTitle: "Passerelle LLMOps",
-    status: "pipeline",
-    statusLabel: "En cours de réalisation",
-    delivery: "Livraison, jours 91 à 120",
+    status: "live",
+    statusLabel: "Démo en ligne, code ouvert",
     summary:
-      "Un proxy inverse d'entreprise placé devant chaque appel de modèle. Les requêtes sémantiquement similaires sont résolues depuis une cache vectorielle Redis en quelques millisecondes, chaque transaction est tracée, et un pipeline CI exécute des évaluations de régression sur des jeux de données de référence pour qu'une mauvaise modification de prompt n'atteigne jamais main.",
+      "Une passerelle FastAPI placée devant chaque appel de modèle, avec une route compatible OpenAI vers laquelle n'importe quel client peut pointer. Les questions répétées reviennent d'une cache vectorielle Redis 8 sans appel de modèle, les nouvelles sont évaluées selon leur complexité et envoyées à une chaîne de modèles légère ou lourde avec relève automatique, et chaque étape est un segment d'une même trace, avec jetons et dollars, reproduite dans Langfuse. Un flux GitHub Actions fait répondre le vrai pipeline à un jeu de questions de référence, fait juger les réponses par DeepEval et Ragas, et fait échouer la pull request quand le taux d'hallucination dépasse 5 % ou que la fidélité passe sous 0,95. Fonctionne à coût nul sur des modèles gratuits.",
     problem:
-      "Les dépenses d'API grimpent à chaque fonctionnalité, la latence p99 est imprévisible, et personne ne peut prouver qu'un ajustement de prompt n'a pas dégradé les réponses. Sans évaluation en CI, les fonctionnalités génératives sont livrées à l'aveuglette.",
+      "La facture de modèles grimpe à chaque requête, la latence de queue dépend de la file d'attente du fournisseur ce jour-là, et personne ne peut démontrer que la modification de prompt de la semaine dernière n'a pas dégradé les réponses. Une cache sémantique ne fait économiser que si elle ne sert jamais la réponse d'une autre question, et un seuil de qualité n'est réel que si un changement fautif ne peut pas être fusionné.",
     architecture:
-      "Un proxy inverse FastAPI calcule l'embedding des prompts entrants et interroge une cache de similarité vectorielle Redis. Les correspondances au-dessus de 0.96 de similarité cosinus renvoient la réponse stockée sans appel amont. Les requêtes manquées sont routées selon la complexité de la tâche, la classification et l'extraction vers des modèles légers, la synthèse en plusieurs étapes vers des modèles de pointe. Tous les appels émettent des traces distribuées vers Langfuse avec attribution des jetons, du coût et de la latence. GitHub Actions exécute DeepEval et Ragas sur un jeu de données de référence organisé à chaque pull request et fait échouer le build si le taux d'hallucination dépasse 5 % ou si la fidélité tombe sous 95 %.",
+      "Une garde normalise chaque requête, neutralise les jetons de gabarit de clavardage et les balises usurpées, signale les formulations d'injection et applique des plafonds de jetons en entrée et en sortie par palier. La cache sémantique vérifie d'abord une clé exacte, puis plonge la question avec bge-small sur le processeur et demande à Redis les trois questions en cache les plus proches dans le même espace de noms (version du prompt, empreinte du corpus, modèle de plongement), au moyen d'un index HNSW en distance cosinus. Un voisin au-dessus du seuil de 0,96 n'est servi que si une garde de contraste ne trouve aucune contradiction entre les deux questions sur un nombre, un code ou un terme opposé\xa0: mesuré, c'est ce qui empêche de servir la limite de repas au pays pour la question sur l'étranger. Un échec de cache passe par une recherche hybride (plongements et BM25 fusionnés par rang réciproque) et un routeur de complexité fait de signaux nommés, qui ne coûte aucun appel de modèle et s'explique dans la trace. La chaîne du palier choisi répond, et un 429, un délai dépassé, un modèle retiré, un refus ou une réponse sans citation passe la requête au modèle suivant, puis à l'autre palier; une clé invalide l'arrête. Les réponses sont diffusées en Server-Sent Events, et chaque appel de modèle est chiffré deux fois\xa0: ce qu'il a coûté, et ce que les mêmes jetons coûteraient au prix courant de Claude Haiku 5.5 ou de Claude Opus 5.5. Chaque étape est un segment reproduit dans Langfuse comme une observation typée, les générations avec le détail des jetons et du coût. La barrière de qualité exécute une vérification déterministe de la recherche à chaque pull request et, quand les réponses ont pu changer, DeepEval et Ragas comme juges LLM sur 37 cas de référence, puis fait échouer la compilation selon les seuils et dès qu'une métrique passe sous la référence acceptée.",
     stack: [
-      "FastAPI Reverse Proxy",
-      "Redis Vector Similarity Cache",
-      "Langfuse Tracing",
+      "Python 3.12",
+      "FastAPI",
+      "Pydantic v2",
+      "Server-Sent Events",
+      "Redis 8 vector search",
+      "fastembed (bge-small)",
+      "Langfuse",
       "DeepEval",
       "Ragas",
-      "GitHub Actions CI/CD",
+      "GitHub Actions",
+      "OpenRouter",
+      "Docker",
+      "GitHub Pages",
     ],
     pipeline: [
-      { name: "Proxy", detail: "Point d'entrée unique pour chaque appel de modèle" },
-      { name: "Cache", detail: "Similarité vectorielle Redis, correspondance au-dessus de 0.96 cosinus" },
-      { name: "Routage", detail: "Cascade par complexité entre niveaux de modèles" },
-      { name: "Traçage", detail: "Spans Langfuse avec jetons, coût, latence" },
-      { name: "Évaluation", detail: "DeepEval et Ragas sur jeux de données de référence en CI" },
-      { name: "Verrou", detail: "PR bloquée au-dessus de 5 % de taux d'hallucination" },
+      {
+        name: "Garde",
+        detail: "Unicode replié, jetons de gabarit et balises usurpées neutralisés, injections signalées, plafonds de jetons",
+      },
+      {
+        name: "Cache",
+        detail: "Clé exacte, puis KNN Redis au-dessus de 0,96 en cosinus, refusé quand les questions se contredisent",
+      },
+      {
+        name: "Routage",
+        detail: "Des signaux nommés et l'étendue de la recherche choisissent la chaîne légère ou lourde, sans appel de modèle",
+      },
+      {
+        name: "Repli",
+        detail: "429, délai dépassé, modèle retiré ou réponse sans citation\xa0: modèle suivant, puis l'autre palier",
+      },
+      {
+        name: "Trace",
+        detail: "Un segment par étape vers Langfuse\xa0: jetons, coût réel, coût au prix courant, p50/p95/p99",
+      },
+      {
+        name: "Barrière",
+        detail: "DeepEval et Ragas sur un jeu de référence; une pull request échoue au-delà de 5 % d'hallucination",
+      },
     ],
     proofPoints: [
-      "Sépare la télémétrie de production de l'évaluation de mise en production. La surveillance dit ce qui s'est passé, la suite CI dit si l'on peut fusionner.",
-      "La mise en cache sémantique transforme les questions d'entreprise répétées en réponses de moins de 15 ms, sans aucun coût d'inférence.",
-      "La triade RAG (pertinence du contexte, fidélité, pertinence de la réponse) est notée automatiquement à chaque modification.",
+      "Compromis du seuil mesuré le 23 octobre 2026 avec le vrai modèle de plongement\xa0: deux reformulations d'une même question ont une similarité médiane de 0,889, tandis que deux questions semblables aux réponses différentes atteignent 0,961. Au seuil de 0,96, la cache seule servirait la mauvaise réponse à 1 question semblable sur 78\xa0; avec la garde de contraste, à aucune, et la garde n'a bloqué aucune des 78 vraies reformulations.",
+      "Sur une relecture de 250 questions de centre d'assistance passées dans le vrai pipeline, la cache a répondu à 199 requêtes (172 répétitions exactes, 27 correspondances sémantiques) sans aucune mauvaise réponse, évitant 79,8 % de la dépense de modèles au prix courant. La même relecture sur Redis 8 a donné les mêmes réponses en cache, avec des recherches de 2,4 ms (exacte) et de 3,6 ms (sémantique, plongement compris) en médiane.",
+      "Vérification de la recherche sans modèle, exécutée à chaque pull request\xa0: le passage qui contient la réponse figurait parmi les quatre premiers pour les 30 questions de référence auxquelles on peut répondre, avec une précision de contexte de 0,975.",
+      "L'image de production tourne dans un conteneur de 512 Mo à 348 Mio, modèle de plongement intégré, se connecte à Redis 8, crée son index vectoriel et a servi une réponse sémantique en cache en 15 ms de bout en bout.",
+      "264 tests hermétiques\xa0: ni réseau, ni Redis, ni clé. Les vrais adaptateurs SDK OpenAI et Anthropic tournent contre un transport simulé, le SDK Langfuse exporte en mémoire, les métriques de DeepEval passent par le propre juge de la passerelle, et la page du projet est tenue à ses enregistrements par des tests. Un test de plus fait tourner la cache sur un vrai Redis 8.",
     ],
     metrics: [
-      { value: "< 15 ms", label: "temps de réponse sur succès de cache", kind: "target" },
-      { value: "0.96", label: "seuil cosinus pour la résolution par la cache", kind: "target" },
-      { value: "5%", label: "plafond d'hallucination qui bloque une PR", kind: "target" },
-      { value: "~65%", label: "de réduction du coût d'inférence grâce à la cache", kind: "target" },
+      {
+        value: "0 / 78",
+        label: "questions semblables servies avec une mauvaise réponse en cache à 0,96, 23 octobre 2026",
+        kind: "measured",
+      },
+      {
+        value: "79,8 %",
+        label: "de la dépense de modèles au prix courant évitée sur une relecture de 250 questions",
+        kind: "measured",
+      },
+      {
+        value: "264",
+        label: "tests hermétiques, sans réseau, sans Redis, sans clé",
+        kind: "measured",
+      },
+      {
+        value: "0,00 $",
+        label: "de coût marginal par requête sur la pile gratuite",
+        kind: "measured",
+      },
+    ],
+    links: [
+      {
+        label: "Page du projet",
+        href: "https://nickdesjardins.github.io/LLMOps-gateway-evals/",
+        kind: "docs",
+      },
+      {
+        label: "Démo en ligne",
+        href: "https://llmops-gateway-q68n.onrender.com/",
+        kind: "demo",
+      },
+      {
+        label: "Code source sur GitHub",
+        href: "https://github.com/nickdesjardins/LLMOps-gateway-evals",
+        kind: "github",
+      },
     ],
   },
 ];

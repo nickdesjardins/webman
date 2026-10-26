@@ -1,13 +1,13 @@
 /**
  * Enterprise Applied AI projects.
  *
- * Projects 1 to 3 are live. Their proof points are taken from each
+ * All four projects are shipped. Their proof points are taken from each
  * repository's own README and dated records (the 7 October 2026 benchmark for
  * project 1, the runs recorded on 14 October 2026 for project 2, the benchmark
- * and the runs recorded on 15 October 2026 for project 3), so every number
- * here can be checked. Project 4 is a scheduled milestone architecture from a
- * 120-day delivery plan; its metrics are explicit design targets, labelled as
- * such.
+ * and the runs recorded on 15 October 2026 for project 3, the cache, replay and
+ * retrieval measurements of 23 October 2026 for project 4), so every number
+ * here can be checked. Project 4's judged evaluation results are added once its
+ * quality gate has passed.
  */
 
 export type ProjectStatus = "live" | "pipeline";
@@ -358,48 +358,108 @@ export const projects: Project[] = [
   {
     id: "llmops-gateway-evaluation-suite",
     slug: "llmops-gateway",
+    seoTitle: "LLM gateway with semantic cache and evals",
     plainTitle: "AI quality gate",
     plain:
-      "A checkpoint in front of every AI call: it records what happened and what it cost, reuses answers to repeated questions, and blocks a change that makes answers worse before it reaches customers.",
+      "Sits in front of every AI call. A question it has already answered comes back from memory in milliseconds, an easy one goes to a cheap model and a hard one to a strong model, and every answer is recorded with what it cost. Before a change ships, a fixed set of questions is asked again, and the change is blocked if the answers got worse.",
     index: "04",
-    phase: "Phase 4 · Capstone",
-    title: "Production LLMOps Gateway & Evaluation CI/CD Suite",
+    phase: "Phase 4 · Shipped",
+    title: "Production LLMOps Gateway: Evaluation CI/CD and Latency Optimization",
     shortTitle: "LLMOps Gateway",
-    status: "pipeline",
-    statusLabel: "In Active Pipeline",
-    delivery: "Delivery: Days 91 to 120",
+    status: "live",
+    statusLabel: "Live Demo & Open Source",
     summary:
-      "An enterprise reverse proxy in front of every model call. Semantically similar queries resolve from a Redis vector cache in milliseconds, every transaction is traced, and a CI pipeline runs regression evaluations against golden datasets so a bad prompt change never reaches main.",
+      "A FastAPI gateway in front of every model call, with an OpenAI-compatible route any client can point at. Repeated questions come back from a Redis 8 vector cache without a model call, new ones are scored for complexity and sent to a light or a heavy chain of models with failover, and every step is a span of one trace with tokens and dollars, mirrored to Langfuse. A GitHub Actions workflow answers a golden set with the real pipeline, has DeepEval and Ragas judge the answers, and fails the pull request when the hallucination rate passes 5% or faithfulness drops below 0.95. Runs at zero cost on free models.",
     problem:
-      "API spend grows with every feature, p99 latency is unpredictable, and nobody can prove that a prompt tweak did not make answers worse. Without evaluation in CI, generative features ship on vibes.",
+      "The model bill grows with every request, tail latency is whatever the provider's queue is that day, and nobody can show that last week's prompt change did not make the answers worse. A semantic cache saves money only if it never serves the answer to a different question, and a quality bar is real only if a failing change cannot merge.",
     architecture:
-      "A FastAPI reverse proxy embeds incoming prompts and checks a Redis vector similarity cache. Hits above 0.96 cosine similarity return the stored response without an upstream call. Misses are routed by task complexity: classification and extraction to lightweight models, multi-step synthesis to frontier models. All calls emit distributed traces to Langfuse with token, cost, and latency attribution. GitHub Actions runs DeepEval and Ragas against a curated golden dataset on every pull request and fails the build if hallucination rate exceeds 5% or faithfulness drops below 95%.",
+      "A guard normalizes every request, neutralizes chat-template tokens and spoofed tags, flags injection phrasings, and applies input and per-tier output token ceilings. The semantic cache checks an exact key first, then embeds the question with bge-small on the CPU and asks Redis for the three nearest cached questions in the same namespace (prompt version, corpus fingerprint, embedding model), through an HNSW index with cosine distance. A neighbour above the 0.96 threshold is served only if a contrast guard finds no contradiction between the two questions on a number, a code or an opposite term; measured, that is what keeps the domestic meal limit from being served for the international one. A miss goes through hybrid retrieval (dense and BM25 fused by reciprocal rank) and a complexity router built from named signals, which costs no model call and explains itself in the trace. The chosen tier's chain answers, and a 429, a timeout, a withdrawn model, a refusal or an uncited answer hands the request to the next model, then to the other tier; a bad key stops it. Answers stream as Server-Sent Events, and every model call is priced twice: what it cost, and what the same tokens cost at Claude Haiku 5.5 or Claude Opus 5.5 list prices. Each step is a span mirrored to Langfuse as a typed observation, generations with usage and cost details. The quality gate runs a deterministic retrieval check on every pull request and, when the answers can have changed, DeepEval and Ragas as LLM-as-a-judge on 37 golden cases, then fails the build on the thresholds and on any metric that drops below the accepted baseline.",
     stack: [
-      "FastAPI Reverse Proxy",
-      "Redis Vector Similarity Cache",
-      "Langfuse Tracing",
+      "Python 3.12",
+      "FastAPI",
+      "Pydantic v2",
+      "Server-Sent Events",
+      "Redis 8 vector search",
+      "fastembed (bge-small)",
+      "Langfuse",
       "DeepEval",
       "Ragas",
-      "GitHub Actions CI/CD",
+      "GitHub Actions",
+      "OpenRouter",
+      "Docker",
+      "GitHub Pages",
     ],
     pipeline: [
-      { name: "Proxy", detail: "Single ingress for every model call" },
-      { name: "Cache", detail: "Redis vector similarity, hit above 0.96 cosine" },
-      { name: "Route", detail: "Complexity-based cascade across model tiers" },
-      { name: "Trace", detail: "Langfuse spans with token, cost, latency" },
-      { name: "Evaluate", detail: "DeepEval and Ragas on golden datasets in CI" },
-      { name: "Gate", detail: "PR blocked above 5% hallucination rate" },
+      {
+        name: "Guard",
+        detail: "Unicode folded, template tokens and spoofed tags neutralized, injections flagged, token ceilings",
+      },
+      {
+        name: "Cache",
+        detail: "Exact key, then Redis KNN above 0.96 cosine, refused when the questions contradict each other",
+      },
+      {
+        name: "Route",
+        detail: "Named signals and retrieval spread pick the light or the heavy chain; no model call",
+      },
+      {
+        name: "Fallback",
+        detail: "429, timeout, withdrawn model or uncited answer: next model, then the other tier",
+      },
+      {
+        name: "Trace",
+        detail: "One span per step to Langfuse: tokens, actual cost, list-price cost, p50/p95/p99",
+      },
+      {
+        name: "Gate",
+        detail: "DeepEval and Ragas on a golden set; a pull request fails above 5% hallucination",
+      },
     ],
     proofPoints: [
-      "Separates production telemetry from release evaluation: monitoring tells you what happened, the CI suite tells you whether you may merge.",
-      "Semantic caching turns repeated enterprise questions into sub-15 ms responses with zero inference cost.",
-      "The RAG Triad (context relevance, faithfulness, answer relevance) is scored automatically on every change.",
+      "Threshold trade-off measured on 23 October 2026 with the real embedding model: two rephrasings of one question have a median similarity of 0.889, while two look-alike questions with different answers reach 0.961. At the 0.96 threshold the cache alone would serve 1 of 78 look-alikes the wrong answer; with the contrast guard, none, and the guard blocked none of the 78 true rephrasings.",
+      "On a 250-question help-desk replay through the real pipeline, the cache answered 199 requests (172 exact repeats, 27 semantic matches) with no wrong answer, avoiding 79.8% of the model spend at list price. The same replay against Redis 8 gave the same hits, with lookups at 2.4 ms (exact) and 3.6 ms (semantic, embedding included) at the median.",
+      "Retrieval check with no model, run on every pull request: the passage that holds the answer was in the top four for all 30 answerable golden questions, with a context precision of 0.975.",
+      "The production image runs in a 512 MB container at 348 MiB with the embedding model baked in, connects to Redis 8, creates its vector index, and served a semantic hit in 15 ms end to end.",
+      "264 hermetic tests: no network, no Redis, no key. The real OpenAI and Anthropic SDK adapters run against a mock transport, the Langfuse SDK exports to memory, DeepEval's metrics run through the gateway's own judge, and the project page is held to its recordings by tests. One more test runs the cache against a real Redis 8.",
     ],
     metrics: [
-      { value: "< 15 ms", label: "cache hit response time", kind: "target" },
-      { value: "0.96", label: "cosine threshold for cache resolution", kind: "target" },
-      { value: "5%", label: "hallucination ceiling that blocks a PR", kind: "target" },
-      { value: "~65%", label: "inference cost reduction from caching", kind: "target" },
+      {
+        value: "0 / 78",
+        label: "look-alike questions served a wrong cached answer at 0.96, 23 October 2026",
+        kind: "measured",
+      },
+      {
+        value: "79.8%",
+        label: "of list-price model spend avoided on a 250-question replay",
+        kind: "measured",
+      },
+      {
+        value: "264",
+        label: "hermetic tests: no network, no Redis, no key",
+        kind: "measured",
+      },
+      {
+        value: "$0.00",
+        label: "marginal cost per request on the free stack",
+        kind: "measured",
+      },
+    ],
+    links: [
+      {
+        label: "Project page",
+        href: "https://nickdesjardins.github.io/LLMOps-gateway-evals/",
+        kind: "docs",
+      },
+      {
+        label: "Live demo",
+        href: "https://llmops-gateway-q68n.onrender.com/",
+        kind: "demo",
+      },
+      {
+        label: "Source on GitHub",
+        href: "https://github.com/nickdesjardins/LLMOps-gateway-evals",
+        kind: "github",
+      },
     ],
   },
 ];

@@ -52,9 +52,10 @@ export const services: ServiceItem[] = [
     icon: "gauge",
     problem: "Vous avez modifié une consigne et personne ne sait si les réponses se sont dégradées.",
     term: "Évaluation en intégration continue, traçage et cache sémantique (LLMOps)",
-    proof: "Contrôle qualité de l'IA : travail planifié, ses chiffres sont donc des cibles, pas des résultats.",
-    status: "target",
-    href: "#projects",
+    proof:
+      "Contrôle qualité de l'IA : mesuré le 23 octobre 2026, aucune question semblable n'a reçu une mauvaise réponse en cache (0 sur 78), et une relecture de 250 questions a évité 79,8 % de la dépense de modèles au prix courant.",
+    status: "measured",
+    href: "/projects/llmops-gateway",
   },
   {
     id: "platforms",

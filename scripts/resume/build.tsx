@@ -96,7 +96,7 @@ const s = StyleSheet.create({
   pageHeadMeta: { fontFamily: "GeistMono", fontSize: 7.5, color: C.muted },
   section: { paddingHorizontal: 40, paddingTop: 14 },
   note: { fontSize: 7.8, color: C.muted, marginBottom: 8, lineHeight: 1.4 },
-  card: { borderWidth: 1, borderColor: C.line, borderRadius: 6, padding: 11, marginBottom: 9 },
+  card: { borderWidth: 1, borderColor: C.line, borderRadius: 6, padding: 9, marginBottom: 9 },
   cardHead: { flexDirection: "row", justifyContent: "space-between", alignItems: "flex-start", gap: 10, marginBottom: 4 },
   cardTitle: { fontSize: 10.5, fontWeight: 700, color: C.ink, flex: 1 },
   status: { fontFamily: "GeistMono", fontSize: 6.8, color: C.accent, backgroundColor: C.accentSoft, borderRadius: 3, paddingHorizontal: 5, paddingVertical: 2 },

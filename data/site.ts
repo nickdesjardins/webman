@@ -145,7 +145,7 @@ export const site: SiteContent = {
       "I build AI that reads your documents, answers from your own files, and shows you the source.",
     promiseAccent: "shows you the source",
     support:
-      "8+ years running production web systems for New Roots Herbal Inc. Three AI services live, with public code you can read.",
+      "8+ years running production web systems for New Roots Herbal Inc. Four AI services shipped, with public code you can read.",
     primaryCta: { label: "See what I build", href: "#services" },
     resumeCta: "Resume (PDF)",
     proof: [

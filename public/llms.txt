@@ -8,6 +8,7 @@
 - [Invoice data extraction with AI](https://webman.dev/projects/invoice-data-extraction): case study (French: https://webman.dev/fr/projects/invoice-data-extraction)
 - [Document search with cited sources (RAG)](https://webman.dev/projects/compliance-document-search): case study (French: https://webman.dev/fr/projects/compliance-document-search)
 - [AI agents with human approval (LangGraph)](https://webman.dev/projects/multi-agent-operations): case study (French: https://webman.dev/fr/projects/multi-agent-operations)
+- [LLM gateway with semantic cache and evals](https://webman.dev/projects/llmops-gateway): case study (French: https://webman.dev/fr/projects/llmops-gateway)
 - [Resume (PDF, English)](https://webman.dev/Nicolas-Desjardins-Resume.pdf)
 - [CV (PDF, French)](https://webman.dev/Nicolas-Desjardins-CV.pdf)
 
@@ -20,7 +21,7 @@ Each service is tied to public, dated proof. "Measured" figures come from saved 
 - Custom AI agents with human approval: multi-step back-office workflows (data lookups, drafting, compliance checks) that pause for a person before anything is sent, published or changed. Measured: 6 scenarios recorded on 15 October 2026, every dispatch behind a recorded human decision.
 - MCP servers and LLM integration: company systems exposed to AI assistants such as Claude, ChatGPT or Cursor through the Model Context Protocol, with scoped tokens, typed tools, confirmation before changes, and provider fallback. Measured: NextBlock's Cortex AI MCP server has 56 tools and is listed in the official MCP Registry.
 - Full-stack Next.js, Supabase and e-commerce development: Next.js, React and TypeScript applications, Supabase and PostgreSQL back ends, headless CMS, custom API integrations, Laravel and PHP platforms, and enterprise e-commerce migrations. Track record: 30+ websites migrated with zero downtime and hosting costs cut by over 40% at New Roots Herbal Inc.
-- Planned, not yet measured: an AI quality gate (evaluation in CI, tracing, semantic caching). Its figures are targets.
+- AI quality gate (LLMOps): a gateway in front of every AI call that answers repeated questions from a semantic cache, sends easy questions to cheap models and hard ones to strong models, records what each answer cost, and blocks a change in CI when the answers get worse. Measured on 23 October 2026: 0 of 78 look-alike questions served a wrong cached answer, 79.8% of list-price model spend avoided on a 250-question replay.
 
 French search terms he serves: automatisation IA Montréal et Québec, consultant en intelligence artificielle et en automatisation des processus d'affaires, développeur full-stack senior.
 
@@ -37,7 +38,7 @@ French search terms he serves: automatisation IA Montréal et Québec, consultan
 - Role: Applied AI Developer and Senior Full-Stack Developer (French: Développeur en IA appliquée et full-stack senior).
 - Open to: contracts, full-time roles, and agency placements. Roles such as Applied AI Engineer, Forward Deployed Engineer, AI Solutions, and Senior Full-Stack Developer with an AI focus.
 - Building for the web since 2004.
-- Proof points: 8+ years running production systems; 30+ websites migrated with zero downtime; 200k+ lines of TypeScript shipped as an open-source CMS (NextBlock); three AI services live with public code.
+- Proof points: 8+ years running production systems; 30+ websites migrated with zero downtime; 200k+ lines of TypeScript shipped as an open-source CMS (NextBlock); four AI services shipped with public code.
 
 ## Flagship product: NextBlock CMS and Cortex AI
 
@@ -57,7 +58,7 @@ French search terms he serves: automatisation IA Montréal et Québec, consultan
 - Invoice Extraction Service (Phase 1, shipped): an asynchronous FastAPI microservice that turns messy documents into a schema-validated invoice record. A free primary model cascades to a second provider on rate limits, timeouts, or schema exceptions, at zero marginal cost. [Project page](https://nickdesjardins.github.io/Invoice-Extraction-Service/), [source](https://github.com/nickdesjardins/Invoice-Extraction-Service).
 - Context-Aware Hybrid Compliance Retrieval Engine (Phase 2, shipped): answers from SOPs and regulatory manuals only by quoting the source. Vector and keyword search run in one PostgreSQL statement and are fused, a cross-encoder keeps the best passages, and every quote is checked against the stored document. Measured on 14 October 2026: 6 of 6 recorded questions answered with verified citations, 1 of 1 out-of-corpus question declined, 441 MB peak memory on a 512 MB instance. [Project page](https://nickdesjardins.github.io/hybrid-knowledge-rag/), [source](https://github.com/nickdesjardins/hybrid-knowledge-rag), [live demo](https://hybrid-retrieval-engine.onrender.com/) (free tier, about a minute to wake).
 - Autonomous Multi-Agent Operations and Marketing Pipeline (Phase 3, shipped): a cyclic LangGraph state machine that turns one inventory SKU into channel marketing copy for a licensed Natural Health Product and sends nothing until a person signs it off. Violations loop back to the writer a bounded number of times, then the graph pauses on a PostgreSQL checkpoint; approval fires one HMAC-signed webhook. Measured on 15 October 2026: 3 of 3 dispatches behind a recorded human decision, 504 hermetic tests, $0.00 marginal cost per run. [Project page](https://nickdesjardins.github.io/autonomous-operation-marketing/), [source](https://github.com/nickdesjardins/autonomous-operation-marketing), [live demo](https://multi-agent-ops-pipeline.onrender.com/).
-- Production LLMOps Gateway and Evaluation CI/CD Suite (Phase 4, in active pipeline): semantic caching, tracing, and regression evaluations in CI. Planned; its figures are targets.
+- Production LLMOps Gateway: Evaluation CI/CD and Latency Optimization (Phase 4, shipped): a FastAPI gateway in front of every model call. A Redis 8 semantic cache with a contrast check that refuses look-alike questions, a complexity router across a light and a heavy chain of free models with failover and self-repair, SSE streaming, token ceilings, and a Langfuse trace with tokens and cost per request. DeepEval and Ragas judge a 37-case golden set in GitHub Actions and block a pull request past 5% hallucination or below 0.95 faithfulness. Measured on 23 October 2026: 0 of 78 look-alikes served a wrong cached answer at the 0.96 threshold, 79.8% of list-price spend avoided on a 250-question replay, $0.00 marginal cost per request. [Project page](https://nickdesjardins.github.io/LLMOps-gateway-evals/), [source](https://github.com/nickdesjardins/LLMOps-gateway-evals), [live demo](https://llmops-gateway-q68n.onrender.com/).
 
 ## Production web work
 

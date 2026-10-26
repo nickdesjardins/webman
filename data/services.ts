@@ -83,9 +83,10 @@ export const services: ServiceItem[] = [
     icon: "gauge",
     problem: "You changed a prompt and nobody knows whether the answers got worse.",
     term: "Evaluation in CI, tracing and semantic caching (LLMOps)",
-    proof: "AI quality gate: planned work, so its numbers are targets, not results.",
-    status: "target",
-    href: "#projects",
+    proof:
+      "AI quality gate: measured on 23 October 2026, no look-alike question got a wrong cached answer (0 of 78), and a 250-question replay avoided 79.8% of the list-price model spend.",
+    status: "measured",
+    href: "/projects/llmops-gateway",
   },
   {
     id: "platforms",
