@@ -6,6 +6,16 @@ import { useEffect, useRef, useState, type RefObject } from "react";
 import * as THREE from "three";
 import { readTonePalette, type Rgb, type TonePalette } from "./color";
 
+/*
+ * @react-three/fiber 9 still creates its store clock with THREE.Clock, which three
+ * deprecated in r183 (fiber 10 moves to THREE.Timer). This scene only reads
+ * useFrame's delta, so drop that one notice and pass every other message through.
+ */
+THREE.setConsoleFunction((type, message, ...params) => {
+  if (message.startsWith("THREE.Clock: This module has been deprecated")) return;
+  console[type](message, ...params);
+});
+
 export interface PointerState {
   /** Normalised pointer position in [-1, 1], 0 when the pointer is away. */
   x: number;
