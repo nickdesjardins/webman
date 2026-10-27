@@ -77,6 +77,14 @@ export const site: SiteContent = {
     demoLabel: "Voyez-le à l'œuvre",
     demoCaption: "Une facture en désordre entre. Des données propres et vérifiées en sortent.",
     portraitAlt: "Nicolas Desjardins",
+    reach: {
+      trigger: "Écrire à Nicolas sur LinkedIn",
+      eyebrow: "Me joindre",
+      linkedin: "M'écrire sur LinkedIn",
+      linkedinNote: "Ouvre mon profil. Écrivez-moi ou ajoutez-moi à votre réseau.",
+      form: "Ou passez par le formulaire",
+      newTab: "(s'ouvre dans un nouvel onglet)",
+    },
   },
   /* Les deux questions reprennent contact.heading : la page s'ouvre et se ferme sur les mêmes deux lecteurs. */
   doors: {

@@ -67,6 +67,20 @@ export interface SiteContent {
     demoLabel: string;
     demoCaption: string;
     portraitAlt: string;
+    /**
+     * Card the portrait opens. LinkedIn has no embeddable chat and its compose
+     * URL only works between connections, so the card opens the profile (the
+     * app on a phone) and offers email and the form beside it.
+     */
+    reach: {
+      /** Accessible name of the portrait button. */
+      trigger: string;
+      eyebrow: string;
+      linkedin: string;
+      linkedinNote: string;
+      form: string;
+      newTab: string;
+    };
   };
   /**
    * Slim band under the hero for the readers who skip technical terms: a
@@ -156,6 +170,14 @@ export const site: SiteContent = {
     demoLabel: "Watch it work",
     demoCaption: "A messy invoice goes in. Clean, checked data comes out.",
     portraitAlt: "Nicolas Desjardins",
+    reach: {
+      trigger: "Message Nicolas on LinkedIn",
+      eyebrow: "Get in touch",
+      linkedin: "Message me on LinkedIn",
+      linkedinNote: "Opens my profile. Message me or connect there.",
+      form: "Or use the contact form",
+      newTab: "(opens in a new tab)",
+    },
   },
   /* The two questions echo contact.heading, so the page opens and closes on the same two readers. */
   doors: {

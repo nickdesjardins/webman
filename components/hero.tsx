@@ -1,11 +1,13 @@
 "use client";
 
 import Image from "next/image";
-import { ArrowRight, Download } from "lucide-react";
+import { ArrowRight, Download, Mail } from "lucide-react";
 
 import { HeroAiCanvas } from "@/components/hero-ai-canvas";
 import { useLocale } from "@/components/locale-provider";
+import { LinkedInGlyph } from "@/components/nav-link";
 import { Button } from "@/components/ui/button";
+import { Popover, PopoverClose, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { getContent } from "@/lib/content";
 import { cn } from "@/lib/utils";
 
@@ -77,25 +79,78 @@ export function Hero() {
         <div className="min-w-0 lg:col-span-5">
           {/* Identity: face, role, place */}
           <div className={cn(ENTER, "flex items-center gap-4")}>
-            <div className="relative shrink-0">
-              <div className="rounded-full bg-[conic-gradient(from_200deg,var(--primary),var(--success),var(--primary))] p-[2px] shadow-[0_0_40px_-8px_var(--glow)]">
-                <Image
-                  src="/img/me.avif"
-                  alt={hero.portraitAlt}
-                  width={160}
-                  height={160}
-                  sizes="(min-width: 640px) 72px, 60px"
-                  priority
-                  className="size-[60px] rounded-full border-2 border-background object-cover sm:size-[72px]"
-                />
-              </div>
-              <span
-                aria-hidden
-                className="absolute right-0.5 bottom-0.5 flex size-3.5 rounded-full border-2 border-background bg-success"
+            {/* The portrait opens a small contact card, LinkedIn first. */}
+            <Popover>
+              <PopoverTrigger
+                aria-label={hero.reach.trigger}
+                className="group relative shrink-0 cursor-pointer rounded-full outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-4 focus-visible:ring-offset-background"
               >
-                <span className="absolute inset-0 animate-ping rounded-full bg-success opacity-60 motion-reduce:animate-none" />
-              </span>
-            </div>
+                <span className="block rounded-full bg-[conic-gradient(from_200deg,var(--primary),var(--success),var(--primary))] p-[2px] shadow-[0_0_40px_-8px_var(--glow)] transition-shadow group-hover:shadow-[0_0_48px_-4px_var(--glow)] motion-reduce:transition-none">
+                  <Image
+                    src="/img/me.avif"
+                    alt={hero.portraitAlt}
+                    width={160}
+                    height={160}
+                    sizes="(min-width: 640px) 72px, 60px"
+                    priority
+                    className="size-[60px] rounded-full border-2 border-background object-cover sm:size-[72px]"
+                  />
+                </span>
+                {/* Hover and focus cue: the LinkedIn mark over the photo. */}
+                <span
+                  aria-hidden
+                  className="absolute inset-[2px] flex items-center justify-center rounded-full bg-background/65 text-foreground opacity-0 transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100 group-data-[state=open]:opacity-100 motion-reduce:transition-none"
+                >
+                  <LinkedInGlyph className="size-5 sm:size-6" />
+                </span>
+                <span
+                  aria-hidden
+                  className="absolute right-0.5 bottom-0.5 flex size-3.5 rounded-full border-2 border-background bg-success"
+                >
+                  <span className="absolute inset-0 animate-ping rounded-full bg-success opacity-60 motion-reduce:animate-none" />
+                </span>
+              </PopoverTrigger>
+              <PopoverContent align="start" sideOffset={12} collisionPadding={16} className="p-0">
+                <div className="border-b border-border/70 px-4 py-3">
+                  <p className="font-mono text-[11px] tracking-[0.18em] text-primary uppercase">{hero.reach.eyebrow}</p>
+                  <p className="mt-1 text-sm text-muted-foreground">{site.contact.responseTime}</p>
+                </div>
+                <div className="p-4">
+                  <PopoverClose asChild>
+                    <Button asChild className="w-full">
+                      <a href={links.linkedin} target="_blank" rel="noopener noreferrer">
+                        <LinkedInGlyph />
+                        {hero.reach.linkedin}
+                        <span className="sr-only">{hero.reach.newTab}</span>
+                      </a>
+                    </Button>
+                  </PopoverClose>
+                  <p className="mt-2.5 text-xs leading-relaxed text-muted-foreground">{hero.reach.linkedinNote}</p>
+                </div>
+                <ul className="border-t border-border/70 p-2 text-sm">
+                  <li>
+                    <a
+                      href={`mailto:${site.email}`}
+                      className="flex items-center gap-2.5 rounded-md px-2 py-2 text-foreground/90 transition-colors hover:bg-accent/40 hover:text-foreground"
+                    >
+                      <Mail aria-hidden="true" className="size-4 shrink-0 text-muted-foreground" />
+                      <span className="min-w-0 truncate">{site.email}</span>
+                    </a>
+                  </li>
+                  <li>
+                    <PopoverClose asChild>
+                      <a
+                        href="#contact"
+                        className="flex items-center gap-2.5 rounded-md px-2 py-2 text-foreground/90 transition-colors hover:bg-accent/40 hover:text-foreground"
+                      >
+                        <ArrowRight aria-hidden="true" className="size-4 shrink-0 text-muted-foreground" />
+                        {hero.reach.form}
+                      </a>
+                    </PopoverClose>
+                  </li>
+                </ul>
+              </PopoverContent>
+            </Popover>
             <div className="min-w-0">
               <p className="font-mono text-xs font-medium tracking-[0.2em] text-primary uppercase">{hero.role}</p>
               <p className="mt-1.5 text-sm text-muted-foreground">{hero.place}</p>
