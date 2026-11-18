@@ -31,8 +31,11 @@ const JOB_TITLE: Record<Locale, string> = {
   fr: "Développeur en IA appliquée",
 };
 
-/** A JPEG crop of the real portrait (structured data prefers JPEG/PNG over AVIF). */
-const PORTRAIT_PATH = "/img/nicolas-desjardins-headshot.jpg";
+/**
+ * The studio headshot, the same file the hero avatar uses. JPEG at 1200 px
+ * because structured data prefers JPEG/PNG over AVIF and search engines prefer large images.
+ */
+const PORTRAIT_PATH = "/img/nicolas-desjardins-portrait.jpg";
 
 /** Canonical origin shared by both editions; keeps the @id anchors identical across locales. */
 const ORIGIN = getContent(defaultLocale).site.url;

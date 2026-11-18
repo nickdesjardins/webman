@@ -87,7 +87,7 @@ export function Hero() {
               >
                 <span className="block rounded-full bg-[conic-gradient(from_200deg,var(--primary),var(--success),var(--primary))] p-[2px] shadow-[0_0_40px_-8px_var(--glow)] transition-shadow group-hover:shadow-[0_0_48px_-4px_var(--glow)] motion-reduce:transition-none">
                   <Image
-                    src="/img/me.avif"
+                    src="/img/nicolas-desjardins-portrait.jpg"
                     alt={hero.portraitAlt}
                     width={160}
                     height={160}
