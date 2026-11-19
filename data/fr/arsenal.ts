@@ -189,8 +189,8 @@ export const arsenal: ArsenalCategory[] = [
     lucide: "gauge",
     tools: [
       { name: "Langfuse Tracing", mono: "LF", tier: "active", context: "Chaque requête de la passerelle reproduite en direct comme une trace typée: garde, recherche en cache, recherche documentaire, et chaque tentative de modèle comme une génération avec jetons et coût.", href: "https://langfuse.com/" },
-      { name: "DeepEval", mono: "DE", tier: "active", context: "Juge LLM en CI: fidélité, pertinence de la réponse, précision du contexte et hallucination sur un jeu de 37 cas de référence; une pull request échoue au-delà de 5 % d'hallucination.", href: "https://docs.confident-ai.com/" },
-      { name: "Ragas", mono: "RG", tier: "active", context: "Un second juge des mêmes réponses, dans sa propre tâche CI: fidélité, pertinence de la réponse et précision du contexte, tenus à la référence acceptée.", href: "https://docs.ragas.io/" },
+      { name: "DeepEval", mono: "DE", tier: "active", context: "Juge LLM en CI: fidélité, pertinence de la réponse, précision du contexte et hallucination sur un jeu de 37 cas de référence; le contrôle échoue au-delà de 5 % d'hallucination.", href: "https://docs.confident-ai.com/" },
+      { name: "Ragas", mono: "RG", tier: "active", context: "Un second juge des mêmes réponses, dans sa propre tâche CI: fidélité, pertinence de la réponse et précision du contexte. Branché sur la barrière, pas encore exécuté avec un vrai modèle.", href: "https://docs.ragas.io/" },
       { name: "Pytest", icon: "siPytest", tier: "production", context: "Suites hors ligne par construction. Un test qui atteint le réseau échoue, volontairement.", href: "https://docs.pytest.org/" },
       { name: "Vitest", mono: "VT", tier: "production", context: "146 fichiers de test dans le monorepo de NextBlock, couvrant le serveur MCP, les exécuteurs d'outils des agents, les schémas et l'assistant de configuration.", href: "https://vitest.dev/" },
     ],

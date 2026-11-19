@@ -9,7 +9,8 @@
  * projet 1, les exécutions enregistrées le 14 octobre 2026 pour le projet 2,
  * le banc d'essai et les exécutions enregistrées le 15 octobre 2026 pour le
  * projet 3, les mesures de cache, de relecture et de recherche du 23 octobre
- * 2026 pour le projet 4), donc chaque chiffre est vérifiable. Les résultats
+ * 2026 pour le projet 4, et les exécutions de tests du 19 novembre 2026 pour
+ * les projets 3 et 4), donc chaque chiffre est vérifiable. Les résultats
  * d'évaluation jugée du projet 4 s'ajoutent quand sa barrière de qualité passe.
  */
 import type { Project } from "@/data/projects";
@@ -269,7 +270,7 @@ export const projects: Project[] = [
       "Dans l'exécution d'escalade, le modèle validateur a jugé le brouillon conforme, et la vérification déterministe des dosages a attrapé trois quantités de probiotiques interverties (10, 10 et 20 milliards d'UFC là où la licence dit 20, 20 et 10). Le brouillon est allé à une personne plutôt que vers la sortie, et la personne l'a rejeté.",
       "Dans l'exécution de rejet, le validateur a renvoyé le premier brouillon pour une allégation non autorisée et a accepté la réécriture\xa0: un cycle d'autocorrection, 66 secondes. Le réviseur l'a ensuite rejeté, et le nœud webhook n'a jamais tourné.",
       "Banc d'essai de modèles daté du 15 octobre 2026\xa0: 27 appels répartis sur trois modèles gratuits, sur les propres cas du pipeline, chaque réponse sauvegardée en JSONL pour que les chiffres puissent être recalculés sans appeler de modèle. Le modèle Liquid a répondu correctement 9 fois sur 9 avec une médiane de 9,1 s et le modèle NVIDIA 8 fois sur 9, et c'est l'ordre de la chaîne livrée.",
-      "504 tests hermétiques\xa0: ni réseau, ni PostgreSQL, ni clé API. Les deux transports HTTP lèvent une exception avant qu'une requête ne sorte du processus, les vrais clients SDK ne peuvent pas être construits dans la suite, et le README comme la page du projet sont tenus au code par des tests. Quatre tests de plus font tourner le graphe compilé sur un vrai checkpointer PostgreSQL quand une base est fournie.",
+      "520 tests hermétiques, tous réussis le 19 novembre 2026\xa0: ni réseau, ni PostgreSQL, ni clé API. Les deux transports HTTP lèvent une exception avant qu'une requête ne sorte du processus, les vrais clients SDK ne peuvent pas être construits dans la suite, et le README comme la page du projet sont tenus au code par des tests. Quatre tests optionnels de plus tournent sur un vrai PostgreSQL quand une base est fournie, dont deux qui font tourner le graphe compilé avec son checkpointer.",
       "Le webhook est la seule mutation. Le nœud refuse d'envoyer tant que le statut de révision humaine n'est pas approuvé ou modifié, un rejet est inscrit au point de contrôle comme si le nœud avait tourné, le récepteur vérifie la signature en temps constant, et chaque tentative figure au journal d'audit.",
     ],
     metrics: [
@@ -284,7 +285,7 @@ export const projects: Project[] = [
         kind: "measured",
       },
       {
-        value: "504",
+        value: "520",
         label: "tests hermétiques, sans réseau, sans base, sans clé",
         kind: "measured",
       },
@@ -318,7 +319,7 @@ export const projects: Project[] = [
     seoTitle: "Passerelle LLM avec cache sémantique et évaluations",
     plainTitle: "Contrôle qualité de l'IA",
     plain:
-      "Se place devant chaque appel à l'IA. Une question à laquelle il a déjà répondu revient de sa mémoire en quelques millisecondes, une question simple va à un modèle économique et une question difficile à un modèle puissant, et chaque réponse est consignée avec ce qu'elle a coûté. Avant qu'un changement soit livré, une série fixe de questions est reposée, et le changement est bloqué si les réponses se sont dégradées.",
+      "Se place devant chaque appel à l'IA. Une question à laquelle il a déjà répondu revient de sa mémoire en quelques millisecondes, une question simple va à un modèle économique et une question difficile à un modèle puissant, et chaque réponse est consignée avec ce qu'elle a coûté. Avant qu'un changement soit livré, une série fixe de questions est reposée, et la vérification échoue si les réponses passent sous un seuil de qualité fixe.",
     index: "04",
     phase: "Phase 4 · Livré",
     title: "Passerelle LLMOps de production\xa0: évaluation CI/CD et optimisation de la latence",
@@ -326,11 +327,11 @@ export const projects: Project[] = [
     status: "live",
     statusLabel: "Démo en ligne, code ouvert",
     summary:
-      "Une passerelle FastAPI placée devant chaque appel de modèle, avec une route compatible OpenAI vers laquelle n'importe quel client peut pointer. Les questions répétées reviennent d'une cache vectorielle Redis 8 sans appel de modèle, les nouvelles sont évaluées selon leur complexité et envoyées à une chaîne de modèles légère ou lourde avec relève automatique, et chaque étape est un segment d'une même trace, avec jetons et dollars, reproduite dans Langfuse. Un flux GitHub Actions fait répondre le vrai pipeline à un jeu de questions de référence, fait juger les réponses par DeepEval et Ragas, et fait échouer la pull request quand le taux d'hallucination dépasse 5 % ou que la fidélité passe sous 0,95. Fonctionne à coût nul sur des modèles gratuits.",
+      "Une passerelle FastAPI placée devant chaque appel de modèle, avec une route compatible OpenAI vers laquelle n'importe quel client peut pointer. Les questions répétées reviennent d'une cache vectorielle Redis 8 sans appel de modèle, les nouvelles sont évaluées selon leur complexité et envoyées à une chaîne de modèles légère ou lourde avec relève automatique, et chaque étape est un segment d'une même trace, avec jetons et dollars, reproduite dans Langfuse. Un flux GitHub Actions fait répondre le vrai pipeline à un jeu de questions de référence, fait juger les réponses par DeepEval (Ragas est branché comme second juge, mais n'a pas encore tourné avec un vrai modèle), et fait échouer le contrôle de qualité de la pull request quand le taux d'hallucination dépasse 5 % ou que la fidélité passe sous 0,95. Fonctionne à coût nul sur des modèles gratuits.",
     problem:
       "La facture de modèles grimpe à chaque requête, la latence de queue dépend de la file d'attente du fournisseur ce jour-là, et personne ne peut démontrer que la modification de prompt de la semaine dernière n'a pas dégradé les réponses. Une cache sémantique ne fait économiser que si elle ne sert jamais la réponse d'une autre question, et un seuil de qualité n'est réel que si un changement fautif ne peut pas être fusionné.",
     architecture:
-      "Une garde normalise chaque requête, neutralise les jetons de gabarit de clavardage et les balises usurpées, signale les formulations d'injection et applique des plafonds de jetons en entrée et en sortie par palier. La cache sémantique vérifie d'abord une clé exacte, puis plonge la question avec bge-small sur le processeur et demande à Redis les trois questions en cache les plus proches dans le même espace de noms (version du prompt, empreinte du corpus, modèle de plongement), au moyen d'un index HNSW en distance cosinus. Un voisin au-dessus du seuil de 0,96 n'est servi que si une garde de contraste ne trouve aucune contradiction entre les deux questions sur un nombre, un code ou un terme opposé\xa0: mesuré, c'est ce qui empêche de servir la limite de repas au pays pour la question sur l'étranger. Un échec de cache passe par une recherche hybride (plongements et BM25 fusionnés par rang réciproque) et un routeur de complexité fait de signaux nommés, qui ne coûte aucun appel de modèle et s'explique dans la trace. La chaîne du palier choisi répond, et un 429, un délai dépassé, un modèle retiré, un refus ou une réponse sans citation passe la requête au modèle suivant, puis à l'autre palier; une clé invalide l'arrête. Les réponses sont diffusées en Server-Sent Events, et chaque appel de modèle est chiffré deux fois\xa0: ce qu'il a coûté, et ce que les mêmes jetons coûteraient au prix courant de Claude Haiku 5.5 ou de Claude Opus 5.5. Chaque étape est un segment reproduit dans Langfuse comme une observation typée, les générations avec le détail des jetons et du coût. La barrière de qualité exécute une vérification déterministe de la recherche à chaque pull request et, quand les réponses ont pu changer, DeepEval et Ragas comme juges LLM sur 37 cas de référence, puis fait échouer la compilation selon les seuils et dès qu'une métrique passe sous la référence acceptée.",
+      "Une garde normalise chaque requête, neutralise les jetons de gabarit de clavardage et les balises usurpées, signale les formulations d'injection et applique des plafonds de jetons en entrée et en sortie par palier. La cache sémantique vérifie d'abord une clé exacte, puis plonge la question avec bge-small sur le processeur et demande à Redis les trois questions en cache les plus proches dans le même espace de noms (version du prompt, empreinte du corpus, modèle de plongement), au moyen d'un index HNSW en distance cosinus. Un voisin au-dessus du seuil de 0,96 n'est servi que si une garde de contraste ne trouve aucune contradiction entre les deux questions sur un nombre, un code ou un terme opposé\xa0: mesuré, c'est ce qui empêche de servir la limite de repas au pays pour la question sur l'étranger. Un échec de cache passe par une recherche hybride (plongements et BM25 fusionnés par rang réciproque) et un routeur de complexité fait de signaux nommés, qui ne coûte aucun appel de modèle et s'explique dans la trace. La chaîne du palier choisi répond, et un 429, un délai dépassé, un modèle retiré, un refus ou une réponse sans citation passe la requête au modèle suivant, puis à l'autre palier; une clé invalide l'arrête. Les réponses sont diffusées en Server-Sent Events, et chaque appel de modèle est chiffré deux fois\xa0: ce qu'il a coûté, et ce que les mêmes jetons coûteraient au prix courant de Claude Haiku 5.5 ou de Claude Opus 5.5. Chaque étape est un segment reproduit dans Langfuse comme une observation typée, les générations avec le détail des jetons et du coût. La barrière de qualité exécute une vérification déterministe de la recherche à chaque pull request et, quand les réponses ont pu changer, une évaluation par juge LLM sur 37 cas de référence (DeepEval, avec Ragas comme second juge dans sa propre tâche), puis fait échouer la compilation selon les seuils et, lorsqu'une base de référence a été acceptée, dès qu'une métrique suivie passe de plus de 0,03 sous celle-ci. Si la barrière est exigée comme vérification d'état, son échec désactive le bouton de fusion.",
     stack: [
       "Python 3.12",
       "FastAPI",
@@ -369,7 +370,7 @@ export const projects: Project[] = [
       },
       {
         name: "Barrière",
-        detail: "DeepEval et Ragas sur un jeu de référence; une pull request échoue au-delà de 5 % d'hallucination",
+        detail: "DeepEval évalue 37 cas de référence, Ragas branché; le contrôle échoue au-delà de 5 % d'hallucination",
       },
     ],
     proofPoints: [
@@ -377,7 +378,7 @@ export const projects: Project[] = [
       "Sur une relecture de 250 questions de centre d'assistance passées dans le vrai pipeline, la cache a répondu à 199 requêtes (172 répétitions exactes, 27 correspondances sémantiques) sans aucune mauvaise réponse, évitant 79,8 % de la dépense de modèles au prix courant. La même relecture sur Redis 8 a donné les mêmes réponses en cache, avec des recherches de 2,4 ms (exacte) et de 3,6 ms (sémantique, plongement compris) en médiane.",
       "Vérification de la recherche sans modèle, exécutée à chaque pull request\xa0: le passage qui contient la réponse figurait parmi les quatre premiers pour les 30 questions de référence auxquelles on peut répondre, avec une précision de contexte de 0,975.",
       "L'image de production tourne dans un conteneur de 512 Mo à 348 Mio, modèle de plongement intégré, se connecte à Redis 8, crée son index vectoriel et a servi une réponse sémantique en cache en 15 ms de bout en bout.",
-      "264 tests hermétiques\xa0: ni réseau, ni Redis, ni clé. Les vrais adaptateurs SDK OpenAI et Anthropic tournent contre un transport simulé, le SDK Langfuse exporte en mémoire, les métriques de DeepEval passent par le propre juge de la passerelle, et la page du projet est tenue à ses enregistrements par des tests. Un test de plus fait tourner la cache sur un vrai Redis 8.",
+      "355 tests hermétiques, tous réussis le 19 novembre 2026\xa0: ni réseau, ni Redis, ni clé. Les vrais adaptateurs SDK OpenAI et Anthropic tournent contre un transport simulé, le SDK Langfuse exporte en mémoire, les métriques de DeepEval passent par le propre juge de la passerelle, et la page du projet est tenue à ses enregistrements par des tests. Un test de plus fait tourner la cache sur un vrai Redis 8.",
     ],
     metrics: [
       {
@@ -391,7 +392,7 @@ export const projects: Project[] = [
         kind: "measured",
       },
       {
-        value: "264",
+        value: "355",
         label: "tests hermétiques, sans réseau, sans Redis, sans clé",
         kind: "measured",
       },

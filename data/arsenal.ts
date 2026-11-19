@@ -230,8 +230,8 @@ export const arsenal: ArsenalCategory[] = [
     lucide: "gauge",
     tools: [
       { name: "Langfuse Tracing", mono: "LF", tier: "active", context: "Every gateway request mirrored live as one typed trace: guardrail, cache lookup, retriever, and each model attempt as a generation with tokens and cost.", href: "https://langfuse.com/" },
-      { name: "DeepEval", mono: "DE", tier: "active", context: "LLM-as-a-judge in CI: faithfulness, answer relevancy, contextual precision and hallucination on a 37-case golden set; a pull request fails past 5% hallucination.", href: "https://docs.confident-ai.com/" },
-      { name: "Ragas", mono: "RG", tier: "active", context: "A second judge of the same answers, in its own CI job: faithfulness, answer relevancy and context precision, held to the accepted baseline.", href: "https://docs.ragas.io/" },
+      { name: "DeepEval", mono: "DE", tier: "active", context: "LLM-as-a-judge in CI: faithfulness, answer relevancy, contextual precision and hallucination on a 37-case golden set; the check fails past 5% hallucination.", href: "https://docs.confident-ai.com/" },
+      { name: "Ragas", mono: "RG", tier: "active", context: "A second judge of the same answers, in its own CI job: faithfulness, answer relevancy and context precision. Wired into the gate, not yet run with a real judge.", href: "https://docs.ragas.io/" },
       { name: "Pytest", icon: "siPytest", tier: "production", context: "Offline-by-construction suites. A test that reaches the network fails, on purpose.", href: "https://docs.pytest.org/" },
       { name: "Vitest", mono: "VT", tier: "production", context: "146 test files across NextBlock's monorepo, covering the MCP server, agent tool executors, schemas, and the setup wizard.", href: "https://vitest.dev/" },
     ],

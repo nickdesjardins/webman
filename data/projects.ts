@@ -5,7 +5,8 @@
  * repository's own README and dated records (the 7 October 2026 benchmark for
  * project 1, the runs recorded on 14 October 2026 for project 2, the benchmark
  * and the runs recorded on 15 October 2026 for project 3, the cache, replay and
- * retrieval measurements of 23 October 2026 for project 4), so every number
+ * retrieval measurements of 23 October 2026 for project 4, and the test runs
+ * of 19 November 2026 for projects 3 and 4), so every number
  * here can be checked. Project 4's judged evaluation results are added once its
  * quality gate has passed.
  */
@@ -312,7 +313,7 @@ export const projects: Project[] = [
       "In the escalation run the validator model called the draft compliant, and the deterministic dosage check caught three swapped probiotic amounts (10, 10 and 20 billion CFU where the licence says 20, 20 and 10). The draft went to a person instead of out the door, and the person rejected it.",
       "In the reject run the validator sent the first draft back for an unauthorized claim and passed the rewrite: one self-correction cycle, 66 seconds. The reviewer then rejected it, and the webhook node never ran.",
       "Dated model benchmark (15 October 2026): 27 calls across three free models on the pipeline's own cases, every answer saved as JSONL so the figures can be re-derived without calling a model. The Liquid model answered 9 of 9 correctly at a 9.1 s median and the NVIDIA model 8 of 9, which is the order the shipped chain uses.",
-      "504 hermetic tests: no network, no PostgreSQL, no API key. Both HTTP transports raise before a request can leave the process, the real SDK clients cannot be constructed inside the suite, and the README and the project page are held to the code by tests. Four more tests run the compiled graph over a real PostgreSQL checkpointer when a database is provided.",
+      "520 hermetic tests, all passing on 19 November 2026: no network, no PostgreSQL, no API key. Both HTTP transports raise before a request can leave the process, the real SDK clients cannot be constructed inside the suite, and the README and the project page are held to the code by tests. Four more opt-in tests run against a real PostgreSQL when a database is provided, two of them driving the compiled graph through its checkpointer.",
       "The webhook is the only mutation. The node refuses to send unless the human review status is approved or edited, a rejection is checkpointed as if the node had run, the receiver verifies the signature in constant time, and every attempt is in the audit log.",
     ],
     metrics: [
@@ -327,7 +328,7 @@ export const projects: Project[] = [
         kind: "measured",
       },
       {
-        value: "504",
+        value: "520",
         label: "hermetic tests: no network, no database, no key",
         kind: "measured",
       },
@@ -361,7 +362,7 @@ export const projects: Project[] = [
     seoTitle: "LLM gateway with semantic cache and evals",
     plainTitle: "AI quality gate",
     plain:
-      "Sits in front of every AI call. A question it has already answered comes back from memory in milliseconds, an easy one goes to a cheap model and a hard one to a strong model, and every answer is recorded with what it cost. Before a change ships, a fixed set of questions is asked again, and the change is blocked if the answers got worse.",
+      "Sits in front of every AI call. A question it has already answered comes back from memory in milliseconds, an easy one goes to a cheap model and a hard one to a strong model, and every answer is recorded with what it cost. Before a change ships, a fixed set of questions is asked again, and the check fails if the answers fall below a fixed quality bar.",
     index: "04",
     phase: "Phase 4 · Shipped",
     title: "Production LLMOps Gateway: Evaluation CI/CD and Latency Optimization",
@@ -369,11 +370,11 @@ export const projects: Project[] = [
     status: "live",
     statusLabel: "Live Demo & Open Source",
     summary:
-      "A FastAPI gateway in front of every model call, with an OpenAI-compatible route any client can point at. Repeated questions come back from a Redis 8 vector cache without a model call, new ones are scored for complexity and sent to a light or a heavy chain of models with failover, and every step is a span of one trace with tokens and dollars, mirrored to Langfuse. A GitHub Actions workflow answers a golden set with the real pipeline, has DeepEval and Ragas judge the answers, and fails the pull request when the hallucination rate passes 5% or faithfulness drops below 0.95. Runs at zero cost on free models.",
+      "A FastAPI gateway in front of every model call, with an OpenAI-compatible route any client can point at. Repeated questions come back from a Redis 8 vector cache without a model call, new ones are scored for complexity and sent to a light or a heavy chain of models with failover, and every step is a span of one trace with tokens and dollars, mirrored to Langfuse. A GitHub Actions workflow answers a golden set with the real pipeline, has DeepEval judge the answers (Ragas is wired in as a second judge, not yet run with a real one), and fails the pull request's quality check when the hallucination rate passes 5% or faithfulness drops below 0.95. Runs at zero cost on free models.",
     problem:
       "The model bill grows with every request, tail latency is whatever the provider's queue is that day, and nobody can show that last week's prompt change did not make the answers worse. A semantic cache saves money only if it never serves the answer to a different question, and a quality bar is real only if a failing change cannot merge.",
     architecture:
-      "A guard normalizes every request, neutralizes chat-template tokens and spoofed tags, flags injection phrasings, and applies input and per-tier output token ceilings. The semantic cache checks an exact key first, then embeds the question with bge-small on the CPU and asks Redis for the three nearest cached questions in the same namespace (prompt version, corpus fingerprint, embedding model), through an HNSW index with cosine distance. A neighbour above the 0.96 threshold is served only if a contrast guard finds no contradiction between the two questions on a number, a code or an opposite term; measured, that is what keeps the domestic meal limit from being served for the international one. A miss goes through hybrid retrieval (dense and BM25 fused by reciprocal rank) and a complexity router built from named signals, which costs no model call and explains itself in the trace. The chosen tier's chain answers, and a 429, a timeout, a withdrawn model, a refusal or an uncited answer hands the request to the next model, then to the other tier; a bad key stops it. Answers stream as Server-Sent Events, and every model call is priced twice: what it cost, and what the same tokens cost at Claude Haiku 5.5 or Claude Opus 5.5 list prices. Each step is a span mirrored to Langfuse as a typed observation, generations with usage and cost details. The quality gate runs a deterministic retrieval check on every pull request and, when the answers can have changed, DeepEval and Ragas as LLM-as-a-judge on 37 golden cases, then fails the build on the thresholds and on any metric that drops below the accepted baseline.",
+      "A guard normalizes every request, neutralizes chat-template tokens and spoofed tags, flags injection phrasings, and applies input and per-tier output token ceilings. The semantic cache checks an exact key first, then embeds the question with bge-small on the CPU and asks Redis for the three nearest cached questions in the same namespace (prompt version, corpus fingerprint, embedding model), through an HNSW index with cosine distance. A neighbour above the 0.96 threshold is served only if a contrast guard finds no contradiction between the two questions on a number, a code or an opposite term; measured, that is what keeps the domestic meal limit from being served for the international one. A miss goes through hybrid retrieval (dense and BM25 fused by reciprocal rank) and a complexity router built from named signals, which costs no model call and explains itself in the trace. The chosen tier's chain answers, and a 429, a timeout, a withdrawn model, a refusal or an uncited answer hands the request to the next model, then to the other tier; a bad key stops it. Answers stream as Server-Sent Events, and every model call is priced twice: what it cost, and what the same tokens cost at Claude Haiku 5.5 or Claude Opus 5.5 list prices. Each step is a span mirrored to Langfuse as a typed observation, generations with usage and cost details. The quality gate runs a deterministic retrieval check on every pull request and, when the answers can have changed, an LLM-as-a-judge suite on 37 golden cases (DeepEval, with Ragas as a second judge in its own job), then fails the build on the thresholds and, once a baseline has been accepted, on any tracked metric that drops more than 0.03 below it. Once the gate is made a required status check, a failure disables the merge button.",
     stack: [
       "Python 3.12",
       "FastAPI",
@@ -412,7 +413,7 @@ export const projects: Project[] = [
       },
       {
         name: "Gate",
-        detail: "DeepEval and Ragas on a golden set; a pull request fails above 5% hallucination",
+        detail: "DeepEval scores 37 golden cases, Ragas wired in; the check fails above 5% hallucination",
       },
     ],
     proofPoints: [
@@ -420,7 +421,7 @@ export const projects: Project[] = [
       "On a 250-question help-desk replay through the real pipeline, the cache answered 199 requests (172 exact repeats, 27 semantic matches) with no wrong answer, avoiding 79.8% of the model spend at list price. The same replay against Redis 8 gave the same hits, with lookups at 2.4 ms (exact) and 3.6 ms (semantic, embedding included) at the median.",
       "Retrieval check with no model, run on every pull request: the passage that holds the answer was in the top four for all 30 answerable golden questions, with a context precision of 0.975.",
       "The production image runs in a 512 MB container at 348 MiB with the embedding model baked in, connects to Redis 8, creates its vector index, and served a semantic hit in 15 ms end to end.",
-      "264 hermetic tests: no network, no Redis, no key. The real OpenAI and Anthropic SDK adapters run against a mock transport, the Langfuse SDK exports to memory, DeepEval's metrics run through the gateway's own judge, and the project page is held to its recordings by tests. One more test runs the cache against a real Redis 8.",
+      "355 hermetic tests, all passing on 19 November 2026: no network, no Redis, no key. The real OpenAI and Anthropic SDK adapters run against a mock transport, the Langfuse SDK exports to memory, DeepEval's metrics run through the gateway's own judge, and the project page is held to its recordings by tests. One more test runs the cache against a real Redis 8.",
     ],
     metrics: [
       {
@@ -434,7 +435,7 @@ export const projects: Project[] = [
         kind: "measured",
       },
       {
-        value: "264",
+        value: "355",
         label: "hermetic tests: no network, no Redis, no key",
         kind: "measured",
       },
