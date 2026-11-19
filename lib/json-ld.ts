@@ -3,8 +3,9 @@
  *
  * One @graph with stable @id anchors so every node can reference the
  * Person without repeating it: Person, the Webman ProfessionalService he
- * founded (areas served and offer catalog), WebSite, ProfilePage, and for
- * each live project a SoftwareApplication plus its SoftwareSourceCode.
+ * founded (areas served and offer catalog), WebSite, ProfilePage, for
+ * each live project a SoftwareApplication plus its SoftwareSourceCode, and
+ * the same pair for NextBlock and for the applied-ai-audit toolkit.
  * The anchors are derived from the canonical (default locale) origin, so the
  * English and French editions describe the same entities; only the prose,
  * the page url and inLanguage change per locale.
@@ -109,6 +110,51 @@ const KNOWS_ABOUT = [
 ];
 
 const AGPL_URL = "https://www.gnu.org/licenses/agpl-3.0.html";
+const MIT_URL = "https://opensource.org/licenses/MIT";
+
+/**
+ * The applied-ai-audit toolkit as software: the installable prompt pack
+ * (SoftwareApplication) and its repository (SoftwareSourceCode). Both @ids
+ * derive from the one repository URL, so the home graph and the toolkit page
+ * describe the same entities. MIT, and not a Python project: the toolkit is
+ * Markdown prompts, a shell installer and a Python check script.
+ */
+function auditSoftwareNodes(locale: Locale): JsonLdNode[] {
+  const { audit } = getContent(locale);
+  const repo = audit.links.repo.href;
+  const appId = `${repo}#app`;
+  return [
+    {
+      "@type": "SoftwareApplication",
+      "@id": appId,
+      name: audit.name,
+      alternateName: audit.plainTitle,
+      description: audit.description,
+      applicationCategory: "DeveloperApplication",
+      operatingSystem: "macOS, Linux, Windows (Git Bash, WSL)",
+      url: `${ORIGIN}${localePath(locale, audit.path)}`,
+      softwareVersion: audit.version,
+      license: MIT_URL,
+      author: { "@id": PERSON_ID },
+      creator: { "@id": PERSON_ID },
+      offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+      installUrl: audit.installUrl,
+      softwareHelp: audit.links.readme.href,
+    },
+    {
+      "@type": "SoftwareSourceCode",
+      "@id": `${repo}#code`,
+      name: audit.name,
+      description: audit.description,
+      codeRepository: repo,
+      programmingLanguage: ["Markdown", "Shell", "Python"],
+      license: MIT_URL,
+      version: audit.version,
+      targetProduct: { "@id": appId },
+      author: { "@id": PERSON_ID },
+    },
+  ];
+}
 
 /**
  * Webman, the working name behind webman.dev: founded and run by the Person,
@@ -318,6 +364,9 @@ export function buildJsonLd(locale: Locale): JsonLdGraph {
     });
   }
 
+  /* The open-source audit toolkit: a developer tool beside the projects, not one of them. */
+  graph.push(...auditSoftwareNodes(locale));
+
   return {
     "@context": "https://schema.org",
     "@graph": graph,
@@ -373,6 +422,47 @@ export function buildProjectJsonLd(locale: Locale, project: Project): JsonLdGrap
     });
   }
   return { "@context": "https://schema.org", "@graph": graph };
+}
+
+/**
+ * Graph for /projects/applied-ai-audit: the page (a TechArticle about the
+ * toolkit's source code), its breadcrumb, and the toolkit's
+ * SoftwareApplication and SoftwareSourceCode nodes, with the same @ids as on
+ * the home page. The Person and WebSite are referenced by @id.
+ */
+export function buildAuditJsonLd(locale: Locale): JsonLdGraph {
+  const { site, audit } = getContent(locale);
+  const pageUrl = `${ORIGIN}${localePath(locale, audit.path)}`;
+  const homeUrl = `${ORIGIN}${localePath(locale, "/")}`;
+
+  const article: JsonLdNode = {
+    "@type": "TechArticle",
+    "@id": `${pageUrl}#article`,
+    url: pageUrl,
+    headline: audit.title,
+    description: audit.summary,
+    inLanguage: hreflang[locale],
+    dateModified: CONTENT_UPDATED,
+    author: { "@id": PERSON_ID },
+    publisher: { "@id": PERSON_ID },
+    isPartOf: { "@id": WEBSITE_ID },
+    image: `${ORIGIN}${PORTRAIT_PATH}`,
+    about: { "@id": `${audit.links.repo.href}#code` },
+    keywords: audit.keywords.join(", "),
+  };
+
+  const breadcrumb: JsonLdNode = {
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: site.name, item: homeUrl },
+      { "@type": "ListItem", position: 2, name: audit.plainTitle, item: pageUrl },
+    ],
+  };
+
+  return {
+    "@context": "https://schema.org",
+    "@graph": [article, breadcrumb, ...auditSoftwareNodes(locale)],
+  };
 }
 
 /**

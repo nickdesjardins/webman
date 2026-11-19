@@ -19,6 +19,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...getContent("en")
       .projects.filter((project) => project.status === "live")
       .map((project) => `/projects/${project.slug}`),
+    getContent("en").audit.path,
   ];
 
   const absolute = (path: string) => (path === "/" ? `${site.url}/` : `${site.url}${path}`);

@@ -3,6 +3,7 @@
 import { useLocale } from "@/components/locale-provider";
 import type { ReactNode } from "react";
 import { ArrowRight, CheckCircle2, ChevronDown, ExternalLink, FileText, MonitorPlay } from "lucide-react";
+import { AuditTeaser } from "@/components/audit/audit-teaser";
 import { BrandIcon } from "@/components/brand-icon";
 import { Reveal } from "@/components/motion/reveal";
 import { PipelineFlow } from "@/components/pipeline-flow";
@@ -304,7 +305,7 @@ export function HowItWorks({
 export function ProjectsSection() {
   const locale = useLocale();
   const t = STRINGS[locale];
-  const { projects } = getContent(locale);
+  const { projects, audit } = getContent(locale);
   const liveProjects = projects.filter((p) => p.status === "live");
   const pipelineProjects = projects.filter((p) => p.status !== "live");
 
@@ -324,6 +325,11 @@ export function ProjectsSection() {
           <LiveProject key={project.id} project={project} locale={locale} />
         ))}
       </div>
+
+      {/* The open-source audit toolkit: a developer tool beside the services, not a fifth one. */}
+      <Reveal className="mt-14 lg:mt-16">
+        <AuditTeaser audit={audit} locale={locale} />
+      </Reveal>
 
       {pipelineProjects.length > 0 && (
         <>

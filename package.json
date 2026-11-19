@@ -9,6 +9,7 @@
     "lint": "eslint .",
     "resume": "tsx scripts/resume/build.tsx",
     "icons": "node scripts/brand-sprite.mjs",
+    "audit-prompt": "node scripts/sync-audit-prompt.mjs",
     "predev": "npm run icons",
     "prebuild": "npm run icons"
   },
